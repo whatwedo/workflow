@@ -2,11 +2,11 @@
 
 namespace whatwedo\WorkflowBundle\Form;
 
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use whatwedo\WorkflowBundle\Entity\Place;
 use whatwedo\WorkflowBundle\Entity\Transition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Form\DataTransformer\EntityToValueTransformer;
-use whatwedo\WorkflowBundle\Service\DoctrineHelper;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -17,16 +17,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class TransitionType extends AbstractType
 {
 
-    /** @var DoctrineHelper */
-    private $doctirineHelper;
+    /** @var RegistryInterface */
+    private $doctirine;
 
     /**
-     * @param DoctrineHelper $doctirineHelper
+     * @param RegistryInterface $doctirine
      * @required
      */
-    public function setDoctirineHelper(DoctrineHelper $doctirineHelper): void
+    public function setDoctirine(RegistryInterface $doctirine): void
     {
-        $this->doctirineHelper = $doctirineHelper;
+        $this->doctirine = $doctirine;
     }
 
 

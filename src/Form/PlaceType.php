@@ -2,6 +2,7 @@
 
 namespace whatwedo\WorkflowBundle\Form;
 
+use Symfony\Bridge\Doctrine\RegistryInterface;
 use whatwedo\WorkflowBundle\Entity\Place;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use Symfony\Component\Form\AbstractType;
@@ -12,16 +13,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class PlaceType extends AbstractType
 {
 
-    /** @var DoctrineHelper */
-    private $doctirineHelper;
+    /** @var RegistryInterface */
+    private $doctirine;
 
     /**
-     * @param DoctrineHelper $doctirineHelper
+     * @param RegistryInterface $doctirineHelper
      * @required
      */
-    public function setDoctirineHelper(DoctrineHelper $doctirineHelper): void
+    public function setDoctirine(RegistryInterface $doctirine): void
     {
-        $this->doctirineHelper = $doctirineHelper;
+        $this->doctirine = $doctirine;
     }
 
 
@@ -31,13 +32,15 @@ class PlaceType extends AbstractType
         $builder
             ->add(
                 'workflow',
-                HiddenType::class
+
             )
             ->add('name')
             ->add('limit')
         ;
 
-        $builder->get('workflow')->addModelTransformer(new EntityToValueTransformer($this->doctirineHelper->getRepository(Workflow::class)));
+//        $builder->get('workflow')->addModelTransformer(
+//            new EntityToValueTransformer($this->doctirineHelper->getRepository(Workflow::class))
+//        );
     }
 
     public function configureOptions(OptionsResolver $resolver)
