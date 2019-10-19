@@ -1,0 +1,159 @@
+{% extends 'baseMet.html.twig' %}
+{% import "macros/elements.html.twig" as elements %}
+
+{% block body %}
+<div class="row">
+    {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Workflow'} %}
+        {% block portlet_actions %}
+            <a href="{{ path('workflow_workflow_index') }}" class="btn btn-outline-primary btn-sm">back to list</a>
+            <a href="{{ path('workflow_workflow_edit', {'id': workflow.id}) }}" class="btn btn-outline-primary btn-sm">edit</a>
+        {% endblock portlet_actions %}
+
+        {% block portlet_body %}
+            <table class="table">
+                <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ workflow.id }}</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ workflow.name }}</td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>{{ workflow.type }}</td>
+                </tr>
+                <tr>
+                    <th>Supports</th>
+                    <td>{{ workflow.supports ? workflow.supports|json_encode : '' }}</td>
+                </tr>
+                <tr>
+                    <th>MarkingStore</th>
+                    <td>{{ workflow.markingStore ? workflow.markingStore|json_encode : '' }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+
+        {% endblock %}
+    {% endembed %}
+</div>
+<div class="row">
+    {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Places', width: 6} %}
+    {% block portlet_actions %}
+        <a href="{{ path('workflow_place_new', {workflow: workflow.id}) }}" class="btn btn-outline-primary btn-sm">
+            <i class="flaticon2-add-1"></i> New Place
+        </a>
+    {% endblock %}
+    {% block portlet_body %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for place in workflow.places %}
+                <tr>
+                    <td>{{ place.id }}</td>
+                    <td>{{ place.name }}</td>
+                    <td>
+                        <a href="{{ path('workflow_place_show', {'id': place.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-eye"></i>show</a>
+                        <a href="{{ path('workflow_place_edit', {'id': place.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-edit"></i>edit</a>
+                        {% if place.fromTransitions | length == 0 and place.toTransitions | length == 0  %}
+                        <a href="javascript:;"
+                           data-toggle="confirm"
+                           data-title="Delete {{ place.name }}"
+                           data-text="Delete {{ place.name }}"
+                           data-token="{{ csrf_token('delete' ~ place.id) }}"
+                           data-target-text="{{ 'label.delete' | trans }}"
+                           data-type="warning"
+                           data-href="{{ path('workflow_place_delete', {id: place.id, _token: csrf_token('delete' ~ place.id) }) }}"
+                           class="btn btn-default  btn-xs">
+                            <i class="kt-nav__link-icon flaticon2-trash"></i>
+                            <span class="kt-nav__link-text">Delete</span>
+                            {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endblock %}
+    {% endembed %}
+
+
+    {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Transitions', width: 6} %}
+        {% block portlet_actions %}
+            <a href="{{ path('workflow_transition_new', {workflow: workflow.id}) }}" class="btn btn-outline-primary btn-sm">
+                <i class="flaticon2-add-1"></i> New Transition
+            </a>
+        {% endblock %}
+
+        {% block portlet_body %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for transition in workflow.transitions %}
+                <tr>
+                    <td>{{ transition.id }}</td>
+                    <td>{{ transition.name }}</td>
+                    <td>
+                        {% for trans in transition.froms  %}
+                        {{ trans.name }}
+                        {% endfor  %}
+                    </td>
+                    <td>
+                        {% for trans in transition.tos  %}
+                            {{ trans.name }}
+                        {% endfor  %}
+                    </td>
+                    <td>
+                        <a href="{{ path('workflow_transition_show', {'id': transition.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-eye"></i>show</a>
+                        <a href="{{ path('workflow_transition_edit', {'id': transition.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-edit"></i>edit</a>
+                        <a href="javascript:;"
+                           data-toggle="confirm"
+                           data-title="Delete {{ transition.name }}"
+                           data-text="Delete {{ transition.name }}"
+                           data-token="{{ csrf_token('delete' ~ transition.id) }}"
+                           data-target-text="{{ 'label.delete' | trans }}"
+                           data-type="warning"
+                           data-href="{{ path('workflow_transition_delete', {id: transition.id, _token: csrf_token('delete' ~ transition.id) }) }}"
+                           class="btn btn-default btn-xs">
+                            <i class="kt-nav__link-icon flaticon2-trash"></i>
+                            <span class="kt-nav__link-text">Delete</span>
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endblock %}
+    {% endembed %}
+</div>
+<div class="row">
+    {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Transitions'} %}
+        {% block portlet_body %}
+            <img src="data:image/png;base64,{{ image}}">
+        {% endblock %}
+    {% endembed %}
+</div>
+
+{% endblock %}
+

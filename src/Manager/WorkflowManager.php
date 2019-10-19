@@ -5,10 +5,9 @@ namespace whatwedo\WorkflowBundle\Manager;
 
 
 
-use Socius\DTO\Workflow\WorkflowMetadataStore;
-use Socius\Entity\Workflow\Workflow;
-use Socius\Repository\Workflow\WorkflowRepository;
-use Socius\Service\DoctrineHelper;
+use whatwedo\WorkflowBundle\DTO\WorkflowMetadataStore;
+use whatwedo\WorkflowBundle\Entity\Workflow;
+use whatwedo\WorkflowBundle\Repository\WorkflowRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Workflow\DefinitionBuilder;
 use Symfony\Component\Workflow\Transition;

@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 
-class WorkflowBundleExtensionextends extends Extension
+class WorkflowBundleExtension  extends Extension
 {
     /**
      * {@inheritdoc}

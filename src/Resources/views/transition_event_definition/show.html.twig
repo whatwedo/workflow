@@ -1,0 +1,40 @@
+{% extends 'baseMet.html.twig' %}
+
+{% block body %}
+    {% embed "include/embed/portlet.html.twig" with { portlet_title: 'TransitionEventDefinition'} %}
+    {% block portlet_body %}
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ transition_event_definition.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ transition_event_definition.name }}</td>
+            </tr>
+            <tr>
+                <th>EventName</th>
+                <td>{{ transition_event_definition.eventName }}</td>
+            </tr>
+            <tr>
+                <th>Sortorder</th>
+                <td>{{ transition_event_definition.sortorder }}</td>
+            </tr>
+            <tr>
+                <th>Expression</th>
+                <td>{{ transition_event_definition.expression }}</td>
+            </tr>
+            <tr>
+                <th>Template</th>
+                <td>{{ transition_event_definition.template }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('workflow_transition_show', {id: transition_event_definition.transition.id}) }}">back to list</a>
+
+    {% endblock %}
+    {% endembed %}
+
+{% endblock %}

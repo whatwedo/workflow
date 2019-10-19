@@ -1,0 +1,60 @@
+{% extends 'baseMet.html.twig' %}
+{% import "macros/elements.html.twig" as elements %}
+
+{% block subHeaderToolbar %}
+    <a href="{{ path('workflow_workflow_new') }}" class="btn btn-outline-primary btn-sm">
+        <i class="flaticon2-add-1"></i> new
+    </a>
+{% endblock %}
+
+
+{% block body %}
+<div class="row">
+    <div class="col-lg-12">
+
+        <div class="kt-portlet kt-portlet--mobile">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">Workföpw</h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Supports</th>
+                <th>Single State</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for workflow in workflows %}
+            <tr>
+                <td>{{ workflow.id }}</td>
+                <td>{{ workflow.name }}</td>
+                <td>{{ workflow.type }}</td>
+                <td>{{ workflow.supports ? workflow.supports|json_encode : '' }}</td>
+                <td>{{ workflow.singleState ? 'yes' : 'no' }}</td>
+                <td>
+                    <a href="{{ path('workflow_workflow_show', {'id': workflow.id}) }}">show</a>
+                    <a href="{{ path('workflow_workflow_edit', {'id': workflow.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
