@@ -5,6 +5,6 @@ services:
         public: false
 
     _instanceof:
-        Socius\WorkflowEventHandler\WorkflowSubscriberAbstract:
+        whatwedo\WorkflowBundle\EventHandler\WorkflowSubscriberAbstract:
             tags: ['workflow.event_handler']
             public: true

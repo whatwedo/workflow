@@ -2,11 +2,11 @@
 
 namespace whatwedo\WorkflowBundle\Controller;
 
-use Socius\Controller\AbstractController;
-use Socius\Entity\Workflow\Place;
-use Socius\Entity\Workflow\PlaceEventDefinition;
-use Socius\Form\Workflow\PlaceEventDefinitionType;
-use Socius\Repository\Workflow\PlaceEventDefinitionRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use whatwedo\WorkflowBundle\Entity\Place;
+use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
+use whatwedo\WorkflowBundle\Form\PlaceEventDefinitionType;
+use whatwedo\WorkflowBundle\Repository\PlaceEventDefinitionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

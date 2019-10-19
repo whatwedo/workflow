@@ -2,11 +2,11 @@
 
 namespace whatwedo\WorkflowBundle\Controller;
 
-use Socius\Controller\AbstractController;
-use Socius\Entity\Workflow\Place;
-use Socius\Entity\Workflow\Workflow;
-use Socius\Form\Workflow\PlaceType;
-use Socius\Repository\Workflow\PlaceRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use whatwedo\WorkflowBundle\Entity\Place;
+use whatwedo\WorkflowBundle\Entity\Workflow;
+use whatwedo\WorkflowBundle\Form\PlaceType;
+use whatwedo\WorkflowBundle\Repository\PlaceRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

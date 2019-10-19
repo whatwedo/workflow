@@ -17,7 +17,7 @@ class PlaceType extends AbstractType
     private $doctirine;
 
     /**
-     * @param RegistryInterface $doctirineHelper
+     * @param RegistryInterface $doctirine
      * @required
      */
     public function setDoctirine(RegistryInterface $doctirine): void

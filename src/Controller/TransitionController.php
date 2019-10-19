@@ -2,11 +2,11 @@
 
 namespace whatwedo\WorkflowBundle\Controller;
 
-use Socius\Controller\AbstractController;
-use Socius\Entity\Workflow\Transition;
-use Socius\Entity\Workflow\Workflow;
-use Socius\Form\Workflow\TransitionType;
-use Socius\Repository\Workflow\TransitionRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use whatwedo\WorkflowBundle\Entity\Transition;
+use whatwedo\WorkflowBundle\Entity\Workflow;
+use whatwedo\WorkflowBundle\Form\TransitionType;
+use whatwedo\WorkflowBundle\Repository\TransitionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

@@ -3,9 +3,8 @@
 
 namespace whatwedo\WorkflowBundle\Controller;
 
-use Socius\Entity\Workflow\Transition;
-use Socius\Entity\Workflow\Workflow;
-use Socius\Service\WorkflowService;
+use whatwedo\WorkflowBundle\Service\WorkflowService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

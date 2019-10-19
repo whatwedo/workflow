@@ -2,10 +2,10 @@
 
 namespace whatwedo\WorkflowBundle\Controller;
 
-use Socius\Controller\AbstractController;
-use Socius\Entity\Workflow\Workflow;
-use Socius\Form\Workflow\WorkflowType;
-use Socius\Repository\Workflow\WorkflowRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use whatwedo\WorkflowBundle\Entity\Workflow;
+use whatwedo\WorkflowBundle\Form\WorkflowType;
+use whatwedo\WorkflowBundle\Repository\WorkflowRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
