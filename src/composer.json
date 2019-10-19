@@ -1,0 +1,25 @@
+{
+    "name": "whatwedo/workflow-bundle",
+    "type": "symfony-bundle",
+    "description": "Database controlled Workflow",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Maurizio Monticelli",
+            "email": "mauriztio@whatwedo.ch"
+        }
+    ],
+    "require": {
+        "php": ">=7.3",
+        "symfony/workflow": "~.0",
+        "symfony/console": "~4.0",
+        "symfony/framework-bundle": "~4.0",
+        "symfony/http-kernel": "~2.8|~3.0|~4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "whatwedo\\WorkflowBundle\\": ""
+        }
+    }
+}

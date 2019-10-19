@@ -1,0 +1,10 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    _instanceof:
+        Socius\WorkflowEventHandler\WorkflowSubscriberAbstract:
+            tags: ['workflow.event_handler']
+            public: true
