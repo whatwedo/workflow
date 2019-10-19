@@ -3,7 +3,6 @@
     "type": "symfony-bundle",
     "description": "Database controlled Workflow",
     "license": "MIT",
-    "minimum-stability": "dev",
     "authors": [
         {
             "name": "Maurizio Monticelli",
