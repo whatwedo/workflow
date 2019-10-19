@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\RepositoryTransitionRepository")
+ * @ORM\Table(name="whatwedo_workflow_transition")
  */
 class Transition
 {

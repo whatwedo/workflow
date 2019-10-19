@@ -11,6 +11,7 @@ use Symfony\Component\VarDumper\Tests\Cloner\DataTest;
 
 /**
  * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\RepositoryWorkflowLogRepository")
+ * @ORM\Table(name="whatwedo_workflow_workflow_log")
  */
 class WorkflowLog
 {

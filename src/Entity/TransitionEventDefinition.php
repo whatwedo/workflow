@@ -7,14 +7,19 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\RepositoryPlaceEventDefinitionRepository")
+ * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\RepositoryTransitionEventDefinitionRepository")
+ * @ORM\Table(name="whatwedo_workflow_transition_event_definition")
  */
-class PlaceEventDefinition
+class TransitionEventDefinition
 {
+    const GUARD         = 'guard';
+    const TRANSITION    = 'transition';
+    const COMPLETED     = 'completed';
+    const ANNOUNCE      = 'announce';
+    const ENTER         = 'enter';
+    const ENTERED       = 'entered';
+    const LEAVE         = 'leave';
 
-    const LEAVE     = 'leave';
-    const ENTER     = 'enter';
-    const ENTERED   = 'entered';
 
     /**
      * @ORM\Id()
@@ -24,11 +29,11 @@ class PlaceEventDefinition
     private $id;
 
     /**
-     * @var null|Place
-     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\Place", inversedBy="eventDefinitions")
+     * @var null|Transition
+     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\Transition", inversedBy="eventDefinitions")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $place;
+    private $transition;
 
     /**
      * @var null|string
@@ -43,6 +48,12 @@ class PlaceEventDefinition
     private $eventName;
 
     /**
+     * @var null|string
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $eventSubscriber;
+
+    /**
      * @var integer
      * @ORM\Column(type="integer", nullable=false)
      */
@@ -50,20 +61,20 @@ class PlaceEventDefinition
 
     /**
      * @var null|string
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $expression;
 
     /**
      * @var null|string
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $template;
 
 
-    public function __construct(Place $place)
+    public function __construct(Transition $transition)
     {
-        $this->place = $place;
+        $this->transition = $transition;
     }
 
     public function getId(): ?int
@@ -72,19 +83,19 @@ class PlaceEventDefinition
     }
 
     /**
-     * @return Place|null
+     * @return Transition|null
      */
-    public function getPlace(): ?Place
+    public function getTransition(): ?Transition
     {
-        return $this->place;
+        return $this->transition;
     }
 
     /**
-     * @param Place|null $place
+     * @param Transition|null $transition
      */
-    public function setPlace(?Place $place): void
+    public function setTransition(?Transition $transition): void
     {
-        $this->place = $place;
+        $this->transition = $transition;
     }
 
     /**
@@ -117,6 +128,22 @@ class PlaceEventDefinition
     public function setEventName(?string $eventName): void
     {
         $this->eventName = $eventName;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEventSubscriber(): ?string
+    {
+        return $this->eventSubscriber;
+    }
+
+    /**
+     * @param string|null $eventSubscriber
+     */
+    public function setEventSubscriber(?string $eventSubscriber): void
+    {
+        $this->eventSubscriber = $eventSubscriber;
     }
 
     /**
@@ -166,5 +193,8 @@ class PlaceEventDefinition
     {
         $this->template = $template;
     }
+
+
+
 
 }
