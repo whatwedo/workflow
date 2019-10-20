@@ -25,7 +25,7 @@ class WorkflowEventSubscriberTypes extends AbstractType
     {
         $klass = get_class($workflowSubscriber);
         $reflect = new ReflectionClass($klass);
-        if($reflect->implementsInterface(IWorkflowSubscriber::class)) {
+        if($reflect->isSubclassOf(WorkflowSubscriberAbstract::class)) {
             $this->workflowSubscribers[$klass] = $klass;
         }
     }
