@@ -12,13 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/workflow/place")
+ * @Route("/wwd/workflow/place")
  */
 class PlaceController extends AbstractController
 {
 
     /**
-     * @Route("/{workflow}/new", name="workflow_place_new", methods={"GET","POST"})
+     * @Route("/{workflow}/new", name="wwd_workflow_place_new", methods={"GET","POST"})
      * @param Request $request
      * @param Workflow $workflow
      * @return Response
@@ -38,24 +38,24 @@ class PlaceController extends AbstractController
             return $this->redirectToRoute('workflow_workflow_show', [ 'id' => $place->getWorkflow()->getId() ]);
         }
 
-        return $this->render('workflow/place/new.html.twig', [
+        return $this->render('@whatwedoWorkflow/place/new.html.twig', [
             'place' => $place,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="workflow_place_show", methods={"GET"})
+     * @Route("/{id}", name="wwd_workflow_place_show", methods={"GET"})
      */
     public function show(Place $place): Response
     {
-        return $this->render('workflow/place/show.html.twig', [
+        return $this->render('@whatwedoWorkflow/place/show.html.twig', [
             'place' => $place,
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="workflow_place_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="wwd_workflow_place_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Place $place): Response
     {
@@ -68,14 +68,14 @@ class PlaceController extends AbstractController
             return $this->redirectToRoute('workflow_workflow_show', [ 'id' => $place->getWorkflow()->getId() ]);
         }
 
-        return $this->render('workflow/place/new.html.twig', [
+        return $this->render('@whatwedoWorkflow/place/new.html.twig', [
             'place' => $place,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}/delete", name="workflow_place_delete", methods={"GET"})
+     * @Route("/{id}/delete", name="wwd_workflow_place_delete", methods={"GET"})
      */
     public function delete(Request $request, Place $place): Response
     {

@@ -12,25 +12,25 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/workflow/transition")
+ * @Route("/wwd/workflow/transition")
  */
 class TransitionController extends AbstractController
 {
 
 
     /**
-     * @Route("/{id}", name="workflow_transition_show", methods={"GET"})
+     * @Route("/{id}", name="wwd_workflow_transition_show", methods={"GET"})
      */
     public function show(Transition $transition): Response
     {
-        return $this->render('workflow/transition/show.html.twig', [
+        return $this->render('@whatwedoWorkflow/transition/show.html.twig', [
             'transition' => $transition,
         ]);
     }
 
 
     /**
-     * @Route("/new/{workflow}", name="workflow_transition_new", methods={"GET","POST"})
+     * @Route("/new/{workflow}", name="wwd_workflow_transition_new", methods={"GET","POST"})
      */
     public function new(Request $request, Workflow $workflow): Response
     {
@@ -47,14 +47,14 @@ class TransitionController extends AbstractController
             return $this->redirectToRoute('workflow_workflow_show', [ 'id' => $workflow->getId()]);
         }
 
-        return $this->render('workflow/transition/new.html.twig', [
+        return $this->render('@whatwedoWorkflow/transition/new.html.twig', [
             'transition' => $transition,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="workflow_transition_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="wwd_workflow_transition_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Transition $transition): Response
     {
@@ -67,14 +67,14 @@ class TransitionController extends AbstractController
             return $this->redirectToRoute('workflow_workflow_show', ['id' => $transition->getWorkflow()->getId()]);
         }
 
-        return $this->render('workflow/transition/new.html.twig', [
+        return $this->render('@whatwedoWorkflow/transition/new.html.twig', [
             'transition' => $transition,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}/delete", name="workflow_transition_delete", methods={"GET"})
+     * @Route("/{id}/delete", name="wwd_workflow_transition_delete", methods={"GET"})
      */
     public function delete(Request $request, Transition $transition): Response
     {

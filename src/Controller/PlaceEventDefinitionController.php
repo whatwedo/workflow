@@ -12,13 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/workflow/place/event/definition")
+ * @Route("/wwd/workflow/place/event/definition")
  */
 class PlaceEventDefinitionController extends AbstractController
 {
 
     /**
-     * @Route("/new/{place}", name="workflow_place_event_definition_new", methods={"GET","POST"})
+     * @Route("/new/{place}", name="wwd_workflow_place_event_definition_new", methods={"GET","POST"})
      */
     public function new(Request $request, Place $place): Response
     {
@@ -34,24 +34,24 @@ class PlaceEventDefinitionController extends AbstractController
             return $this->redirectToRoute('workflow_place_show', ['id' => $placeEventDefinition->getPlace()->getId()]);
         }
 
-        return $this->render('workflow/place_event_definition/new.html.twig', [
+        return $this->render('@whatwedoWorkflow/place_event_definition/new.html.twig', [
             'eventDefinition' => $placeEventDefinition,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="workflow_place_event_definition_show", methods={"GET"})
+     * @Route("/{id}", name="wwd_workflow_place_event_definition_show", methods={"GET"})
      */
     public function show(PlaceEventDefinition $placeEventDefinition): Response
     {
-        return $this->render('workflow/place_event_definition/show.html.twig', [
+        return $this->render('@whatwedoWorkflow/place_event_definition/show.html.twig', [
             'place_event_definition' => $placeEventDefinition,
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="workflow_place_event_definition_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="wwd_workflow_place_event_definition_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, PlaceEventDefinition $placeEventDefinition): Response
     {
@@ -64,14 +64,14 @@ class PlaceEventDefinitionController extends AbstractController
             return $this->redirectToRoute('workflow_place_show', ['id' => $placeEventDefinition->getPlace()->getId()]);
         }
 
-        return $this->render('workflow/place_event_definition/new.html.twig', [
+        return $this->render('@whatwedoWorkflow/place_event_definition/new.html.twig', [
             'eventDefinition' => $placeEventDefinition,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="workflow_place_event_definition_delete", methods={"DELETE"})
+     * @Route("/{id}", name="wwd_workflow_place_event_definition_delete", methods={"DELETE"})
      */
     public function delete(Request $request, PlaceEventDefinition $placeEventDefinition): Response
     {

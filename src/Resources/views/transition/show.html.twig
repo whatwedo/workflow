@@ -1,5 +1,4 @@
-{% extends 'baseMet.html.twig' %}
-{% import "macros/elements.html.twig" as elements %}
+{% extends '@whatwedoWorkflow/layout.html.twig' %}
 
 {% block body %}
 {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Transition'} %}
@@ -16,7 +15,7 @@
             </tr>
         </tbody>
     </table>
-    <a href="{{ path('workflow_workflow_show', {id: transition.workflow.id}) }}">back to workflow</a>
+    <a href="{{ path('wwd_workflow_workflow_show', {id: transition.workflow.id}) }}">back to workflow</a>
       {% endblock %}
 {% endembed %}
 
@@ -40,8 +39,8 @@
                     <td>{{ event_definition.eventName }}</td>
                     <td>{{ event_definition.sortorder }}</td>
                     <td>
-                        <a href="{{ path('workflow_transition_event_definition_show', {'id': event_definition.id}) }}">show</a>
-                        <a href="{{ path('workflow_transition_event_definition_edit', {'id': event_definition.id}) }}">edit</a>
+                        <a href="{{ path('wwd_workflow_transition_event_definition_show', {'id': event_definition.id}) }}">show</a>
+                        <a href="{{ path('wwd_workflow_transition_event_definition_edit', {'id': event_definition.id}) }}">edit</a>
                     </td>
                 </tr>
             {% else %}
@@ -52,9 +51,9 @@
             </tbody>
         </table>
 
-        <a href="{{ path('workflow_transition_event_definition_new', {transition: transition.id}) }}">Create new</a>
+        <a href="{{ path('wwd_workflow_transition_event_definition_new', {transition: transition.id}) }}">Create new</a>
 
-    <a href="{{ path('workflow_workflow_show', {id: transition.workflow.id}) }}">back to workflow</a>
+    <a href="{{ path('wwd_workflow_workflow_show', {id: transition.workflow.id}) }}">back to workflow</a>
 
 
     {% endblock %}

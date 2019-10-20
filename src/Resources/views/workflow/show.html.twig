@@ -1,12 +1,11 @@
-{% extends 'baseMet.html.twig' %}
-{% import "macros/elements.html.twig" as elements %}
+{% extends '@whatwedoWorkflow/layout.html.twig' %}
 
 {% block body %}
 <div class="row">
     {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Workflow'} %}
         {% block portlet_actions %}
-            <a href="{{ path('workflow_workflow_index') }}" class="btn btn-outline-primary btn-sm">back to list</a>
-            <a href="{{ path('workflow_workflow_edit', {'id': workflow.id}) }}" class="btn btn-outline-primary btn-sm">edit</a>
+            <a href="{{ path('wwd_workflow_workflow_index') }}" class="btn btn-outline-primary btn-sm">back to list</a>
+            <a href="{{ path('wwd_workflow_workflow_edit', {'id': workflow.id}) }}" class="btn btn-outline-primary btn-sm">edit</a>
         {% endblock portlet_actions %}
 
         {% block portlet_body %}
@@ -42,7 +41,7 @@
 <div class="row">
     {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Places', width: 6} %}
     {% block portlet_actions %}
-        <a href="{{ path('workflow_place_new', {workflow: workflow.id}) }}" class="btn btn-outline-primary btn-sm">
+        <a href="{{ path('wwd_workflow_place_new', {workflow: workflow.id}) }}" class="btn btn-outline-primary btn-sm">
             <i class="flaticon2-add-1"></i> New Place
         </a>
     {% endblock %}
@@ -61,8 +60,8 @@
                     <td>{{ place.id }}</td>
                     <td>{{ place.name }}</td>
                     <td>
-                        <a href="{{ path('workflow_place_show', {'id': place.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-eye"></i>show</a>
-                        <a href="{{ path('workflow_place_edit', {'id': place.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-edit"></i>edit</a>
+                        <a href="{{ path('wwd_workflow_place_show', {'id': place.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-eye"></i>show</a>
+                        <a href="{{ path('wwd_workflow_place_edit', {'id': place.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-edit"></i>edit</a>
                         {% if place.fromTransitions | length == 0 and place.toTransitions | length == 0  %}
                         <a href="javascript:;"
                            data-toggle="confirm"
@@ -71,7 +70,7 @@
                            data-token="{{ csrf_token('delete' ~ place.id) }}"
                            data-target-text="{{ 'label.delete' | trans }}"
                            data-type="warning"
-                           data-href="{{ path('workflow_place_delete', {id: place.id, _token: csrf_token('delete' ~ place.id) }) }}"
+                           data-href="{{ path('wwd_workflow_place_delete', {id: place.id, _token: csrf_token('delete' ~ place.id) }) }}"
                            class="btn btn-default  btn-xs">
                             <i class="kt-nav__link-icon flaticon2-trash"></i>
                             <span class="kt-nav__link-text">Delete</span>
@@ -91,7 +90,7 @@
 
     {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Transitions', width: 6} %}
         {% block portlet_actions %}
-            <a href="{{ path('workflow_transition_new', {workflow: workflow.id}) }}" class="btn btn-outline-primary btn-sm">
+            <a href="{{ path('wwd_workflow_transition_new', {workflow: workflow.id}) }}" class="btn btn-outline-primary btn-sm">
                 <i class="flaticon2-add-1"></i> New Transition
             </a>
         {% endblock %}
@@ -121,8 +120,8 @@
                         {% endfor  %}
                     </td>
                     <td>
-                        <a href="{{ path('workflow_transition_show', {'id': transition.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-eye"></i>show</a>
-                        <a href="{{ path('workflow_transition_edit', {'id': transition.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-edit"></i>edit</a>
+                        <a href="{{ path('wwd_workflow_transition_show', {'id': transition.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-eye"></i>show</a>
+                        <a href="{{ path('wwd_workflow_transition_edit', {'id': transition.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-edit"></i>edit</a>
                         <a href="javascript:;"
                            data-toggle="confirm"
                            data-title="Delete {{ transition.name }}"
@@ -130,7 +129,7 @@
                            data-token="{{ csrf_token('delete' ~ transition.id) }}"
                            data-target-text="{{ 'label.delete' | trans }}"
                            data-type="warning"
-                           data-href="{{ path('workflow_transition_delete', {id: transition.id, _token: csrf_token('delete' ~ transition.id) }) }}"
+                           data-href="{{ path('wwd_workflow_transition_delete', {id: transition.id, _token: csrf_token('delete' ~ transition.id) }) }}"
                            class="btn btn-default btn-xs">
                             <i class="kt-nav__link-icon flaticon2-trash"></i>
                             <span class="kt-nav__link-text">Delete</span>

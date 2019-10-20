@@ -1,6 +1,5 @@
 <?php
 
-
 namespace whatwedo\WorkflowBundle\Controller;
 
 use whatwedo\WorkflowBundle\Service\WorkflowService;
@@ -31,17 +30,17 @@ class ApplyController extends AbstractController
         $this->doctirine = $doctirine;
     }
 
-//    /**
-//     * @param WorkflowService $workflowRegistry
-//     * @required
-//     */
-//    public function setWorkflowRegistry(WorkflowService $workflowRegistry): void
-//    {
-//        $this->workflowRegistry = $workflowRegistry;
-//    }
+    /**
+     * @param WorkflowService $workflowRegistry
+     * @required
+     */
+    public function setWorkflowRegistry(WorkflowService $workflowRegistry): void
+    {
+        $this->workflowRegistry = $workflowRegistry;
+    }
 
     /**
-     * @Route("/workflow/apply/{workflow}/{transition}/{subjectClass}/{subjectId}", name="workflow_apply", methods={"GET"})
+     * @Route("/wwd/workflow/apply/{workflow}/{transition}/{subjectClass}/{subjectId}", name="wwd_workflow_apply", methods={"GET"})
      * @param Request $request
      * @param Workflow $workflow
      * @param Transition $transition

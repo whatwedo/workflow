@@ -1,4 +1,4 @@
-{% extends 'baseMet.html.twig' %}
+{% extends '@whatwedoWorkflow/layout.html.twig' %}
 
 {% block body %}
     {% embed "include/embed/portlet.html.twig" with { portlet_title: 'TransitionEventDefinition'} %}
@@ -32,7 +32,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('workflow_transition_show', {id: transition_event_definition.transition.id}) }}">back to list</a>
+    <a href="{{ path('wwd_workflow_transition_show', {id: transition_event_definition.transition.id}) }}">back to list</a>
 
     {% endblock %}
     {% endembed %}

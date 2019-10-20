@@ -1,5 +1,4 @@
-{% extends 'baseMet.html.twig' %}
-{% import "macros/elements.html.twig" as elements %}
+{% extends '@whatwedoWorkflow/layout.html.twig' %}
 
 {% block body %}
     {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Create new Transition'} %}
@@ -7,7 +6,7 @@
     {{ form_start(form) }}
     {{ form_widget(form) }}
     <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
-    <a class="btn-default btn" href="{{ path('workflow_workflow_show', {id: transition.workflow.id}) }}">back to list</a>
+    <a class="btn-default btn" href="{{ path('wwd_workflow_workflow_show', {id: transition.workflow.id}) }}">back to list</a>
     {{ form_end(form) }}
         {% endblock %}
     {% endembed %}

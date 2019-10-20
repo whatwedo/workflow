@@ -1,4 +1,4 @@
-{% extends 'baseMet.html.twig' %}
+{% extends '@whatwedoWorkflow/layout.html.twig' %}
 
 {% block body %}
         {% embed "include/embed/portlet.html.twig" with { portlet_title: 'PlaceEventDefinition'} %}
@@ -32,9 +32,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('workflow_place_event_definition_index') }}">back to list</a>
+    <a href="{{ path('wwd_workflow_place_event_definition_index') }}">back to list</a>
 
-    <a href="{{ path('workflow_place_event_definition_edit', {'id': place_event_definition.id}) }}">edit</a>
+    <a href="{{ path('wwd_workflow_place_event_definition_edit', {'id': place_event_definition.id}) }}">edit</a>
 
     {{ include('workflow_place_event_definition/_delete_form.html.twig') }}
     {% endblock %}

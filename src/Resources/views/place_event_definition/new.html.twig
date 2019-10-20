@@ -1,4 +1,4 @@
-{% extends 'baseMet.html.twig' %}
+{% extends '@whatwedoWorkflow/layout.html.twig' %}
 
 {% block body %}
     {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Create new PlaceEventDefinition'} %}
@@ -8,7 +8,7 @@
         <button class="btn">{{ button_label|default('Save') }}</button>
         {{ form_end(form) }}
 
-    <a href="{{ path('workflow_place_show', {id: eventDefinition.place.id} ) }}">back to place</a>
+    <a href="{{ path('wwd_workflow_place_show', {id: eventDefinition.place.id} ) }}">back to place</a>
     {% endblock %}
     {% endembed %}
 

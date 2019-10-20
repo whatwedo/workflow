@@ -17,22 +17,22 @@ use Symfony\Component\Workflow\MarkingStore\MethodMarkingStore;
 use Symfony\Component\Workflow\Transition;
 
 /**
- * @Route("/workflow/workflow")
+ * @Route("/wwd/workflow/workflow")
  */
 class WorkflowController extends AbstractController
 {
     /**
-     * @Route("/", name="workflow_workflow_index", methods={"GET"})
+     * @Route("/", name="wwd_workflow_workflow_index", methods={"GET"})
      */
     public function index(WorkflowRepository $workflowRepository): Response
     {
-        return $this->render('workflow/workflow/index.html.twig', [
+        return $this->render('@whatwedoWorkflow/workflow/index.html.twig', [
             'workflows' => $workflowRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/new", name="workflow_workflow_new", methods={"GET","POST"})
+     * @Route("/new", name="wwd_workflow_workflow_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -48,14 +48,14 @@ class WorkflowController extends AbstractController
             return $this->redirectToRoute('workflow_workflow_index');
         }
 
-        return $this->render('workflow/workflow/new.html.twig', [
+        return $this->render('@whatwedoWorkflow/workflow/new.html.twig', [
             'workflow' => $workflow,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="workflow_workflow_show", methods={"GET"})
+     * @Route("/{id}", name="wwd_workflow_workflow_show", methods={"GET"})
      */
     public function show(Workflow $workflow): Response
     {
@@ -112,14 +112,14 @@ class WorkflowController extends AbstractController
         unlink($tmpfname. '.png');
 
 
-        return $this->render('workflow/workflow/show.html.twig', [
+        return $this->render('@whatwedoWorkflow/workflow/show.html.twig', [
             'workflow' => $workflow,
             'image' => $image,
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="workflow_workflow_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="wwd_workflow_workflow_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Workflow $workflow): Response
     {
@@ -132,14 +132,14 @@ class WorkflowController extends AbstractController
             return $this->redirectToRoute('workflow_workflow_index');
         }
 
-        return $this->render('workflow/workflow/new.html.twig', [
+        return $this->render('@whatwedoWorkflow/workflow/new.html.twig', [
             'workflow' => $workflow,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="workflow_workflow_delete", methods={"DELETE"})
+     * @Route("/{id}", name="wwd_workflow_workflow_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Workflow $workflow): Response
     {

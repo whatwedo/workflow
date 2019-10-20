@@ -1,24 +1,6 @@
-{% extends 'baseMet.html.twig' %}
-{% import "macros/elements.html.twig" as elements %}
-
-{% block subHeaderToolbar %}
-    <a href="{{ path('workflow_workflow_new') }}" class="btn btn-outline-primary btn-sm">
-        <i class="flaticon2-add-1"></i> new
-    </a>
-{% endblock %}
-
+{% extends '@whatwedoWorkflow/layout.html.twig' %}
 
 {% block body %}
-<div class="row">
-    <div class="col-lg-12">
-
-        <div class="kt-portlet kt-portlet--mobile">
-            <div class="kt-portlet__head">
-                <div class="kt-portlet__head-label">
-                    <h3 class="kt-portlet__head-title">Workföpw</h3>
-                </div>
-            </div>
-            <div class="kt-portlet__body">
 
     <table class="table">
         <thead>
@@ -40,8 +22,8 @@
                 <td>{{ workflow.supports ? workflow.supports|json_encode : '' }}</td>
                 <td>{{ workflow.singleState ? 'yes' : 'no' }}</td>
                 <td>
-                    <a href="{{ path('workflow_workflow_show', {'id': workflow.id}) }}">show</a>
-                    <a href="{{ path('workflow_workflow_edit', {'id': workflow.id}) }}">edit</a>
+                    <a href="{{ path('wwd_workflow_workflow_show', {'id': workflow.id}) }}">show</a>
+                    <a href="{{ path('wwd_workflow_workflow_edit', {'id': workflow.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -52,9 +34,6 @@
         </tbody>
     </table>
 
-            </div>
-        </div>
-    </div>
-
-</div>
+    <a href="{{ path('wwd_workflow_workflow_new') }}">new
+    </a>
 {% endblock %}
