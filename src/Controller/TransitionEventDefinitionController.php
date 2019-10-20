@@ -31,7 +31,7 @@ class TransitionEventDefinitionController extends AbstractController
             $entityManager->persist($transitionEventDefinition);
             $entityManager->flush();
 
-            return $this->redirectToRoute('workflow_transition_show', ['id' => $transitionEventDefinition->getTransition()->getId()]);
+            return $this->redirectToRoute('wwd_workflow_transition_show', ['id' => $transitionEventDefinition->getTransition()->getId()]);
         }
 
         return $this->render('@whatwedoWorkflow/transition_event_definition/new.html.twig', [
@@ -61,7 +61,7 @@ class TransitionEventDefinitionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('workflow_transition_show', ['id' => $transitionEventDefinition->getTransition()->getId()]);
+            return $this->redirectToRoute('wwd_workflow_transition_show', ['id' => $transitionEventDefinition->getTransition()->getId()]);
         }
 
         return $this->render('@whatwedoWorkflow/transition_event_definition/new.html.twig', [
@@ -81,6 +81,6 @@ class TransitionEventDefinitionController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('workflow_transition_show', ['id' => $transitionEventDefinition->getTransition()->getId()]);
+        return $this->redirectToRoute('wwd_workflow_transition_show', ['id' => $transitionEventDefinition->getTransition()->getId()]);
     }
 }

@@ -45,7 +45,7 @@ class WorkflowController extends AbstractController
             $entityManager->persist($workflow);
             $entityManager->flush();
 
-            return $this->redirectToRoute('workflow_workflow_index');
+            return $this->redirectToRoute('wwd_workflow_workflow_index');
         }
 
         return $this->render('@whatwedoWorkflow/workflow/new.html.twig', [
@@ -129,7 +129,7 @@ class WorkflowController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('workflow_workflow_index');
+            return $this->redirectToRoute('wwd_workflow_workflow_index');
         }
 
         return $this->render('@whatwedoWorkflow/workflow/new.html.twig', [
@@ -149,6 +149,6 @@ class WorkflowController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('workflow_workflow_index');
+        return $this->redirectToRoute('wwd_workflow_workflow_index');
     }
 }

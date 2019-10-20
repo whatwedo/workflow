@@ -46,11 +46,6 @@ class Workflow
      */
     private $singleState = true;
 
-    /**
-     * @var string
-     * @ORM\Column(type="string")
-     */
-    private $property;
 
     /**
      * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\Place", mappedBy="workflow")
@@ -199,22 +194,4 @@ class Workflow
     {
         $this->singleState = $singleState;
     }
-
-    /**
-     * @return string
-     */
-    public function getProperty(): string
-    {
-        return $this->property;
-    }
-
-    /**
-     * @param string $property
-     */
-    public function setProperty(string $property): void
-    {
-        $this->property = $property;
-    }
-
-
 }

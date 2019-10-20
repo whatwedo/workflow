@@ -16,7 +16,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class TransitionType extends AbstractType
 {
-
     /** @var RegistryInterface */
     private $doctirine;
 
@@ -29,7 +28,6 @@ class TransitionType extends AbstractType
         $this->doctirine = $doctirine;
     }
 
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         /** @var Transition $data */
@@ -38,27 +36,18 @@ class TransitionType extends AbstractType
             ->add('name')
             ->add(
                 'workflow',
-                HiddenType::class
+                HiddenType::class,
+                    [
+                        'property_path' => 'id'
+                    ]
                 )
             ->add(
                 'froms',
                     EntityType::class,
                     [
                         'choices' => $data->getWorkflow()->getPlaces(),
-//                        'choice_label' => function(Place $choice, $key, $value) {
-//                            // adds a class like attending_yes, attending_no, etc
-//                            return $choice->getName();
-//                        },
-//                        'choice_value' => function($choice) {
-//                            // adds a class like attending_yes, attending_no, etc
-//                            if ($choice instanceof Place) {
-//                                return $choice ? $choice->getId() : '';
-//                            }
-//                            return '';
-//                        },
                         'class' => Place::class,
                         'multiple' => true,
-
                     ]
                 )
             ->add('tos'
@@ -66,30 +55,11 @@ class TransitionType extends AbstractType
                 EntityType::class,
                 [
                     'choices' => $data->getWorkflow()->getPlaces(),
-//                    'choice_label' => function(Place $choice, $key, $value) {
-//                        // adds a class like attending_yes, attending_no, etc
-//                        return $choice->getName();
-//                    },
-//                    'choice_value' => function($choice) {
-//                        // adds a class like attending_yes, attending_no, etc
-//                        if ($choice instanceof Place) {
-//                            return $choice ? $choice->getId() : '';
-//                        }
-//                        return '';
-//                    },
                     'class' => Place::class,
                     'multiple' => true,
-
                 ]
             )
         ;
-
-
-
-        $builder->get('workflow')->addModelTransformer(new EntityToValueTransformer($this->doctirineHelper->getRepository(Workflow::class)));
-//        $builder->get('froms')->addModelTransformer(new EntityToValueTransformer($this->doctirineHelper->getRepository(Place::class)));
-//        $builder->get('tos')->addModelTransformer(new EntityToValueTransformer($this->doctirineHelper->getRepository(Place::class)));
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

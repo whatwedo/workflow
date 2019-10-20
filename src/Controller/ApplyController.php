@@ -64,8 +64,7 @@ class ApplyController extends AbstractController
         if ($request->query->has('ref')) {
             return $this->redirect($request->query->get('ref'));
         }
-
-        return $this->redirectToRoute('home');
+        
     }
 
 }

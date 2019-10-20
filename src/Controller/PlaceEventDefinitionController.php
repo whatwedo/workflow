@@ -31,7 +31,7 @@ class PlaceEventDefinitionController extends AbstractController
             $entityManager->persist($placeEventDefinition);
             $entityManager->flush();
 
-            return $this->redirectToRoute('workflow_place_show', ['id' => $placeEventDefinition->getPlace()->getId()]);
+            return $this->redirectToRoute('wwd_workflow_place_show', ['id' => $placeEventDefinition->getPlace()->getId()]);
         }
 
         return $this->render('@whatwedoWorkflow/place_event_definition/new.html.twig', [
@@ -61,7 +61,7 @@ class PlaceEventDefinitionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('workflow_place_show', ['id' => $placeEventDefinition->getPlace()->getId()]);
+            return $this->redirectToRoute('wwd_workflow_place_show', ['id' => $placeEventDefinition->getPlace()->getId()]);
         }
 
         return $this->render('@whatwedoWorkflow/place_event_definition/new.html.twig', [
@@ -81,6 +81,6 @@ class PlaceEventDefinitionController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('workflow_place_show', ['id' => $placeEventDefinition->getPlace()->getId()]);
+        return $this->redirectToRoute('wwd_workflow_place_show', ['id' => $placeEventDefinition->getPlace()->getId()]);
     }
 }

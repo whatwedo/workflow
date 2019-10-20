@@ -35,7 +35,7 @@ class PlaceController extends AbstractController
             $entityManager->persist($place);
             $entityManager->flush();
 
-            return $this->redirectToRoute('workflow_workflow_show', [ 'id' => $place->getWorkflow()->getId() ]);
+            return $this->redirectToRoute('wwd_workflow_workflow_show', [ 'id' => $place->getWorkflow()->getId() ]);
         }
 
         return $this->render('@whatwedoWorkflow/place/new.html.twig', [
@@ -65,7 +65,7 @@ class PlaceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('workflow_workflow_show', [ 'id' => $place->getWorkflow()->getId() ]);
+            return $this->redirectToRoute('wwd_workflow_workflow_show', [ 'id' => $place->getWorkflow()->getId() ]);
         }
 
         return $this->render('@whatwedoWorkflow/place/new.html.twig', [
@@ -85,6 +85,6 @@ class PlaceController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('workflow_workflow_show', ['id' => $place->getWorkflow()->getId()]);
+        return $this->redirectToRoute('wwd_workflow_workflow_show', ['id' => $place->getWorkflow()->getId()]);
     }
 }

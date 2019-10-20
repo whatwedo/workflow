@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class PlaceType extends AbstractType
 {
@@ -30,9 +31,11 @@ class PlaceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add(
-                'workflow',
-
+            ->add('workflow',
+                HiddenType::class,
+                [
+                    'property_path' => 'id'
+                ]
             )
             ->add('name')
             ->add('limit')

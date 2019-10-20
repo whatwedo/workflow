@@ -32,7 +32,7 @@ class Place
 
     /**
      * @var int
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", name="placeLimit", nullable=true)
      */
     private $limit = 0;
 

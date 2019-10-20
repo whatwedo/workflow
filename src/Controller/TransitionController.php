@@ -44,7 +44,7 @@ class TransitionController extends AbstractController
             $entityManager->persist($transition);
             $entityManager->flush();
 
-            return $this->redirectToRoute('workflow_workflow_show', [ 'id' => $workflow->getId()]);
+            return $this->redirectToRoute('wwd_workflow_workflow_show', [ 'id' => $workflow->getId()]);
         }
 
         return $this->render('@whatwedoWorkflow/transition/new.html.twig', [
@@ -64,7 +64,7 @@ class TransitionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('workflow_workflow_show', ['id' => $transition->getWorkflow()->getId()]);
+            return $this->redirectToRoute('wwd_workflow_workflow_show', ['id' => $transition->getWorkflow()->getId()]);
         }
 
         return $this->render('@whatwedoWorkflow/transition/new.html.twig', [
@@ -84,6 +84,6 @@ class TransitionController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('workflow_workflow_show', [ 'id' => $transition->getWorkflow()->getId()]);
+        return $this->redirectToRoute('wwd_workflow_workflow_show', [ 'id' => $transition->getWorkflow()->getId()]);
     }
 }
