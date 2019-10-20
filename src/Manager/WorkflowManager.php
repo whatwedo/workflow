@@ -3,8 +3,6 @@
 
 namespace whatwedo\WorkflowBundle\Manager;
 
-
-
 use whatwedo\WorkflowBundle\DTO\WorkflowMetadataStore;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Repository\WorkflowRepository;

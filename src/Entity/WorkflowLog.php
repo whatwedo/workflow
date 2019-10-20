@@ -51,7 +51,7 @@ class WorkflowLog
     /**
      * @var Transition
      * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\TransitionEventDefinition")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $transitionEventDefinition;
 

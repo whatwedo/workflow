@@ -34,6 +34,7 @@ class WorkflowService extends Registry
         /** @var Workflow[] $workflows */
         $workflows = $this->manager->getAllWorkflows();
 
+
         foreach ($workflows as $workflow) {
             $definition = $this->manager->getDefinition($workflow);
             $dispatcher = new EventDispatcher();
@@ -48,7 +49,7 @@ class WorkflowService extends Registry
                 $workflow->getName()
             );
 
-            $this->addWorkflow($wf, new InstanceOfSupportStrategy(Member::class));
+            $this->addWorkflow($wf, new InstanceOfSupportStrategy($workflow->getSupports()[0]));
         }
     }
 }

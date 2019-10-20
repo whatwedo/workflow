@@ -14,7 +14,7 @@ use Symfony\Component\Workflow\Registry;
 
 class ApplyController extends AbstractController
 {
-    /** @var WorkflowService */
+    /** @var Registry */
     private $workflowRegistry;
 
 
@@ -31,10 +31,10 @@ class ApplyController extends AbstractController
     }
 
     /**
-     * @param WorkflowService $workflowRegistry
+     * @param Registry $workflowRegistry
      * @required
      */
-    public function setWorkflowRegistry(WorkflowService $workflowRegistry): void
+    public function setWorkflowRegistry(Registry $workflowRegistry): void
     {
         $this->workflowRegistry = $workflowRegistry;
     }
@@ -53,7 +53,7 @@ class ApplyController extends AbstractController
      */
     public function apply(Request $request, Workflow $workflow, Transition $transition, string $subjectClass, string $subjectId): Response
     {
-        $subject = $this->doctirine->getRepository($subjectClass)->findById($subjectId);
+        $subject = $this->doctirine->getRepository($subjectClass)->find($subjectId);
 
         $wf =  $this->workflowRegistry->get($subject, $workflow->getName());
         $wf->apply($subject, $transition->getName(), ['foo' => 'bar']);
