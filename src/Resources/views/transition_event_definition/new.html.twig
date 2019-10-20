@@ -1,15 +1,10 @@
 {% extends '@whatwedoWorkflow/layout.html.twig' %}
 
 {% block body %}
-    {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Create new TransitionEventDefinition'} %}
-    {% block portlet_body %}
         {{ form_start(form) }}
         {{ form_widget(form) }}
         <button class="btn">{{ button_label|default('Save') }}</button>
         {{ form_end(form) }}
 
     <a href="{{ path('wwd_workflow_transition_show', {id: eventDefinition.transition.id}) }}">back to transition</a>
-    {% endblock %}
-    {% endembed %}
-
-    {% endblock %}
+{% endblock %}

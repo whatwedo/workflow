@@ -1,8 +1,7 @@
 {% extends '@whatwedoWorkflow/layout.html.twig' %}
 
 {% block body %}
-        {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Create new Place'} %}
-    {% block portlet_body %}
+
     {{ form_start(form) }}
     {{ form_widget(form) }}
     <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
@@ -10,6 +9,4 @@
     {{ form_end(form) }}
 
 
-    {% endblock %}
-    {% endembed %}
 {% endblock %}

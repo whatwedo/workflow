@@ -2,13 +2,10 @@
 
 {% block body %}
 <div class="row">
-    {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Workflow'} %}
-        {% block portlet_actions %}
+
             <a href="{{ path('wwd_workflow_workflow_index') }}" class="btn btn-outline-primary btn-sm">back to list</a>
             <a href="{{ path('wwd_workflow_workflow_edit', {'id': workflow.id}) }}" class="btn btn-outline-primary btn-sm">edit</a>
-        {% endblock portlet_actions %}
 
-        {% block portlet_body %}
             <table class="table">
                 <tbody>
                 <tr>
@@ -34,18 +31,8 @@
                 </tbody>
             </table>
 
-
-        {% endblock %}
-    {% endembed %}
 </div>
 <div class="row">
-    {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Places', width: 6} %}
-    {% block portlet_actions %}
-        <a href="{{ path('wwd_workflow_place_new', {workflow: workflow.id}) }}" class="btn btn-outline-primary btn-sm">
-            <i class="flaticon2-add-1"></i> New Place
-        </a>
-    {% endblock %}
-    {% block portlet_body %}
         <table class="table">
             <thead>
             <tr>
@@ -84,18 +71,8 @@
             {% endfor %}
             </tbody>
         </table>
-    {% endblock %}
-    {% endembed %}
 
 
-    {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Transitions', width: 6} %}
-        {% block portlet_actions %}
-            <a href="{{ path('wwd_workflow_transition_new', {workflow: workflow.id}) }}" class="btn btn-outline-primary btn-sm">
-                <i class="flaticon2-add-1"></i> New Transition
-            </a>
-        {% endblock %}
-
-        {% block portlet_body %}
         <table class="table">
             <thead>
             <tr>
@@ -143,15 +120,9 @@
             {% endfor %}
             </tbody>
         </table>
-    {% endblock %}
-    {% endembed %}
 </div>
 <div class="row">
-    {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Transitions'} %}
-        {% block portlet_body %}
-            <img src="data:image/png;base64,{{ image}}">
-        {% endblock %}
-    {% endembed %}
+    <img src="data:image/png;base64,{{ image}}">
 </div>
 
 {% endblock %}

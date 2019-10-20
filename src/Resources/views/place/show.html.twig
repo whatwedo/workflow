@@ -1,8 +1,7 @@
 {% extends '@whatwedoWorkflow/layout.html.twig' %}
 
 {% block body %}
-        {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Place'} %}
-    {% block portlet_body %}
+
     <table class="table">
         <tbody>
             <tr>
@@ -17,11 +16,7 @@
     </table>
 
     <a href="{{ path('wwd_workflow_workflow_show', {id: place.workflow.id}) }}">back to workflow</a>
-    {% endblock %}
-    {% endembed %}
 
-    {% embed "include/embed/portlet.html.twig" with { portlet_title: 'Event Definitions'} %}
-        {% block portlet_body %}
             <table class="table">
                 <thead>
                 <tr>
@@ -57,7 +52,5 @@
             <a href="{{ path('wwd_workflow_workflow_show', {id: place.workflow.id}) }}">back to workflow</a>
 
 
-        {% endblock %}
-    {% endembed %}
 
 {% endblock %}

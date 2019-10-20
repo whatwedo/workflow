@@ -1,8 +1,6 @@
 {% extends '@whatwedoWorkflow/layout.html.twig' %}
 
 {% block body %}
-    {% embed "include/embed/portlet.html.twig" with { portlet_title: 'TransitionEventDefinition'} %}
-    {% block portlet_body %}
     <table class="table">
         <tbody>
             <tr>
@@ -33,8 +31,4 @@
     </table>
 
     <a href="{{ path('wwd_workflow_transition_show', {id: transition_event_definition.transition.id}) }}">back to list</a>
-
-    {% endblock %}
-    {% endembed %}
-
 {% endblock %}
