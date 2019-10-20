@@ -4,6 +4,8 @@
 namespace whatwedo\WorkflowBundle\Controller;
 
 use whatwedo\WorkflowBundle\Service\WorkflowService;
+use whatwedo\WorkflowBundle\Entity\Workflow;
+use whatwedo\WorkflowBundle\Entity\Transition;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,14 +31,14 @@ class ApplyController extends AbstractController
         $this->doctirine = $doctirine;
     }
 
-    /**
-     * @param WorkflowService $workflowRegistry
-     * @required
-     */
-    public function setWorkflowRegistry(WorkflowService $workflowRegistry): void
-    {
-        $this->workflowRegistry = $workflowRegistry;
-    }
+//    /**
+//     * @param WorkflowService $workflowRegistry
+//     * @required
+//     */
+//    public function setWorkflowRegistry(WorkflowService $workflowRegistry): void
+//    {
+//        $this->workflowRegistry = $workflowRegistry;
+//    }
 
     /**
      * @Route("/workflow/apply/{workflow}/{transition}/{subjectClass}/{subjectId}", name="workflow_apply", methods={"GET"})
@@ -58,7 +60,7 @@ class ApplyController extends AbstractController
         $wf->apply($subject, $transition->getName(), ['foo' => 'bar']);
 
         $this->doctirine->getManager()->persist($subject);
-cd v        $this->doctirine->getManager()->flush();
+        $this->doctirine->getManager()->flush();
 
         if ($request->query->has('ref')) {
             return $this->redirect($request->query->get('ref'));

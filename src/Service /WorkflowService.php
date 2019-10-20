@@ -26,7 +26,6 @@ class WorkflowService extends Registry
     private $workflowListener;
 
 
-
     public function __construct(WorkflowManager $manager, WorkflowSubscriber $workflowListener)
     {
 //        throw new \Exception('peng');

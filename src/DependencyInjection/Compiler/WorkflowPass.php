@@ -1,19 +1,14 @@
 <?php
 
-
 namespace whatwedo\WorkflowBundle\DependencyInjection\Compiler;
 
-
-use whatwedo\WorkflowBundle\Form\TransitionEventDefinitionType;
 use whatwedo\WorkflowBundle\Form\WorkflowEventSubscriberTypes;
-use whatwedo\WorkflowBundle\EventHandler\IWorkflowSubscriber;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 class WorkflowPass implements CompilerPassInterface
 {
-
     /**
      * @inheritDoc
      */
