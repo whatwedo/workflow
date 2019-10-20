@@ -2,7 +2,7 @@
 
 namespace whatwedo\WorkflowBundle\Repository;
 
-use whatwedo\WorkflowBundle\Entity\Workflow\Workflow;
+use whatwedo\WorkflowBundle\Entity\Workflow;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 

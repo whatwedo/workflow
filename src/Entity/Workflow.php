@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\RepositoryWorkflowRepository")
+ * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\WorkflowRepository")
  * @ORM\Table(name="whatwedo_workflow_workflow")
  */
 class Workflow

@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\RepositoryTransitionEventDefinitionRepository")
+ * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\TransitionEventDefinitionRepository")
  * @ORM\Table(name="whatwedo_workflow_transition_event_definition")
  */
 class TransitionEventDefinition

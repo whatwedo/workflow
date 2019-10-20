@@ -2,11 +2,10 @@
 
 namespace whatwedo\WorkflowBundle\Repository;
 
-use whatwedo\WorkflowBundle\Entity\Workflow\Workflow;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use whatwedo\WorkflowBundle\Entity\Workflow\Workflowable;
-use whatwedo\WorkflowBundle\Entity\Workflow\WorkflowLog;
+use whatwedo\WorkflowBundle\Entity\Workflowable;
+use whatwedo\WorkflowBundle\Entity\WorkflowLog;
 
 /**
  * @method WorkflowLog|null find($id, $lockMode = null, $lockVersion = null)

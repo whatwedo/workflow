@@ -2,7 +2,7 @@
 
 namespace whatwedo\WorkflowBundle\Repository;
 
-use whatwedo\WorkflowBundle\Entity\Workflow\TransitionEventDefinition;
+use whatwedo\WorkflowBundle\Entity\TransitionEventDefinition;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 

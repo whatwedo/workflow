@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\RepositoryPlaceEventDefinitionRepository")
+ * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\PlaceEventDefinitionRepository")
  * @ORM\Table(name="whatwedo_workflow_place_event_definiton")
  */
 class PlaceEventDefinition

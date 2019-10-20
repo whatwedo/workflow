@@ -2,7 +2,7 @@
 
 namespace whatwedo\WorkflowBundle\Repository;
 
-use whatwedo\WorkflowBundle\Entity\Workflow\PlaceEventDefinition;
+use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 

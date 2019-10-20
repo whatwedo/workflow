@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\VarDumper\Tests\Cloner\DataTest;
 
 /**
- * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\RepositoryWorkflowLogRepository")
+ * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\WorkflowLogRepository")
  * @ORM\Table(name="whatwedo_workflow_workflow_log")
  */
 class WorkflowLog
