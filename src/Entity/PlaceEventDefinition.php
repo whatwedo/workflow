@@ -51,13 +51,13 @@ class PlaceEventDefinition
 
     /**
      * @var null|string
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $expression;
 
     /**
      * @var null|string
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $template;
 

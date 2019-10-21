@@ -15,7 +15,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('wwd_workflow_workflow_show', {id: place.workflow.id}) }}">back to workflow</a>
+    <a href="{{ path('wwd_workflow_workflow_show', {id: place.workflow.id}) }}" class="btn btn-primary">back to workflow</a>
 
             <table class="table">
                 <thead>
@@ -47,9 +47,9 @@
                 </tbody>
             </table>
 
-            <a href="{{ path('wwd_workflow_place_event_definition_new', {place: place.id}) }}">Create new</a>
-
-            <a href="{{ path('wwd_workflow_workflow_show', {id: place.workflow.id}) }}">back to workflow</a>
+            <a href="{{ path('wwd_workflow_place_event_definition_new', {place: place.id}) }}" class="btn btn-primary">Create new</a>
+<br>
+            <a href="{{ path('wwd_workflow_workflow_show', {id: place.workflow.id}) }}" class="btn btn-primary">back to workflow</a>
 
 
 

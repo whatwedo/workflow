@@ -1,12 +1,9 @@
 {% extends '@whatwedoWorkflow/layout.html.twig' %}
 
 {% block body %}
-
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button class="btn">{{ button_label|default('Save') }}</button>
-        {{ form_end(form) }}
-
-    <a href="{{ path('wwd_workflow_place_show', {id: eventDefinition.place.id} ) }}">back to place</a>
-
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-secondary">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+    <a href="{{ path('wwd_workflow_place_show', {id: eventDefinition.place.id} ) }}" class="btn btn-primary">back to place</a>
 {% endblock %}
