@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\PlaceEventDefinitionRepository")
  * @ORM\Table(name="whatwedo_workflow_place_event_definiton")
  */
-class PlaceEventDefinition
+class PlaceEventDefinition implements EventDefinitionInterface
 {
 
     const LEAVE     = 'leave';
@@ -42,6 +42,12 @@ class PlaceEventDefinition
      * @ORM\Column(type="string", length=255, nullable=false)
      */
     private $eventName;
+
+    /**
+     * @var null|string
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $eventSubscriber;
 
     /**
      * @var integer
@@ -167,5 +173,22 @@ class PlaceEventDefinition
     {
         $this->template = $template;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getEventSubscriber(): ?string
+    {
+        return $this->eventSubscriber;
+    }
+
+    /**
+     * @param string|null $eventSubscriber
+     */
+    public function setEventSubscriber(?string $eventSubscriber): void
+    {
+        $this->eventSubscriber = $eventSubscriber;
+    }
+
 
 }
