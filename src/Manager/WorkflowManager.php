@@ -28,7 +28,6 @@ class WorkflowManager
         /** @var WorkflowRepository $workflowRepo */
         $workflowRepo = $this->doctirine->getRepository(Workflow::class);
 
-
         $allWorkflows = $workflowRepo->findAll();
 
         $class = get_class($subject);
