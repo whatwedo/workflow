@@ -9,20 +9,6 @@
 namespace whatwedo\WorkflowBundle\Command;
 
 
-use Socius\Entity\Address;
-use Socius\Entity\AddressType;
-use Socius\Entity\Contact;
-use Socius\Entity\ContactType;
-use Socius\Entity\Department;
-use Socius\Entity\Group;
-use Socius\Entity\Member;
-use Socius\Entity\MemberAttribute;
-use Socius\Entity\MemberValue;
-use Socius\Entity\Role;
-use Socius\Entity\Workflow\Place;
-use Socius\Entity\Workflow\WorkflowLog;
-use Socius\Repository\Workflow\PlaceRepository;
-use Socius\Repository\Workflow\WorkflowLogRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;

@@ -8,7 +8,7 @@ use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Repository\WorkflowRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Workflow\DefinitionBuilder;
-use Symfony\Component\Workflow\Transition;
+use whatwedo\WorkflowBundle\Entity\Transition;
 
 class WorkflowManager
 {
@@ -80,9 +80,9 @@ class WorkflowManager
 
     /**
      * @param string $name
-     * @return null|\Socius\Entity\Workflow\Transition
+     * @return null|Transition
      */
-    public function getTransition(string $name) : \Socius\Entity\Workflow\Transition
+    public function getTransition(string $name) : Transition
     {
         return $this->doctirine->getRepository(Workflow::class)->findOneBy(['name' => $name]);
     }
