@@ -12,10 +12,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PlaceEventDefinition implements EventDefinitionInterface
 {
-
     const LEAVE     = 'leave';
     const ENTER     = 'enter';
     const ENTERED   = 'entered';
+    const CHECK     = 'check';
 
     /**
      * @ORM\Id()

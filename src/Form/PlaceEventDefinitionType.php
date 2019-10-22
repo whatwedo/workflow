@@ -19,9 +19,10 @@ class PlaceEventDefinitionType extends AbstractType
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'leave' => 'leave',
-                        'enter' => 'enter',
-                        'entered' => 'entered',
+                        PlaceEventDefinition::LEAVE   => PlaceEventDefinition::LEAVE,
+                        PlaceEventDefinition::ENTER   => PlaceEventDefinition::ENTER,
+                        PlaceEventDefinition::ENTERED => PlaceEventDefinition::ENTERED,
+                        PlaceEventDefinition::CHECK   => PlaceEventDefinition::CHECK,
                     ]
                 ]
             )
