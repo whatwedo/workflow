@@ -33,9 +33,9 @@ class WorkflowMetadataStore implements MetadataStoreInterface
     {
         $result = null;
 
-        foreach ($this->workflow->getPlaces() as $place)  {
-            if ($place->getName() === $place) {
-                $result = $place;
+        foreach ($this->workflow->getPlaces() as $placeItem)  {
+            if ($placeItem->getName() === $place) {
+                $result = $placeItem;
                 break;
             }
         }

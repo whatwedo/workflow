@@ -10,16 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\TransitionEventDefinitionRepository")
  * @ORM\Table(name="whatwedo_workflow_transition_event_definition")
  */
-class TransitionEventDefinition
+class TransitionEventDefinition implements EventDefinitionInterface
 {
     const GUARD         = 'guard';
     const TRANSITION    = 'transition';
     const COMPLETED     = 'completed';
     const ANNOUNCE      = 'announce';
-    const ENTER         = 'enter';
-    const ENTERED       = 'entered';
-    const LEAVE         = 'leave';
-
 
     /**
      * @ORM\Id()

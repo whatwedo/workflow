@@ -2,7 +2,7 @@
 
 namespace whatwedo\WorkflowBundle\Form;
 
-use whatwedo\WorkflowBundle\Entity\Workflow\PlaceEventDefinition;
+use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;

@@ -43,17 +43,31 @@ class WorkflowLog
 
 
     /**
-     * @var Transition
-     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\Transition")
+     * @var Place
+     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\Place")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $transition;
+    private $place;
 
     /**
-     * @var Transition
+     * @var null|TransitionEventDefinition
      * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\TransitionEventDefinition")
      * @ORM\JoinColumn(nullable=true)
      */
     private $transitionEventDefinition;
+
+    /**
+     * @var null|string
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $eventDefinition;
+
+    /**
+     * @var null|PlaceEventDefinition
+     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\PlaceEventDefinition")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $placeEventDefinition;
 
     /**
      *
@@ -69,10 +83,12 @@ class WorkflowLog
      */
     private $log;
 
-    public function __construct(Workflowable $subject, Transition $transition)
+    public function __construct(Workflowable $subject, Transition $transition = null, Place $place = null)
     {
         $this->subjectClass = get_class($subject);
         $this->subjectId = $subject->getId();
+        $this->transition = $transition;
+        $this->place = $place;
         $this->transition = $transition;
         $this->date = new \DateTime('now');
     }
@@ -118,19 +134,35 @@ class WorkflowLog
     }
 
     /**
-     * @return Transition
+     * @return TransitionEventDefinition
      */
-    public function getTransitionEventDefinition(): Transition
+    public function getTransitionEventDefinition(): ?TransitionEventDefinition
     {
         return $this->transitionEventDefinition;
     }
 
     /**
-     * @param Transition $transitionEventDefinition
+     * @param TransitionEventDefinition $transitionEventDefinition
      */
-    public function setTransitionEventDefinition(TransitionEventDefinition $transitionEventDefinition): void
+    public function setTransitionEventDefinition(?TransitionEventDefinition $transitionEventDefinition): void
     {
         $this->transitionEventDefinition = $transitionEventDefinition;
+    }
+
+    /**
+     * @return PlaceEventDefinition|null
+     */
+    public function getPlaceEventDefinition(): ?PlaceEventDefinition
+    {
+        return $this->placeEventDefinition;
+    }
+
+    /**
+     * @param PlaceEventDefinition|null $placeEventDefinition
+     */
+    public function setPlaceEventDefinition(?PlaceEventDefinition $placeEventDefinition): void
+    {
+        $this->placeEventDefinition = $placeEventDefinition;
     }
 
 
@@ -166,5 +198,39 @@ class WorkflowLog
     {
         $this->log = $log;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getEventDefinition(): ?string
+    {
+        return $this->eventDefinition;
+    }
+
+    /**
+     * @param string|null $eventDefinition
+     */
+    public function setEventDefinition(?string $eventDefinition): void
+    {
+        $this->eventDefinition = $eventDefinition;
+    }
+
+    /**
+     * @return Place
+     */
+    public function getPlace(): Place
+    {
+        return $this->place;
+    }
+
+    /**
+     * @param Place $place
+     */
+    public function setPlace(Place $place): void
+    {
+        $this->place = $place;
+    }
+
+
 
 }

@@ -25,9 +25,6 @@ class TransitionEventDefinitionType extends AbstractType
                         TransitionEventDefinition::TRANSITION => TransitionEventDefinition::TRANSITION,
                         TransitionEventDefinition::COMPLETED => TransitionEventDefinition::COMPLETED,
                         TransitionEventDefinition::ANNOUNCE => TransitionEventDefinition::ANNOUNCE,
-                        TransitionEventDefinition::ENTERED => TransitionEventDefinition::ENTERED,
-                        TransitionEventDefinition::ENTER => TransitionEventDefinition::ENTER,
-                        TransitionEventDefinition::LEAVE => TransitionEventDefinition::LEAVE,
                     ]
                 ]
             )
@@ -39,7 +36,10 @@ class TransitionEventDefinitionType extends AbstractType
             ->add(
             'expression',
             null,
-                [ 'required' => false ]
+                [
+                    'required' => false,
+                    'help' => 'some Help',
+                ]
             )
             ->add(
                 'template',
