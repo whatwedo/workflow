@@ -32,16 +32,10 @@ class WorkflowCommand extends Command
     protected function configure()
     {
         $this
-            // the name of the command (the part after "bin/console")
             ->setName('whatwedo:workflow')
-
-            // the short description shown while running "php bin/console list"
             ->setDescription('check workflow Places')
-
         ;
     }
-
-
 
     /**
      * @param InputInterface $input
@@ -68,14 +62,6 @@ class WorkflowCommand extends Command
                     $o =0;
                 }
             }
-
         }
-
-
-
     }
-
-
-
-
 }
