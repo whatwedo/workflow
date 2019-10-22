@@ -50,26 +50,6 @@ class WorkflowLog
     private $place;
 
     /**
-     * @var null|TransitionEventDefinition
-     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\TransitionEventDefinition")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $transitionEventDefinition;
-
-    /**
-     * @var null|string
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $eventDefinition;
-
-    /**
-     * @var null|PlaceEventDefinition
-     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\PlaceEventDefinition")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $placeEventDefinition;
-
-    /**
      *
      * @var null|boolean
      * @ORM\Column(type="boolean", nullable=true)
@@ -134,40 +114,6 @@ class WorkflowLog
     }
 
     /**
-     * @return TransitionEventDefinition
-     */
-    public function getTransitionEventDefinition(): ?TransitionEventDefinition
-    {
-        return $this->transitionEventDefinition;
-    }
-
-    /**
-     * @param TransitionEventDefinition $transitionEventDefinition
-     */
-    public function setTransitionEventDefinition(?TransitionEventDefinition $transitionEventDefinition): void
-    {
-        $this->transitionEventDefinition = $transitionEventDefinition;
-    }
-
-    /**
-     * @return PlaceEventDefinition|null
-     */
-    public function getPlaceEventDefinition(): ?PlaceEventDefinition
-    {
-        return $this->placeEventDefinition;
-    }
-
-    /**
-     * @param PlaceEventDefinition|null $placeEventDefinition
-     */
-    public function setPlaceEventDefinition(?PlaceEventDefinition $placeEventDefinition): void
-    {
-        $this->placeEventDefinition = $placeEventDefinition;
-    }
-
-
-
-    /**
      * @return bool|null
      */
     public function getSuccess(): ?bool
@@ -200,22 +146,6 @@ class WorkflowLog
     }
 
     /**
-     * @return string|null
-     */
-    public function getEventDefinition(): ?string
-    {
-        return $this->eventDefinition;
-    }
-
-    /**
-     * @param string|null $eventDefinition
-     */
-    public function setEventDefinition(?string $eventDefinition): void
-    {
-        $this->eventDefinition = $eventDefinition;
-    }
-
-    /**
      * @return Place
      */
     public function getPlace(): Place
@@ -230,7 +160,5 @@ class WorkflowLog
     {
         $this->place = $place;
     }
-
-
 
 }

@@ -6,8 +6,9 @@
  * Time: 17:01
  */
 
-namespace whatwedo\WorkflowBundle\EventListener;
+namespace whatwedo\WorkflowBundle\EventSubscriber;
 
+use Psr\Log\LoggerInterface;
 use whatwedo\WorkflowBundle\Entity\EventDefinitionInterface;
 use whatwedo\WorkflowBundle\Entity\Place;
 use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
@@ -46,15 +47,6 @@ class WorkflowSubscriber implements EventSubscriberInterface
      */
     protected $container;
 
-    /**
-     * @param ContainerInterface|null $container
-     * @required
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     /** @var WorkflowManager */
     private $manager;
 
@@ -71,6 +63,28 @@ class WorkflowSubscriber implements EventSubscriberInterface
 
     /** @var RegistryInterface */
     private $doctrine;
+
+    /** @var LoggerInterface */
+    private $logger;
+
+    /**
+     * @param LoggerInterface $logger
+     * @required
+     */
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * @param ContainerInterface|null $container
+     * @required
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
 
     /**
      * @param RegistryInterface $doctrine
@@ -190,20 +204,14 @@ class WorkflowSubscriber implements EventSubscriberInterface
         $places = $transition->getTos();
 
         foreach ($places as $placeItem) {
-
-
             /** @var Transition $transition */
             $placeMetaData = $event->getWorkflow()->getMetadataStore()->getPlaceMetadata($placeItem);
-
             $place = $placeMetaData['data'];
-
             $this->processPlace($place, $event->getSubject(), PlaceEventDefinition::ENTER);
 
-            /*
-            $workflowLog = new WorkflowLog($event->getSubject(), null);
+            $workflowLog = new WorkflowLog($event->getSubject(), null, $place);
             $this->doctrine->getManager()->persist($workflowLog);
             $this->doctrine->getManager()->flush();
-            */
         }
     }
 
@@ -244,14 +252,6 @@ class WorkflowSubscriber implements EventSubscriberInterface
                 $workflowSubscriber = $this->container->get($eventSubscriberClass);
                 $success = $workflowSubscriber->run($subject, $eventDefinition);
 
-/*
-                $workflowLog = new WorkflowLog($subject, $transition);
-                $workflowLog->setSuccess($success);
-                $workflowLog->setTransitionEventDefinition($eventDefinition);
-
-                $this->doctrine->getManager()->persist($workflowLog);
-                $this->doctrine->getManager()->flush();
-*/
                 $result = true;
             }
         }
@@ -275,15 +275,6 @@ class WorkflowSubscriber implements EventSubscriberInterface
                 $workflowSubscriber = $this->container->get($eventSubscriberClass);
                 $success = $workflowSubscriber->run($subject, $eventDefinition);
 
-                /*
-                $workflowLog = new WorkflowLog($subject, $place);
-                $workflowLog->setSuccess($success);
-                $workflowLog->setPlaceEventDefinition($eventDefinition);
-
-                $this->doctrine->getManager()->persist($workflowLog);
-                $this->doctrine->getManager()->flush();
-
-                */
                 $result = true;
             }
         }

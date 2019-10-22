@@ -8,7 +8,7 @@ use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Repository\WorkflowRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Workflow\DefinitionBuilder;
-use whatwedo\WorkflowBundle\Entity\Transition;
+use Symfony\Component\Workflow\Transition;
 
 class WorkflowManager
 {

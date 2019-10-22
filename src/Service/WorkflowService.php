@@ -4,7 +4,7 @@ namespace whatwedo\WorkflowBundle\Service;
 
 
 use whatwedo\WorkflowBundle\Entity\Workflow;
-use whatwedo\WorkflowBundle\EventListener\WorkflowSubscriber;
+use whatwedo\WorkflowBundle\EventSubscriber\WorkflowSubscriber;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
