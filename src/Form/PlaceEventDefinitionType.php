@@ -12,6 +12,12 @@ class PlaceEventDefinitionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+        /** @var PlaceEventDefinition $data */
+        $data = $builder->getData();
+
+
+
         $builder
             ->add('name')
             ->add(
@@ -25,6 +31,9 @@ class PlaceEventDefinitionType extends AbstractType
                         PlaceEventDefinition::CHECK   => PlaceEventDefinition::CHECK,
                     ]
                 ]
+            )
+            ->add('eventSubscriber',
+                WorkflowEventSubscriberTypes::class
             )
             ->add('sortorder')
             ->add('expression',

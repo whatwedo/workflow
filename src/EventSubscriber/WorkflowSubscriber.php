@@ -42,9 +42,7 @@ use Symfony\Component\Workflow\Event\TransitionEvent;
 
 class WorkflowSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     protected $container;
 
     /** @var WorkflowManager */

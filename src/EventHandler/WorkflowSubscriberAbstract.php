@@ -26,6 +26,7 @@ abstract class WorkflowSubscriberAbstract
 
 
     abstract public function run($subject, TransitionEventDefinition $eventDefinition): bool;
+    abstract public function getExpressionHelper(): string;
 
     /**
      * @param $subject

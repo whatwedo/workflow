@@ -112,6 +112,21 @@ class WorkflowController extends AbstractController
         unlink($tmpfname. '.png');
 
 
+        $graph = new \Fhaculty\Graph\Graph();
+
+        $blue = $graph->createVertex('blue');
+        $blue->setAttribute('graphviz.color', 'blue');
+
+        $red = $graph->createVertex('red');
+        $red->setAttribute('graphviz.color', 'red');
+
+        $edge = $blue->createEdgeTo($red);
+        $edge->setAttribute('graphviz.color', 'grey');
+
+        $graphviz = new \Graphp\GraphViz\GraphViz();
+        $graphviz->display($graph);
+
+
         return $this->render('@whatwedoWorkflow/workflow/show.html.twig', [
             'workflow' => $workflow,
             'image' => $image,

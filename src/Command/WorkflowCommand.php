@@ -14,11 +14,38 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
+use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 
 class WorkflowCommand extends Command
 {
     /** @var RegistryInterface */
     private $doctrine;
+
+    /** @var WorkflowManager */
+    private $workflowManager;
+
+    /** @var ContainerInterface */
+    protected $container;
+
+    /**
+     * @param ContainerInterface|null $container
+     * @required
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @param WorkflowManager $workflowManager
+     * @required
+     */
+    public function setWorkflowManager(WorkflowManager $workflowManager): void
+    {
+        $this->workflowManager = $workflowManager;
+    }
 
     /**
      * @param RegistryInterface $doctrine
@@ -32,7 +59,7 @@ class WorkflowCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('whatwedo:workflow')
+            ->setName('whatwedo:workflow:check')
             ->setDescription('check workflow Places')
         ;
     }
@@ -44,24 +71,32 @@ class WorkflowCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var PlaceRepository $placesRepo */
-        $placesRepo = $this->doctrine->getRepository(Place::class);
-        /** @var WorkflowLogRepository $workflowLogRepo */
-        $workflowLogRepo = $this->doctrine->getRepository(WorkflowLog::class);
-        $limitedPlaces = $placesRepo->findByLimited();
+        $checkPlaceDefintions = $this->workflowManager->getCheckPlaceDefnitions();
 
-        /** @var Place $place */
-        foreach ($limitedPlaces as $place) {
+        /** @var PlaceEventDefinition $checkPlaceDefintion */
+        foreach ($checkPlaceDefintions as $checkPlaceDefintion) {
 
-            $subjects = $this->doctrine->getRepository($place->getWorkflow()->getSupports()[0])
-                ->findBy(['currentPlace' => $place->getName()]);
+            if ( !empty($checkPlaceDefintion->getEventSubscriber()) ) {
+                $supportedEntities = $checkPlaceDefintion->getPlace()->getWorkflow()->getSupports();
 
-            foreach ($subjects as $subject) {
-                $lastLog = $workflowLogRepo->getLastLog($subject);
-                if ($lastLog->getDate() < new \DateTime($place->getLimit() . ' Days ago')) {
-                    $o =0;
+                foreach ($supportedEntities as $supportedEntity) {
+                    $checkPlaceEntities = $this->workflowManager->getEntitiesInPlace($supportedEntity, $checkPlaceDefintion->getPlace()->getName());
+
+                    foreach ($checkPlaceEntities as $checkPlaceEntity) {
+
+                        $eventSubscriberClass = $checkPlaceDefintion->getEventSubscriber();
+                        /** @var IWorkflowSubscriber $workflowSubscriber */
+                        $workflowSubscriber = $this->container->get($eventSubscriberClass);
+                        $success = $workflowSubscriber->run($subject, $eventDefinition);
+
+                        $result = true;
+
+                    }
                 }
             }
+
+
         }
+
     }
 }

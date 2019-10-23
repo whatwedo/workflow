@@ -40,4 +40,17 @@ class Mailsender extends WorkflowSubscriberAbstract
         return true;
     }
 
+
+
+    public function getExpressionHelper(): string
+    {
+        return '{
+            subject: "The Subject",
+            sender: "Sender@Email.com",
+            receiver: "receiver@Email.com",
+        }';
+    }
+
+
+
 }

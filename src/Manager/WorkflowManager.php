@@ -3,7 +3,9 @@
 
 namespace whatwedo\WorkflowBundle\Manager;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use whatwedo\WorkflowBundle\DTO\WorkflowMetadataStore;
+use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Repository\WorkflowRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -84,5 +86,25 @@ class WorkflowManager
     public function getTransition(string $name) : Transition
     {
         return $this->doctirine->getRepository(Workflow::class)->findOneBy(['name' => $name]);
+    }
+
+
+    /**
+     * @return PlaceEventDefinition[]
+     */
+    public function getCheckPlaceDefnitions()
+    {
+        return $this->doctirine->getRepository(PlaceEventDefinition::class)->findBy(['eventName' => PlaceEventDefinition::CHECK]);
+    }
+
+
+    /**
+     * @param string $entityClass
+     * @param string $place
+     * @return object[]
+     */
+    public function getEntitiesInPlace(string $entityClass, string $place)
+    {
+        return $this->doctirine->getRepository($entityClass)->findBy(['currentPlace' => $place]);
     }
 }

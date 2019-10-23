@@ -30,6 +30,10 @@ class SubjectPersister extends WorkflowSubscriberAbstract
         $this->doctrine = $doctrine;
     }
 
+    public function getExpressionHelper(): string
+    {
+        return 'subject';
+    }
 
 
     public function run($subject, TransitionEventDefinition $eventDefinition): bool

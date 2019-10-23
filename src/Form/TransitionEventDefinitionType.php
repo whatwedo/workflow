@@ -30,7 +30,6 @@ class TransitionEventDefinitionType extends AbstractType
             )
             ->add('eventSubscriber',
                 WorkflowEventSubscriberTypes::class
-//                TextType::class
             )
             ->add('sortorder')
             ->add(
