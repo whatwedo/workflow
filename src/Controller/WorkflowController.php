@@ -2,7 +2,11 @@
 
 namespace whatwedo\WorkflowBundle\Controller;
 
+use Fhaculty\Graph\Vertex;
+use Graphp\GraphViz\GraphViz;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
+use whatwedo\WorkflowBundle\Entity\TransitionEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Form\WorkflowType;
 use whatwedo\WorkflowBundle\Repository\WorkflowRepository;
@@ -86,30 +90,59 @@ class WorkflowController extends AbstractController
         $marking = new Marking();
 
 
-        $transitionType = 'workflow' === $workflow->getType() ? PlantUmlDumper::WORKFLOW_TRANSITION : PlantUmlDumper::STATEMACHINE_TRANSITION;
-        $dumper = new PlantUmlDumper($transitionType);
-        $dumper = new GraphvizDumper();
 
-        $tmpfname = tempnam('/tmp', "wf-");
+        $graph = new \Fhaculty\Graph\Graph();
+        $graph->setAttribute('landscape', true);
+        $graph->setAttribute('splines', 'curved');
 
+        /** @var Vertex[] $places */
+        $places = [];
 
+        foreach ($workflow->getPlaces() as $place) {
+            $places[$place->getId()] = $graph->createVertex($place->getName());
+            $places[$place->getId()]->setAttribute('graphviz.shape', 'box');
+            $places[$place->getId()]->setAttribute('graphviz.fillcolor', 'black');
+            $places[$place->getId()]->setAttribute('graphviz.fontcolor', 'white');
+            $places[$place->getId()]->setAttribute('graphviz.style', 'rounded, filled');
+            $rawData = '<<table cellspacing="0" border="0" cellborder="0">
+                  <tr><td><b><u>\N</u></b></td></tr>';
+            /** @var PlaceEventDefinition $eventDefinition */
+            foreach ($place->getEventDefinitions() as $eventDefinition) {
+                $rawData .= '<tr><td><sub>' . strtoupper($eventDefinition->getEventName()) . '</sub></td></tr>';
+            }
+            $rawData .= '</table>>';
+            $places[$place->getId()]->setAttribute('graphviz.label', GraphViz::raw($rawData));
+        }
 
+        /** @var Vertex[] $transitions */
+        $transitions = [];
 
-        $plantDump = $dumper->dump($definition, $marking, [
-        'name' => $workflow->getName(),
-        'nofooter' => true,
-        'graph' => [
-            'label' => $workflow->getName(),
-        ]]);
+        /** @var \whatwedo\WorkflowBundle\Entity\Transition $transition */
+        foreach ($workflow->getTransitions() as $transition) {
+            $transitions[$transition->getId()]['vertex'] = $graph->createVertex($transition->getName());
+            $rawData = '<<table cellspacing="0" border="0" cellborder="0">
+                <tr><td><b><u>\N</u></b></td></tr>                
+                ';
+            /** @var TransitionEventDefinition $eventDefinition */
+            foreach ($transition->getEventDefinitions() as $eventDefinition) {
+                $rawData .= '<tr><td><sub>' . strtoupper($eventDefinition->getEventName()) . '</sub></td></tr>';
+            }
+            $rawData .= '</table>>';
+            $transitions[$transition->getId()]['vertex']->setAttribute('graphviz.label', GraphViz::raw($rawData));
 
+            /** @var Place $from */
+            foreach ($transition->getFroms() as $from) {
+                $transitions[$transition->getId()]['edge1'] = $places[$from->getId()]->createEdgeTo($transitions[$transition->getId()]['vertex']);
+            }
 
-        file_put_contents($tmpfname, $plantDump);
+            /** @var Place $to */
+            foreach ($transition->getTos() as $to) {
+                $transitions[$transition->getId()]['edge2'] = $transitions[$transition->getId()]['vertex']->createEdgeTo($places[$to->getId()]);
+            }
+        }
 
-        exec('dot -Tpng -o ' . $tmpfname . '.png' . ' < ' . $tmpfname);
-        unlink($tmpfname);
-
-        $image =  base64_encode(file_get_contents($tmpfname . '.png'));
-        unlink($tmpfname. '.png');
+        $graphviz = new \Graphp\GraphViz\GraphViz();
+        $image = $graphviz->createImageSrc($graph);
 
         return $this->render('@whatwedoWorkflow/workflow/show.html.twig', [
             'workflow' => $workflow,

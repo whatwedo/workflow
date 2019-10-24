@@ -13,7 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WorkflowEventSubscriberTypes extends AbstractType
 {
-
     private $workflowSubscribers;
 
     public function __construct()
@@ -34,7 +33,6 @@ class WorkflowEventSubscriberTypes extends AbstractType
     {
         return ChoiceType::class;
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {

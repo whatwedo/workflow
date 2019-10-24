@@ -10,7 +10,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WorkflowType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -31,10 +30,7 @@ class WorkflowType extends AbstractType
                 WorkflowSupportedTypes::class
             )
             ->add('singleState')
-
         ;
-
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

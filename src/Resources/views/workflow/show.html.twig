@@ -43,7 +43,6 @@
             <td>{{ place.id }}</td>
             <td>{{ place.name }}</td>
             <td>
-                <a href="{{ path('wwd_workflow_place_show', {'id': place.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-eye"></i>show</a>
                 <a href="{{ path('wwd_workflow_place_edit', {'id': place.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-edit"></i>edit</a>
                 {% if place.fromTransitions | length == 0 and place.toTransitions | length == 0  %}
                 <a href="javascript:;"
@@ -58,6 +57,43 @@
                     <i class="kt-nav__link-icon flaticon2-trash"></i>
                     <span class="kt-nav__link-text">Delete</span>
                     {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="10">
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>EventName</th>
+                        <th>Sortorder</th>
+                        <th>actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for event_definition in place.eventDefinitions %}
+                        <tr>
+                            <td>{{ event_definition.id }}</td>
+                            <td>{{ event_definition.name }}</td>
+                            <td>{{ event_definition.eventName }}</td>
+                            <td>{{ event_definition.eventSubscriber }}</td>
+                            <td>{{ event_definition.sortorder }}</td>
+                            <td>
+                                <a href="{{ path('wwd_workflow_place_event_definition_edit', {'id': event_definition.id}) }}">edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+
             </td>
         </tr>
     {% else %}
@@ -100,7 +136,6 @@
                 {% endfor  %}
             </td>
             <td>
-                <a href="{{ path('wwd_workflow_transition_show', {'id': transition.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-eye"></i>show</a>
                 <a href="{{ path('wwd_workflow_transition_edit', {'id': transition.id}) }}" class="btn btn-xs btn-default"><i class="fa fa-edit"></i>edit</a>
                 <a href="javascript:;"
                    data-toggle="confirm"
@@ -116,6 +151,44 @@
                 </a>
             </td>
         </tr>
+        <tr>
+            <td></td>
+            <td colspan="10">
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>EventName</th>
+                        <th>Sortorder</th>
+                        <th>actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for event_definition in transition.eventDefinitions %}
+                        <tr>
+                            <td>{{ event_definition.id }}</td>
+                            <td>{{ event_definition.name }}</td>
+                            <td>{{ event_definition.eventName }}</td>
+                            <td>{{ event_definition.eventSubscriber }}</td>
+                            <td>{{ event_definition.sortorder }}</td>
+                            <td>
+                                <a href="{{ path('wwd_workflow_transition_event_definition_show', {'id': event_definition.id}) }}">show</a>
+                                <a href="{{ path('wwd_workflow_transition_event_definition_edit', {'id': event_definition.id}) }}">edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </td>
+
+        </tr>
     {% else %}
         <tr>
             <td colspan="3">no records found</td>
@@ -130,7 +203,7 @@
     <br>
     <br>
 
-<img src="data:image/png;base64,{{ image}}">
+<img src="{{ image }}">
 
 
 {% endblock %}

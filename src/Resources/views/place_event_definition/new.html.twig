@@ -5,5 +5,5 @@
     {{ form_widget(form) }}
     <button class="btn btn-secondary">{{ button_label|default('Save') }}</button>
     {{ form_end(form) }}
-    <a href="{{ path('wwd_workflow_place_show', {id: eventDefinition.place.id} ) }}" class="btn btn-primary">back to place</a>
+    <a href="{{ path('wwd_workflow_workflow_show', {id: eventDefinition.place.workflow.id} ) }}" class="btn btn-primary">back to workflow</a>
 {% endblock %}

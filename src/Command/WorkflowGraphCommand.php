@@ -121,7 +121,8 @@ class WorkflowGraphCommand extends Command
         $edge->setAttribute('graphviz.color', 'grey');
 
         $graphviz = new \Graphp\GraphViz\GraphViz();
-        $graphviz->display($graph);
+        $image = $graphviz->createImageSrc($graph);
+        $o = 0;
 
 
     }

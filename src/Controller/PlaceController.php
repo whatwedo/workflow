@@ -45,16 +45,6 @@ class PlaceController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="wwd_workflow_place_show", methods={"GET"})
-     */
-    public function show(Place $place): Response
-    {
-        return $this->render('@whatwedoWorkflow/place/show.html.twig', [
-            'place' => $place,
-        ]);
-    }
-
-    /**
      * @Route("/{id}/edit", name="wwd_workflow_place_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Place $place): Response
