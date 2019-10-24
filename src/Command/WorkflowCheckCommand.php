@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 
-class WorkflowCommand extends Command
+class WorkflowCheckCommand extends Command
 {
     /** @var RegistryInterface */
     private $doctrine;
