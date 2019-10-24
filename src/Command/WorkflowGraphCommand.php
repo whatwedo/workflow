@@ -9,6 +9,8 @@
 namespace whatwedo\WorkflowBundle\Command;
 
 
+use Fhaculty\Graph\Vertex;
+use Graphp\GraphViz\GraphViz;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
@@ -17,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Transition;
+use whatwedo\WorkflowBundle\Entity\TransitionEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 
@@ -77,48 +80,55 @@ class WorkflowGraphCommand extends Command
         /** @var Workflow $workflow */
         $workflow = $this->doctrine->getRepository(Workflow::class)->find(1);
 
-
-
         $graph = new \Fhaculty\Graph\Graph();
+        $graph->setAttribute('landscape', true);
+        $graph->setAttribute('splines', 'curved');
 
+        /** @var Vertex[] $places */
         $places = [];
 
         foreach ($workflow->getPlaces() as $place) {
             $places[$place->getId()] = $graph->createVertex($place->getName());
-            $places[$place->getId()]->setAttribute('graphviz.color', 'blue');
+            $places[$place->getId()]->setAttribute('graphviz.shape', 'box');
+            $places[$place->getId()]->setAttribute('graphviz.fillcolor', 'black');
+            $places[$place->getId()]->setAttribute('graphviz.fontcolor', 'white');
+            $places[$place->getId()]->setAttribute('graphviz.style', 'rounded, filled');
+            $rawData = '<<table cellspacing="0" border="0" cellborder="0">
+                  <tr><td><b><u>\N</u></b></td></tr>';
+            /** @var PlaceEventDefinition $eventDefinition */
+            foreach ($place->getEventDefinitions() as $eventDefinition) {
+                $rawData .= '<tr><td><sub>' . strtoupper($eventDefinition->getEventName()) . '</sub></td></tr>';
+            }
+    $rawData .= '</table>>';
+            $places[$place->getId()]->setAttribute('graphviz.label', GraphViz::raw($rawData));
         }
 
+        /** @var Vertex[] $transitions */
         $transitions = [];
 
         /** @var Transition $transition */
         foreach ($workflow->getTransitions() as $transition) {
             $transitions[$transition->getId()]['vertex'] = $graph->createVertex($transition->getName());
-            $transitions[$transition->getId()]['vertex']->setAttribute('graphviz.color', 'red');
+            $rawData = '<<table cellspacing="0" border="0" cellborder="0">
+                <tr><td><b><u>\N</u></b></td></tr>                
+                ';
+            /** @var TransitionEventDefinition $eventDefinition */
+            foreach ($transition->getEventDefinitions() as $eventDefinition) {
+                $rawData .= '<tr><td><sub>' . strtoupper($eventDefinition->getEventName()) . '</sub></td></tr>';
+            }
+            $rawData .= '</table>>';
+            $transitions[$transition->getId()]['vertex']->setAttribute('graphviz.label', GraphViz::raw($rawData));
 
             /** @var Place $from */
             foreach ($transition->getFroms() as $from) {
-                $transitions[$transition->getId()]['edge1'] = $place[$from->getId()]->createEdgeTo($transitions[$transition->getId()]['vertex']);
-                $transitions[$transition->getId()]['edge1']->setAttribute('graphviz.color', 'grey');
+                $transitions[$transition->getId()]['edge1'] = $places[$from->getId()]->createEdgeTo($transitions[$transition->getId()]['vertex']);
             }
 
             /** @var Place $to */
             foreach ($transition->getTos() as $to) {
-                $transitions[$transition->getId()]['edge2'] = $transitions[$transition->getId()]['vertex']->createEdgeTo($place[$to->getId()]);
-                $transitions[$transition->getId()]['edge2']->setAttribute('graphviz.color', 'grey');
+                $transitions[$transition->getId()]['edge2'] = $transitions[$transition->getId()]['vertex']->createEdgeTo($places[$to->getId()]);
             }
-
         }
-
-        $blue = $graph->createVertex('blue');
-        $blue->setAttribute('graphviz.color', 'blue');
-
-        $red = $graph->createVertex('red');
-        $red->setAttribute('graphviz.color', 'red');
-
-
-
-        $edge = $blue->createEdgeTo($red);
-        $edge->setAttribute('graphviz.color', 'grey');
 
         $graphviz = new \Graphp\GraphViz\GraphViz();
         $image = $graphviz->createImageSrc($graph);
