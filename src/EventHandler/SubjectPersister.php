@@ -4,7 +4,7 @@
 namespace whatwedo\WorkflowBundle\EventHandler;
 
 
-use whatwedo\WorkflowBundle\Entity\TransitionEventDefinition;
+use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -14,10 +14,8 @@ use Symfony\Component\Security\Core\Authorization\ExpressionLanguageProvider;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
 
-class SubjectPersister extends WorkflowSubscriberAbstract
+class SubjectPersister extends EventHandlerAbstract
 {
-
-
     /** @var RegistryInterface */
     private $doctrine;
 
@@ -36,7 +34,7 @@ class SubjectPersister extends WorkflowSubscriberAbstract
     }
 
 
-    public function run($subject, TransitionEventDefinition $eventDefinition): bool
+    public function run($subject, EventDefinition $eventDefinition): bool
     {
 
         $expression = new ExpressionLanguage(null,

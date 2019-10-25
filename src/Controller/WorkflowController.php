@@ -6,7 +6,7 @@ use Fhaculty\Graph\Vertex;
 use Graphp\GraphViz\GraphViz;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
-use whatwedo\WorkflowBundle\Entity\TransitionEventDefinition;
+use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Form\WorkflowType;
 use whatwedo\WorkflowBundle\Repository\WorkflowRepository;
@@ -123,7 +123,7 @@ class WorkflowController extends AbstractController
             $rawData = '<<table cellspacing="0" border="0" cellborder="0">
                 <tr><td><b><u>\N</u></b></td></tr>                
                 ';
-            /** @var TransitionEventDefinition $eventDefinition */
+            /** @var EventDefinition $eventDefinition */
             foreach ($transition->getEventDefinitions() as $eventDefinition) {
                 $rawData .= '<tr><td><sub>' . strtoupper($eventDefinition->getEventName()) . '</sub></td></tr>';
             }

@@ -16,6 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
+use whatwedo\WorkflowBundle\EventHandler\PlaceEventHandlerAbstract;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 
 class WorkflowCheckCommand extends Command
@@ -83,14 +84,14 @@ class WorkflowCheckCommand extends Command
                     $checkPlaceEntities = $this->workflowManager->getEntitiesInPlace($supportedEntity, $checkPlaceDefintion->getPlace()->getName());
 
                     foreach ($checkPlaceEntities as $checkPlaceEntity) {
-
+                        /** @var PlaceEventDefinition $eventSubscriberClass */
                         $eventSubscriberClass = $checkPlaceDefintion->getEventSubscriber();
-                        /** @var IWorkflowSubscriber $workflowSubscriber */
+                        /** @var PlaceEventHandlerAbstract $workflowSubscriber */
                         $workflowSubscriber = $this->container->get($eventSubscriberClass);
-                        $success = $workflowSubscriber->run($subject, $eventDefinition);
+
+                        $success = $workflowSubscriber->run($checkPlaceEntities, $checkPlaceDefintion);
 
                         $result = true;
-
                     }
                 }
             }

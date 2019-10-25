@@ -2,7 +2,7 @@
 
 namespace whatwedo\WorkflowBundle\Form;
 
-use whatwedo\WorkflowBundle\Entity\TransitionEventDefinition;
+use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\WorkflowEventHandler\IWorkflowSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TransitionEventDefinitionType extends AbstractType
+class EventDefinitionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -20,16 +20,11 @@ class TransitionEventDefinitionType extends AbstractType
                 'eventName',
                 ChoiceType::class,
                 [
-                    'choices' => [
-                        TransitionEventDefinition::GUARD => TransitionEventDefinition::GUARD,
-                        TransitionEventDefinition::TRANSITION => TransitionEventDefinition::TRANSITION,
-                        TransitionEventDefinition::COMPLETED => TransitionEventDefinition::COMPLETED,
-                        TransitionEventDefinition::ANNOUNCE => TransitionEventDefinition::ANNOUNCE,
-                    ]
+                    'choices' => $this->getChoices()
                 ]
             )
             ->add('eventSubscriber',
-                WorkflowEventSubscriberTypes::class
+                EventSubscriberTypes::class
             )
             ->add('sortorder')
             ->add(
@@ -51,7 +46,20 @@ class TransitionEventDefinitionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => TransitionEventDefinition::class,
+            'data_class' => EventDefinition::class,
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getChoices(): array
+    {
+        return [
+            EventDefinition::GUARD => EventDefinition::GUARD,
+            EventDefinition::TRANSITION => EventDefinition::TRANSITION,
+            EventDefinition::COMPLETED => EventDefinition::COMPLETED,
+            EventDefinition::ANNOUNCE => EventDefinition::ANNOUNCE,
+        ];
     }
 }

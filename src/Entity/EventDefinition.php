@@ -7,15 +7,20 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\TransitionEventDefinitionRepository")
- * @ORM\Table(name="whatwedo_workflow_transition_event_definition")
+ * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\EventDefinitionRepository")
+ * @ORM\Table(name="whatwedo_workflow_event_definition")
  */
-class TransitionEventDefinition implements EventDefinitionInterface
+class EventDefinition
 {
     const GUARD         = 'guard';
     const TRANSITION    = 'transition';
     const COMPLETED     = 'completed';
     const ANNOUNCE      = 'announce';
+
+    const LEAVE     = 'leave';
+    const ENTER     = 'enter';
+    const ENTERED   = 'entered';
+    const CHECK     = 'check';
 
     /**
      * @ORM\Id()
@@ -27,9 +32,16 @@ class TransitionEventDefinition implements EventDefinitionInterface
     /**
      * @var null|Transition
      * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\Transition", inversedBy="eventDefinitions")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $transition;
+
+    /**
+     * @var null|Place
+     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\Place", inversedBy="eventDefinitions")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $place;
 
     /**
      * @var null|string
@@ -67,12 +79,6 @@ class TransitionEventDefinition implements EventDefinitionInterface
      */
     private $template;
 
-
-    public function __construct(Transition $transition)
-    {
-        $this->transition = $transition;
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -92,6 +98,22 @@ class TransitionEventDefinition implements EventDefinitionInterface
     public function setTransition(?Transition $transition): void
     {
         $this->transition = $transition;
+    }
+
+    /**
+     * @return Place|null
+     */
+    public function getPlace(): ?Place
+    {
+        return $this->place;
+    }
+
+    /**
+     * @param Place|null $place
+     */
+    public function setPlace(?Place $place): void
+    {
+        $this->place = $place;
     }
 
     /**

@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use whatwedo\WorkflowBundle\DTO\WorkflowMetadataStore;
 use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
+use whatwedo\WorkflowBundle\Entity\Workflowable;
 use whatwedo\WorkflowBundle\Repository\WorkflowRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Workflow\DefinitionBuilder;
@@ -105,6 +106,8 @@ class WorkflowManager
      */
     public function getEntitiesInPlace(string $entityClass, string $place)
     {
-        return $this->doctirine->getRepository($entityClass)->findBy(['currentPlace' => $place]);
+        /** @var Workflowable $dummyEntity */
+        $dummyEntity = new $entityClass;
+        return $this->doctirine->getRepository($entityClass)->findBy([$dummyEntity->getCurrentPlaceField() => $place]);
     }
 }

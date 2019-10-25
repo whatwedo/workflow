@@ -42,7 +42,7 @@ class Place
     private $toTransitions;
 
     /**
-     * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\PlaceEventDefinition", mappedBy="place")
+     * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\EventDefinition", mappedBy="place")
      */
     private $eventDefinitions;
 

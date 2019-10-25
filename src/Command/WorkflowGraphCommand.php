@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Transition;
-use whatwedo\WorkflowBundle\Entity\TransitionEventDefinition;
+use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 
@@ -112,7 +112,7 @@ class WorkflowGraphCommand extends Command
             $rawData = '<<table cellspacing="0" border="0" cellborder="0">
                 <tr><td><b><u>\N</u></b></td></tr>                
                 ';
-            /** @var TransitionEventDefinition $eventDefinition */
+            /** @var EventDefinition $eventDefinition */
             foreach ($transition->getEventDefinitions() as $eventDefinition) {
                 $rawData .= '<tr><td><sub>' . strtoupper($eventDefinition->getEventName()) . '</sub></td></tr>';
             }
