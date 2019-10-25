@@ -2,8 +2,9 @@
 
 namespace whatwedo\WorkflowBundle\Form;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
-use whatwedo\WorkflowBundle\WorkflowEventHandler\IWorkflowSubscriber;
+use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -12,8 +13,32 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class EventDefinitionType extends AbstractType
 {
+    /** @var WorkflowManager */
+    protected $manager;
+
+    /**
+     * @param WorkflowManager|null $manager
+     * @required
+     */
+    public function setManager(WorkflowManager $manager = null)
+    {
+        $this->manager = $manager;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        /** @var EventDefinition $data */
+        $data = $builder->getData();
+
+        $help = '';
+
+        if ($data) {
+            if ($eventHandler = $this->manager->getEventHandler($data)) {
+                $help = $eventHandler->getExpressionHelper();
+            }
+        }
+
+
         $builder
             ->add('name')
             ->add(
@@ -23,8 +48,8 @@ class EventDefinitionType extends AbstractType
                     'choices' => $this->getChoices()
                 ]
             )
-            ->add('eventSubscriber',
-                EventSubscriberTypes::class
+            ->add('eventHandler',
+                EventHandlerTypes::class
             )
             ->add('sortorder')
             ->add(
@@ -32,7 +57,7 @@ class EventDefinitionType extends AbstractType
             null,
                 [
                     'required' => false,
-                    'help' => 'some Help',
+                    'help' => $help,
                 ]
             )
             ->add(
@@ -40,6 +65,13 @@ class EventDefinitionType extends AbstractType
                 null,
                 [ 'required' => false ]
             )
+            ->add(
+                'applyOnce',
+                null,
+                [ 'required' => false ]
+            )
+
+
         ;
     }
 

@@ -5,9 +5,11 @@ namespace whatwedo\WorkflowBundle\Manager;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use whatwedo\WorkflowBundle\DTO\WorkflowMetadataStore;
+use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Entity\Workflowable;
+use whatwedo\WorkflowBundle\EventHandler\EventHandlerAbstract;
 use whatwedo\WorkflowBundle\Repository\WorkflowRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Workflow\DefinitionBuilder;
@@ -17,6 +19,18 @@ class WorkflowManager
 {
     /** @var RegistryInterface */
     private $doctirine;
+
+    /** @var ContainerInterface */
+    protected $container;
+
+    /**
+     * @param ContainerInterface|null $container
+     * @required
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
 
     /**
      * @param RegistryInterface $doctirine
@@ -109,5 +123,21 @@ class WorkflowManager
         /** @var Workflowable $dummyEntity */
         $dummyEntity = new $entityClass;
         return $this->doctirine->getRepository($entityClass)->findBy([$dummyEntity->getCurrentPlaceField() => $place]);
+    }
+
+    public function getEventHandler(EventDefinition $eventDefinition, string $eventName = null): ?EventHandlerAbstract
+    {
+        $result = null;
+        if (($eventName == null || $eventDefinition->getEventName() === $eventName) && !empty($eventDefinition->getEventHandler())) {
+            $eventHandlerClass = $eventDefinition->getEventHandler();
+            /** @var EventHandlerAbstract $eventHandler */
+            $eventHandler = $this->container->get($eventHandlerClass);
+
+            $result = $eventHandler;
+        }
+        return $result;
+
+
+
     }
 }

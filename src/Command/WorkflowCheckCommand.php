@@ -15,6 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\EventHandler\PlaceEventHandlerAbstract;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
@@ -26,18 +27,6 @@ class WorkflowCheckCommand extends Command
 
     /** @var WorkflowManager */
     private $workflowManager;
-
-    /** @var ContainerInterface */
-    protected $container;
-
-    /**
-     * @param ContainerInterface|null $container
-     * @required
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
 
     /**
      * @param WorkflowManager $workflowManager
@@ -72,31 +61,27 @@ class WorkflowCheckCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $checkPlaceDefintions = $this->workflowManager->getCheckPlaceDefnitions();
+        /** @var EventDefinition[] $eventDefintions */
+        $eventDefintions = $this->workflowManager->getCheckPlaceDefnitions();
 
-        /** @var PlaceEventDefinition $checkPlaceDefintion */
-        foreach ($checkPlaceDefintions as $checkPlaceDefintion) {
+        /** @var PlaceEventDefinition $eventDefintion */
+        foreach ($eventDefintions as $eventDefintion) {
 
-            if ( !empty($checkPlaceDefintion->getEventSubscriber()) ) {
-                $supportedEntities = $checkPlaceDefintion->getPlace()->getWorkflow()->getSupports();
+            if ( !empty($eventDefintion->getE()) ) {
+                $supportedEntities = $eventDefintion->getPlace()->getWorkflow()->getSupports();
 
                 foreach ($supportedEntities as $supportedEntity) {
-                    $checkPlaceEntities = $this->workflowManager->getEntitiesInPlace($supportedEntity, $checkPlaceDefintion->getPlace()->getName());
+                    $checkPlaceEntities = $this->workflowManager->getEntitiesInPlace($supportedEntity, $eventDefintion->getPlace()->getName());
 
                     foreach ($checkPlaceEntities as $checkPlaceEntity) {
-                        /** @var PlaceEventDefinition $eventSubscriberClass */
-                        $eventSubscriberClass = $checkPlaceDefintion->getEventSubscriber();
-                        /** @var PlaceEventHandlerAbstract $workflowSubscriber */
-                        $workflowSubscriber = $this->container->get($eventSubscriberClass);
-
-                        $success = $workflowSubscriber->run($checkPlaceEntities, $checkPlaceDefintion);
-
-                        $result = true;
+                        /** @var PlaceEventHandlerAbstract $eventHandler */
+                        if ($eventHandler = $this->workflowManager->getEventHandler($eventDefintion, EventDefinition::CHECK))  {
+                            $success = $eventHandler->run($checkPlaceEntities, $eventDefintion);
+                            $result = true;
+                        }
                     }
                 }
             }
-
-
         }
 
     }

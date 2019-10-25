@@ -11,7 +11,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EventSubscriberTypes extends AbstractType
+class EventHandlerTypes extends AbstractType
 {
     private $workflowSubscribers;
 

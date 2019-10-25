@@ -59,7 +59,7 @@ class EventDefinition
      * @var null|string
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $eventSubscriber;
+    private $eventHandler;
 
     /**
      * @var integer
@@ -77,7 +77,19 @@ class EventDefinition
      * @var null|string
      * @ORM\Column(type="text", nullable=true)
      */
+    /**
+     * @var null|string
+     * @ORM\Column(type="text", nullable=true)
+     */
     private $template;
+
+
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     */
+    private $applyOnce = false;
+
 
     public function getId(): ?int
     {
@@ -151,17 +163,17 @@ class EventDefinition
     /**
      * @return string|null
      */
-    public function getEventSubscriber(): ?string
+    public function getEventHandler(): ?string
     {
-        return $this->eventSubscriber;
+        return $this->eventHandler;
     }
 
     /**
-     * @param string|null $eventSubscriber
+     * @param string|null $eventHandler
      */
-    public function setEventSubscriber(?string $eventSubscriber): void
+    public function setEventHandler(?string $eventHandler): void
     {
-        $this->eventSubscriber = $eventSubscriber;
+        $this->eventHandler = $eventHandler;
     }
 
     /**
@@ -212,7 +224,20 @@ class EventDefinition
         $this->template = $template;
     }
 
+    /**
+     * @return bool
+     */
+    public function isApplyOnce(): bool
+    {
+        return $this->applyOnce;
+    }
 
-
+    /**
+     * @param bool $applyOnce
+     */
+    public function setApplyOnce(bool $applyOnce): void
+    {
+        $this->applyOnce = $applyOnce;
+    }
 
 }

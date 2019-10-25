@@ -15,12 +15,11 @@ use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Transition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Entity\WorkflowLog;
+use whatwedo\WorkflowBundle\EventHandler\EventHandlerAbstract;
 use whatwedo\WorkflowBundle\EventHandler\TransitionsEventHandlerAbstract;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -42,8 +41,6 @@ use Symfony\Component\Workflow\Event\TransitionEvent;
 
 class WorkflowSubscriber implements EventSubscriberInterface
 {
-    /** @var ContainerInterface */
-    protected $container;
 
     /** @var WorkflowManager */
     private $manager;
@@ -74,14 +71,6 @@ class WorkflowSubscriber implements EventSubscriberInterface
         $this->logger = $logger;
     }
 
-    /**
-     * @param ContainerInterface|null $container
-     * @required
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
 
 
     /**
@@ -138,7 +127,7 @@ class WorkflowSubscriber implements EventSubscriberInterface
 
         /** @var EventDefinition $eventDefinition */
         foreach ($transition->getEventDefinitions() as $eventDefinition) {
-            if (empty($eventDefinition->getEventSubscriber()) && $eventDefinition->getEventName() === EventDefinition::GUARD) {
+            if (empty($eventDefinition->getEventHandler()) && $eventDefinition->getEventName() === EventDefinition::GUARD) {
                 // do work
                 if (!empty($eventDefinition->getExpression())) {
                     $expression = new ExpressionLanguage(null,
@@ -244,16 +233,8 @@ class WorkflowSubscriber implements EventSubscriberInterface
         $result = false;
         /** @var EventDefinition $eventDefinition */
         foreach ($transition->getEventDefinitions() as $eventDefinition) {
-            if ( $eventDefinition->getEventName() === $eventName && !empty($eventDefinition->getEventSubscriber()) ) {
-
-                /** @var EventDefinition $eventSubscriberClass */
-                $eventSubscriberClass = $eventDefinition->getEventSubscriber();
-
-                /** @var EventDefinition $workflowSubscriber */
-                $workflowSubscriber = $this->container->get($eventSubscriberClass);
-                $success = $workflowSubscriber->run($subject, $eventDefinition);
-
-                $result = true;
+            if ( $eventDefinition->getEventName() === $eventName && !empty($eventDefinition->getEventHandler()) ) {
+                $result = $this->processEventDefinition($subject, $eventName, $eventDefinition);
             }
         }
 
@@ -270,14 +251,7 @@ class WorkflowSubscriber implements EventSubscriberInterface
         $result = false;
         /** @var EventDefinition $eventDefinition */
         foreach ($place->getEventDefinitions() as $eventDefinition) {
-            if ( $eventDefinition->getEventName() === $eventName && !empty($eventDefinition->getEventSubscriber()) ) {
-                $eventSubscriberClass = $eventDefinition->getEventSubscriber();
-                /** @var IWorkflowSubscriber $workflowSubscriber */
-                $workflowSubscriber = $this->container->get($eventSubscriberClass);
-                $success = $workflowSubscriber->run($subject, $eventDefinition);
-
-                $result = true;
-            }
+            $result = $this->processEventDefinition($subject, $eventName, $eventDefinition);
         }
 
         return $result;
@@ -290,5 +264,20 @@ class WorkflowSubscriber implements EventSubscriberInterface
     private function processWorkflow(Workflow $workflow, $subject, $eventName): void
     {
         $o = 0;
+    }
+
+    /**
+     * @param $subject
+     * @param $eventName
+     * @param EventDefinition $eventDefinition
+     * @return bool
+     */
+    private function processEventDefinition($subject, $eventName, EventDefinition $eventDefinition): bool
+    {
+        if ($eventHandler = $this->manager->getEventHandler($eventDefinition, $eventName)) {
+            $success = $eventHandler->run($subject, $eventDefinition);
+            $result = true;
+        }
+        return $result;
     }
 }

@@ -35,7 +35,6 @@ class EventDefinitionController extends AbstractController
             $type = PlaceEventDefinitionType::class;
         }
 
-
         $form = $this->createForm($type, $eventDefinition);
         $form->handleRequest($request);
 
@@ -56,7 +55,7 @@ class EventDefinitionController extends AbstractController
      /**
      * @Route("/{id}/edit", name="wwd_workflow_event_definition_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, EventDefinition $eventDefinition = null): Response
+    public function edit(Request $request, EventDefinition $eventDefinition): Response
     {
         if ($eventDefinition->getTransition()) {
             $type = EventDefinitionType::class;
@@ -69,7 +68,6 @@ class EventDefinitionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
 
             return $this->redirectToRoute('wwd_workflow_event_definition_edit', ['id' => $eventDefinition->getId()]);
         }
