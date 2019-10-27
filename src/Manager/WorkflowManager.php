@@ -6,9 +6,9 @@ namespace whatwedo\WorkflowBundle\Manager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use whatwedo\WorkflowBundle\DTO\WorkflowMetadataStore;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
-use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Entity\Workflowable;
+use whatwedo\WorkflowBundle\Entity\WorkflowLog;
 use whatwedo\WorkflowBundle\EventHandler\EventHandlerAbstract;
 use whatwedo\WorkflowBundle\Repository\WorkflowRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -105,11 +105,11 @@ class WorkflowManager
 
 
     /**
-     * @return PlaceEventDefinition[]
+     * @return EventDefinition[]
      */
     public function getCheckPlaceDefnitions()
     {
-        return $this->doctirine->getRepository(PlaceEventDefinition::class)->findBy(['eventName' => PlaceEventDefinition::CHECK]);
+        return $this->doctirine->getRepository(EventDefinition::class)->findBy(['eventName' => EventDefinition::CHECK]);
     }
 
 
@@ -136,8 +136,12 @@ class WorkflowManager
             $result = $eventHandler;
         }
         return $result;
+    }
 
 
-
+    public function getLastEventLogForEntity($checkPlaceEntity, EventDefinition $eventDefintion) : ? WorkflowLog
+    {
+        $log = $this->doctirine->getRepository(WorkflowLog::class)->findOneBy(['eventDefinition' => $eventDefintion]);
+        return $log;
     }
 }

@@ -4,6 +4,8 @@ namespace whatwedo\WorkflowBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Mapping\OrderBy;
+use Doctrine\ORM\Query\AST\OrderByClause;
 use whatwedo\WorkflowBundle\Entity\Workflowable;
 use whatwedo\WorkflowBundle\Entity\WorkflowLog;
 
@@ -18,6 +20,13 @@ class WorkflowLogRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, WorkflowLog::class);
+    }
+
+    public function createQueryBuilder($alias, $indexBy = null)
+    {
+        $queryBuilder = parent::createQueryBuilder($alias, $indexBy);
+        $queryBuilder->orderBy('date', 'DESC');
+        return $queryBuilder;
     }
 
 

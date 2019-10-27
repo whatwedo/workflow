@@ -10,11 +10,11 @@
 <script src="/codemirror-5.49.2/mode/twig/twig.js"></script>
 
     <script>
-        var myCodeMirrorExpression = CodeMirror.fromTextArea(place_event_definition_expression,
+        var myCodeMirrorExpression = CodeMirror.fromTextArea($('.expression_editor').get( 0 ),
             {
                 lineNumbers: true
             });
-        var myCodeMirrorTemplate = CodeMirror.fromTextArea(place_event_definition_template,
+        var myCodeMirrorTemplate = CodeMirror.fromTextArea($('.template_editor').get( 0 ),
             {
                 lineNumbers: true,
                 mode: { name: 'twig'}

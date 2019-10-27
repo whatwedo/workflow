@@ -1,8 +1,5 @@
 <?php
-
-
 namespace whatwedo\WorkflowBundle\Entity;
-
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -15,7 +12,6 @@ use Symfony\Component\VarDumper\Tests\Cloner\DataTest;
  */
 class WorkflowLog
 {
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -50,6 +46,13 @@ class WorkflowLog
     private $place;
 
     /**
+     * @var EventDefinition
+     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\EventDefinition")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $eventDefinition;
+
+    /**
      *
      * @var null|boolean
      * @ORM\Column(type="boolean", nullable=true)
@@ -59,17 +62,22 @@ class WorkflowLog
     /**
      *
      * @var null|string
+     * @ORM\Column(type="object", nullable=true)
+     */
+    private $data;
+
+
+    /**
+     *
+     * @var null|string
      * @ORM\Column(type="text", nullable=true)
      */
     private $log;
 
-    public function __construct(Workflowable $subject, Transition $transition = null, Place $place = null)
+    public function __construct(Workflowable $subject)
     {
         $this->subjectClass = get_class($subject);
         $this->subjectId = $subject->getId();
-        $this->transition = $transition;
-        $this->place = $place;
-        $this->transition = $transition;
         $this->date = new \DateTime('now');
     }
 
@@ -160,5 +168,39 @@ class WorkflowLog
     {
         $this->place = $place;
     }
+
+    /**
+     * @return EventDefinition
+     */
+    public function getEventDefinition(): EventDefinition
+    {
+        return $this->eventDefinition;
+    }
+
+    /**
+     * @param EventDefinition $eventDefinition
+     */
+    public function setEventDefinition(EventDefinition $eventDefinition): void
+    {
+        $this->eventDefinition = $eventDefinition;
+    }
+
+    /**
+     * @return null
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param $data
+     */
+    public function setData($data): void
+    {
+        $this->data = $data;
+    }
+
+
 
 }

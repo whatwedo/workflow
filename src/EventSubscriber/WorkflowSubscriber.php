@@ -11,7 +11,6 @@ namespace whatwedo\WorkflowBundle\EventSubscriber;
 use Psr\Log\LoggerInterface;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\Entity\Place;
-use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Transition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Entity\WorkflowLog;
@@ -196,7 +195,8 @@ class WorkflowSubscriber implements EventSubscriberInterface
             $place = $placeMetaData['data'];
             $this->processPlace($place, $event->getSubject(), EventDefinition::ENTER);
 
-            $workflowLog = new WorkflowLog($event->getSubject(), null, $place);
+            $workflowLog = new WorkflowLog($event->getSubject());
+            $workflowLog->setPlace($place);
             $this->doctrine->getManager()->persist($workflowLog);
             $this->doctrine->getManager()->flush();
         }
@@ -274,8 +274,17 @@ class WorkflowSubscriber implements EventSubscriberInterface
      */
     private function processEventDefinition($subject, $eventName, EventDefinition $eventDefinition): bool
     {
+        $result = false;
         if ($eventHandler = $this->manager->getEventHandler($eventDefinition, $eventName)) {
             $success = $eventHandler->run($subject, $eventDefinition);
+
+            $workflowLog = new WorkflowLog($subject);
+            $workflowLog->setEventDefinition($eventDefinition);
+            $workflowLog->setSuccess($success);
+            $this->doctrine->getManager()->persist($workflowLog);
+            $this->doctrine->getManager()->flush();
+
+
             $result = true;
         }
         return $result;

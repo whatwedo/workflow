@@ -44,7 +44,7 @@ class Mailsender extends EventHandlerAbstract
         return '{
             subject: "The Subject",
             sender: "Sender@Email.com",
-            receiver: "receiver@Email.com",
+            receiver: "receiver@Email.com"
         }';
     }
 }

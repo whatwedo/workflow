@@ -58,12 +58,24 @@ class EventDefinitionType extends AbstractType
                 [
                     'required' => false,
                     'help' => $help,
+                    'attr' => [
+                        'id' => 'event_definition_expression',
+                        'class' => 'expression_editor',
+                    ],
+
                 ]
             )
             ->add(
                 'template',
                 null,
-                [ 'required' => false ]
+                [
+                    'required' => false,
+                    'attr' => [
+                        'id' => 'event_definition_template',
+                        'class' => 'template_editor'
+                    ],
+
+                ]
             )
             ->add(
                 'applyOnce',

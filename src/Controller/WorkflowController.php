@@ -5,7 +5,6 @@ namespace whatwedo\WorkflowBundle\Controller;
 use Fhaculty\Graph\Vertex;
 use Graphp\GraphViz\GraphViz;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Form\WorkflowType;
@@ -106,7 +105,7 @@ class WorkflowController extends AbstractController
             $places[$place->getId()]->setAttribute('graphviz.style', 'rounded, filled');
             $rawData = '<<table cellspacing="0" border="0" cellborder="0">
                   <tr><td><b><u>\N</u></b></td></tr>';
-            /** @var PlaceEventDefinition $eventDefinition */
+            /** @var EventDefinition $eventDefinition */
             foreach ($place->getEventDefinitions() as $eventDefinition) {
                 $rawData .= '<tr><td><sub>' . strtoupper($eventDefinition->getEventName()) . '</sub></td></tr>';
             }

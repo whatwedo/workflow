@@ -17,7 +17,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Transition;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
@@ -95,7 +94,7 @@ class WorkflowGraphCommand extends Command
             $places[$place->getId()]->setAttribute('graphviz.style', 'rounded, filled');
             $rawData = '<<table cellspacing="0" border="0" cellborder="0">
                   <tr><td><b><u>\N</u></b></td></tr>';
-            /** @var PlaceEventDefinition $eventDefinition */
+            /** @var EventDefinition $eventDefinition */
             foreach ($place->getEventDefinitions() as $eventDefinition) {
                 $rawData .= '<tr><td><sub>' . strtoupper($eventDefinition->getEventName()) . '</sub></td></tr>';
             }
