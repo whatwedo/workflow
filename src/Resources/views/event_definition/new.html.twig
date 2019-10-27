@@ -1,5 +1,28 @@
 {% extends '@whatwedoWorkflow/layout.html.twig' %}
 
+{% block stylesheets %}
+<link rel="stylesheet" href="/codemirror-5.49.2/lib/codemirror.css">
+{% endblock %}
+
+{% block javascripts %}
+<script src="/codemirror-5.49.2/lib/codemirror.js"></script>
+<script src="/codemirror-5.49.2/mode/javascript/javascript.js"></script>
+<script src="/codemirror-5.49.2/mode/twig/twig.js"></script>
+
+    <script>
+        var myCodeMirrorExpression = CodeMirror.fromTextArea(place_event_definition_expression,
+            {
+                lineNumbers: true
+            });
+        var myCodeMirrorTemplate = CodeMirror.fromTextArea(place_event_definition_template,
+            {
+                lineNumbers: true,
+                mode: { name: 'twig'}
+            });
+
+    </script>
+{% endblock %}
+
 {% block body %}
     {{ form_start(form) }}
     {{ form_widget(form) }}
