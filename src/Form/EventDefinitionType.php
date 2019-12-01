@@ -32,7 +32,7 @@ class EventDefinitionType extends AbstractType
 
         $help = '';
 
-        if ($data) {
+        if ($data !== null) {
             if ($eventHandler = $this->manager->getEventHandler($data)) {
                 $help = $eventHandler->getExpressionHelper();
             }

@@ -225,10 +225,11 @@ class WorkflowSubscriber implements EventSubscriberInterface
 
     /**
      * @param Transition $transition
-     * @param $eventName
+     * @param mixed $subject
+     * @param string $eventName
      * @return bool
      */
-    private function processTransition(Transition $transition, $subject, $eventName): bool
+    private function processTransition(Transition $transition, $subject, string $eventName): bool
     {
         $result = false;
         /** @var EventDefinition $eventDefinition */
@@ -242,11 +243,12 @@ class WorkflowSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param Transition $place
-     * @param $eventName
+     * @param Place $place
+     * @param mixed $subject
+     * @param string $eventName
      * @return bool
      */
-    private function processPlace(Place $place, $subject, $eventName): bool
+    private function processPlace(Place $place, $subject, string $eventName): bool
     {
         $result = false;
         /** @var EventDefinition $eventDefinition */
@@ -258,21 +260,22 @@ class WorkflowSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param Transition $transition
-     * @param $eventName
+     * @param Workflow $workflow
+     * @param mixed $subject
+     * @param string $eventName
      */
-    private function processWorkflow(Workflow $workflow, $subject, $eventName): void
+    private function processWorkflow(Workflow $workflow, $subject, string $eventName): void
     {
         $o = 0;
     }
 
     /**
-     * @param $subject
-     * @param $eventName
+     * @param mixed $subject
+     * @param string $eventName
      * @param EventDefinition $eventDefinition
      * @return bool
      */
-    private function processEventDefinition($subject, $eventName, EventDefinition $eventDefinition): bool
+    private function processEventDefinition($subject, string $eventName, EventDefinition $eventDefinition): bool
     {
         $result = false;
         if ($eventHandler = $this->manager->getEventHandler($eventDefinition, $eventName)) {
@@ -283,7 +286,6 @@ class WorkflowSubscriber implements EventSubscriberInterface
             $workflowLog->setSuccess($success);
             $this->doctrine->getManager()->persist($workflowLog);
             $this->doctrine->getManager()->flush();
-
 
             $result = true;
         }

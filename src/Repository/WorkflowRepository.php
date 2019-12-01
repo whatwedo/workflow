@@ -21,7 +21,6 @@ class WorkflowRepository extends ServiceEntityRepository
 
     public function findBySupportedClass(string $class)
     {
-
         $qb = $this->createQueryBuilder('wf')
             ->where(':class in wf.supports')
             ->setParameter('class', $class);

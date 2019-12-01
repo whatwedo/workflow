@@ -4,7 +4,6 @@ namespace whatwedo\WorkflowBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\VarDumper\Tests\Cloner\DataTest;
 
 /**
  * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\WorkflowLogRepository")
@@ -36,6 +35,14 @@ class WorkflowLog
      * @ORM\Column(type="datetime")
      */
     private $date;
+
+
+    /**
+     * @var Transition
+     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\Transition")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $transition;
 
 
     /**
@@ -122,6 +129,14 @@ class WorkflowLog
     }
 
     /**
+     * @param Transition $transition
+     */
+    public function setTransition(Transition $transition): void
+    {
+        $this->transition = $transition;
+    }
+
+    /**
      * @return bool|null
      */
     public function getSuccess(): ?bool
@@ -186,7 +201,7 @@ class WorkflowLog
     }
 
     /**
-     * @return null
+     * @return mixed|null
      */
     public function getData()
     {
@@ -194,13 +209,10 @@ class WorkflowLog
     }
 
     /**
-     * @param $data
+     * @param mixed $data
      */
     public function setData($data): void
     {
         $this->data = $data;
     }
-
-
-
 }

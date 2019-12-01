@@ -15,6 +15,7 @@ use whatwedo\WorkflowBundle\EventHandler\TransitionsEventHandlerAbstract;
 
 class WorkflowSupportedTypes extends AbstractType
 {
+
     /** @var RegistryInterface */
     private $doctrine;
 
@@ -27,11 +28,6 @@ class WorkflowSupportedTypes extends AbstractType
         $this->doctrine = $doctrine;
     }
 
-    public function __construct()
-    {
-        $this->workflowableEntities = [];
-    }
-
     public function getParent()
     {
         return ChoiceType::class;
@@ -41,6 +37,8 @@ class WorkflowSupportedTypes extends AbstractType
     {
         $choices = [];
 
+
+        /** @var \Doctrine\ORM\EntityManagerInterface $em */
         $em = $this->doctrine->getManager();
         $classes = $em->getConfiguration()->getMetadataDriverImpl()->getAllClassNames();
         foreach($classes as $klass) {

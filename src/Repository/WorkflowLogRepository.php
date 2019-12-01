@@ -38,7 +38,7 @@ class WorkflowLogRepository extends ServiceEntityRepository
     {
         $id = $subject->getId();
 
-        /** @var WorkflowLog $result */
+        /** @var WorkflowLog|null $result */
         $result = $this->createQueryBuilder('w')
             ->andWhere('w.subjectClass = :subjectClass')
             ->andWhere('w.subjectId = :subjectId')

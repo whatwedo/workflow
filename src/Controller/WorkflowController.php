@@ -129,12 +129,12 @@ class WorkflowController extends AbstractController
             $rawData .= '</table>>';
             $transitions[$transition->getId()]['vertex']->setAttribute('graphviz.label', GraphViz::raw($rawData));
 
-            /** @var Place $from */
+            /** @var \whatwedo\WorkflowBundle\Entity\Place $from */
             foreach ($transition->getFroms() as $from) {
                 $transitions[$transition->getId()]['edge1'] = $places[$from->getId()]->createEdgeTo($transitions[$transition->getId()]['vertex']);
             }
 
-            /** @var Place $to */
+            /** @var \whatwedo\WorkflowBundle\Entity\Place $to */
             foreach ($transition->getTos() as $to) {
                 $transitions[$transition->getId()]['edge2'] = $transitions[$transition->getId()]['vertex']->createEdgeTo($places[$to->getId()]);
             }

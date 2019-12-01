@@ -29,7 +29,7 @@ abstract class EventHandlerAbstract
     abstract public function getExpressionHelper(): string;
 
     /**
-     * @param $subject
+     * @param mixed $subject
      * @param EventDefinition $eventDefinition
      * @return string
      * @throws \Twig\Error\LoaderError
@@ -53,7 +53,7 @@ abstract class EventHandlerAbstract
     }
 
     /**
-     * @param $subject
+     * @param mixed $subject
      * @param EventDefinition $eventDefinition
      * @return mixed
      */

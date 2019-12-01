@@ -10,6 +10,9 @@ use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Entity\Workflowable;
 use whatwedo\WorkflowBundle\Entity\WorkflowLog;
 use whatwedo\WorkflowBundle\EventHandler\EventHandlerAbstract;
+use whatwedo\WorkflowBundle\Repository\EventDefinitionRepository;
+use whatwedo\WorkflowBundle\Repository\TransitionRepository;
+use whatwedo\WorkflowBundle\Repository\WorkflowLogRepository;
 use whatwedo\WorkflowBundle\Repository\WorkflowRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Workflow\DefinitionBuilder;
@@ -91,25 +94,31 @@ class WorkflowManager
      */
     public function getAllWorkflows()
     {
-        return $this->doctirine->getRepository(Workflow::class)->findAll();
+
+        /** @var WorkflowRepository $repository */
+        $repository = $this->doctirine->getRepository(Workflow::class);
+        return $repository->findAll();
     }
 
     /**
      * @param string $name
-     * @return null|Transition
+     * @return null|\whatwedo\WorkflowBundle\Entity\Transition
      */
-    public function getTransition(string $name) : Transition
+    public function getTransition(string $name) : ?\whatwedo\WorkflowBundle\Entity\Transition
     {
-        return $this->doctirine->getRepository(Workflow::class)->findOneBy(['name' => $name]);
+        /** @var TransitionRepository $repository */
+        $repository = $this->doctirine->getRepository(\whatwedo\WorkflowBundle\Entity\Transition::class);
+        return $repository->findOneBy(['name' => $name]);
     }
 
-
     /**
-     * @return EventDefinition[]
+     * @return EventDefinition[]|null
      */
     public function getCheckPlaceDefnitions()
     {
-        return $this->doctirine->getRepository(EventDefinition::class)->findBy(['eventName' => EventDefinition::CHECK]);
+        /** @var EventDefinitionRepository $repository */
+        $repository = $this->doctirine->getRepository(EventDefinition::class);
+        return $repository->findBy(['eventName' => EventDefinition::CHECK]);
     }
 
 
@@ -141,7 +150,9 @@ class WorkflowManager
 
     public function getLastEventLogForEntity($checkPlaceEntity, EventDefinition $eventDefintion) : ? WorkflowLog
     {
-        $log = $this->doctirine->getRepository(WorkflowLog::class)->findOneBy(['eventDefinition' => $eventDefintion]);
+        /** @var WorkflowLogRepository $repository */
+        $repository = $this->doctirine->getRepository(WorkflowLog::class);
+        $log = $repository->findOneBy(['eventDefinition' => $eventDefintion]);
         return $log;
     }
 }
