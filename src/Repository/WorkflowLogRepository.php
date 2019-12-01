@@ -31,16 +31,15 @@ class WorkflowLogRepository extends ServiceEntityRepository
 
 
     /**
-     * @param $subject
-     * @return mixed
+     * @param Workflowable $subject
+     * @return WorkflowLog|null
      */
     public function getLastLog(Workflowable $subject): ? WorkflowLog
     {
         $id = $subject->getId();
 
-
         /** @var WorkflowLog $result */
-        $result =  $this->createQueryBuilder('w')
+        $result = $this->createQueryBuilder('w')
             ->andWhere('w.subjectClass = :subjectClass')
             ->andWhere('w.subjectId = :subjectId')
             ->setParameter('subjectClass', get_class($subject))
@@ -51,17 +50,18 @@ class WorkflowLogRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
             ;
 
-        /**  */
-        if ($result) {
-            foreach ($result->getTransition()->getTos() as $place) {
-                if ($place->getName() == $subject->getCurrentPlace()) {
-                    return $result;
-                }
-            }
+        if ($result === null) {
+            return null;
         }
 
+        foreach ($result->getTransition()->getTos() as $place) {
+            if ($place->getName() !== $subject->getCurrentPlace()) {
+                continue;
+            }
+            return $result;
+        }
 
+        // No place matched.
         return null;
     }
-
 }
