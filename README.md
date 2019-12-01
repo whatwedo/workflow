@@ -1,8 +1,8 @@
 # whatwedo Workflow Bundle
 
-provied a frontend for the Symfony Workflow component. 
+Provide a frontend for the Symfony Workflow component. 
 Enables you to configure the Workflow, defining Places and Transitons.  
-Define event on Transition and Places. 
+Define events on Transition and Places. 
 
 
 ## Confguration
@@ -35,9 +35,6 @@ somewhere, the next Trasition Buttons for the Entity-Workflow
 ## Usage
 
 Enable Entities for Workflow:
-      
-      
-      
 ```php
 ...
 use whatwedo\WorkflowBundle\Entity\Workflowable;
@@ -73,7 +70,4 @@ class Post implements Workflowable
         return 'myCurrentPlace';
     }
 }
-
 ```      
-
-
