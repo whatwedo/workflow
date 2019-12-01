@@ -43,7 +43,7 @@ class Transition
     private $tos;
 
     /**
-     * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\TransitionEventDefinition", mappedBy="transition")
+     * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\EventDefinition", mappedBy="transition")
      * @ORM\OrderBy({"sortorder" = "ASC"})
      */
     private $eventDefinitions;

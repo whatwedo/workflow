@@ -4,14 +4,13 @@
 namespace whatwedo\WorkflowBundle\EventHandler;
 
 
-use whatwedo\WorkflowBundle\Entity\TransitionEventDefinition;
+use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use Twig\Environment;
 
-class Mailsender extends WorkflowSubscriberAbstract
+class Mailsender extends EventHandlerAbstract
 {
-
     /** @var \Swift_Mailer */
-    private $mailer;
+    protected $mailer;
 
     /**
      * @param \Swift_Mailer $mailer
@@ -22,7 +21,7 @@ class Mailsender extends WorkflowSubscriberAbstract
         $this->mailer = $mailer;
     }
 
-    public function run($subject, TransitionEventDefinition $eventDefinition): bool
+    public function run($subject, EventDefinition $eventDefinition): bool
     {
 
         $data = $this->evaluateExpression($subject, $eventDefinition);
@@ -40,4 +39,12 @@ class Mailsender extends WorkflowSubscriberAbstract
         return true;
     }
 
+    public function getExpressionHelper(): string
+    {
+        return '{
+            subject: "The Subject",
+            sender: "Sender@Email.com",
+            receiver: "receiver@Email.com"
+        }';
+    }
 }

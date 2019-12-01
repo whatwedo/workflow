@@ -13,7 +13,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class PlaceType extends AbstractType
 {
-
     /** @var RegistryInterface */
     private $doctirine;
 
@@ -26,8 +25,6 @@ class PlaceType extends AbstractType
         $this->doctirine = $doctirine;
     }
 
-
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -38,12 +35,7 @@ class PlaceType extends AbstractType
                 ]
             )
             ->add('name')
-            ->add('limit')
         ;
-
-//        $builder->get('workflow')->addModelTransformer(
-//            new EntityToValueTransformer($this->doctirineHelper->getRepository(Workflow::class))
-//        );
     }
 
     public function configureOptions(OptionsResolver $resolver)

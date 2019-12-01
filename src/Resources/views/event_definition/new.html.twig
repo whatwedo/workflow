@@ -1,0 +1,38 @@
+{% extends '@whatwedoWorkflow/layout.html.twig' %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="/codemirror-5.49.2/lib/codemirror.css">
+{% endblock %}
+
+{% block javascripts %}
+<script src="/codemirror-5.49.2/lib/codemirror.js"></script>
+<script src="/codemirror-5.49.2/mode/javascript/javascript.js"></script>
+<script src="/codemirror-5.49.2/mode/twig/twig.js"></script>
+
+    <script>
+        var myCodeMirrorExpression = CodeMirror.fromTextArea($('.expression_editor').get( 0 ),
+            {
+                lineNumbers: true
+            });
+        var myCodeMirrorTemplate = CodeMirror.fromTextArea($('.template_editor').get( 0 ),
+            {
+                lineNumbers: true,
+                mode: { name: 'twig'}
+            });
+
+    </script>
+{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn btn-secondary">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+
+    {% if eventDefinition.transition %}
+    <a href="{{ path('wwd_workflow_workflow_show', {id: eventDefinition.transition.workflow.id}) }}" class="btn btn-primary">back to workflow</a>
+    {% endif %}
+    {% if eventDefinition.place %}
+    <a href="{{ path('wwd_workflow_workflow_show', {id: eventDefinition.place.workflow.id}) }}" class="btn btn-primary">back to workflow</a>
+    {% endif %}
+{% endblock %}

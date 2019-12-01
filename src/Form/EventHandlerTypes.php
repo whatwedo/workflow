@@ -6,14 +6,13 @@ namespace whatwedo\WorkflowBundle\Form;
 
 use ReflectionClass;
 use whatwedo\WorkflowBundle\Entity\Workflowable;
-use whatwedo\WorkflowBundle\EventHandler\WorkflowSubscriberAbstract;
+use whatwedo\WorkflowBundle\EventHandler\EventHandlerAbstract;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class WorkflowEventSubscriberTypes extends AbstractType
+class EventHandlerTypes extends AbstractType
 {
-
     private $workflowSubscribers;
 
     public function __construct()
@@ -21,11 +20,11 @@ class WorkflowEventSubscriberTypes extends AbstractType
         $this->workflowSubscribers = [];
     }
 
-    public function addWorkflowSubscriber(WorkflowSubscriberAbstract $workflowSubscriber)
+    public function addWorkflowSubscriber(EventHandlerAbstract $workflowSubscriber)
     {
         $klass = get_class($workflowSubscriber);
         $reflect = new ReflectionClass($klass);
-        if($reflect->isSubclassOf(WorkflowSubscriberAbstract::class)) {
+        if($reflect->isSubclassOf(EventHandlerAbstract::class)) {
             $this->workflowSubscribers[$klass] = $klass;
         }
     }
@@ -34,7 +33,6 @@ class WorkflowEventSubscriberTypes extends AbstractType
     {
         return ChoiceType::class;
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {

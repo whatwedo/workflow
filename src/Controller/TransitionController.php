@@ -17,18 +17,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class TransitionController extends AbstractController
 {
 
-
-    /**
-     * @Route("/{id}", name="wwd_workflow_transition_show", methods={"GET"})
-     */
-    public function show(Transition $transition): Response
-    {
-        return $this->render('@whatwedoWorkflow/transition/show.html.twig', [
-            'transition' => $transition,
-        ]);
-    }
-
-
     /**
      * @Route("/new/{workflow}", name="wwd_workflow_transition_new", methods={"GET","POST"})
      */

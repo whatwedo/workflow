@@ -6,20 +6,19 @@
  * Time: 17:01
  */
 
-namespace whatwedo\WorkflowBundle\EventListener;
+namespace whatwedo\WorkflowBundle\EventSubscriber;
 
-use whatwedo\WorkflowBundle\Entity\EventDefinitionInterface;
+use Psr\Log\LoggerInterface;
+use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\Entity\Place;
-use whatwedo\WorkflowBundle\Entity\PlaceEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Transition;
-use whatwedo\WorkflowBundle\Entity\TransitionEventDefinition;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Entity\WorkflowLog;
+use whatwedo\WorkflowBundle\EventHandler\EventHandlerAbstract;
+use whatwedo\WorkflowBundle\EventHandler\TransitionsEventHandlerAbstract;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -41,19 +40,6 @@ use Symfony\Component\Workflow\Event\TransitionEvent;
 
 class WorkflowSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * @param ContainerInterface|null $container
-     * @required
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
 
     /** @var WorkflowManager */
     private $manager;
@@ -71,6 +57,20 @@ class WorkflowSubscriber implements EventSubscriberInterface
 
     /** @var RegistryInterface */
     private $doctrine;
+
+    /** @var LoggerInterface */
+    private $logger;
+
+    /**
+     * @param LoggerInterface $logger
+     * @required
+     */
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
+
+
 
     /**
      * @param RegistryInterface $doctrine
@@ -124,9 +124,9 @@ class WorkflowSubscriber implements EventSubscriberInterface
 
 
 
-        /** @var TransitionEventDefinition $eventDefinition */
+        /** @var EventDefinition $eventDefinition */
         foreach ($transition->getEventDefinitions() as $eventDefinition) {
-            if (empty($eventDefinition->getEventSubscriber()) && $eventDefinition->getEventName() === TransitionEventDefinition::GUARD) {
+            if (empty($eventDefinition->getEventHandler()) && $eventDefinition->getEventName() === EventDefinition::GUARD) {
                 // do work
                 if (!empty($eventDefinition->getExpression())) {
                     $expression = new ExpressionLanguage(null,
@@ -158,21 +158,21 @@ class WorkflowSubscriber implements EventSubscriberInterface
     {
         /** @var Transition $transition */
         $transition = $event->getMetadata('data', $event->getTransition());
-        $this->processTransition($transition, $event->getSubject(), TransitionEventDefinition::TRANSITION);
+        $this->processTransition($transition, $event->getSubject(), EventDefinition::TRANSITION);
     }
 
     public function onCompleted(CompletedEvent $event)
     {
         /** @var Transition $transition */
         $transition = $event->getMetadata('data', $event->getTransition());
-        $this->processTransition($transition, $event->getSubject(), TransitionEventDefinition::COMPLETED);
+        $this->processTransition($transition, $event->getSubject(), EventDefinition::COMPLETED);
     }
 
     public function onAnnounce(AnnounceEvent $event)
     {
         /** @var Transition $transition */
         $transition = $event->getMetadata('data', $event->getTransition());
-        $this->processTransition($transition, $event->getSubject(), TransitionEventDefinition::ANNOUNCE);
+        $this->processTransition($transition, $event->getSubject(), EventDefinition::ANNOUNCE);
     }
 
 
@@ -180,7 +180,7 @@ class WorkflowSubscriber implements EventSubscriberInterface
     {
         /** @var Transition $transition */
         $transition = $event->getMetadata('data', $event->getTransition());
-        $this->processTransition($transition, $event->getSubject(), PlaceEventDefinition::LEAVE);
+        $this->processTransition($transition, $event->getSubject(), EventDefinition::LEAVE);
     }
 
 
@@ -190,20 +190,15 @@ class WorkflowSubscriber implements EventSubscriberInterface
         $places = $transition->getTos();
 
         foreach ($places as $placeItem) {
-
-
             /** @var Transition $transition */
             $placeMetaData = $event->getWorkflow()->getMetadataStore()->getPlaceMetadata($placeItem);
-
             $place = $placeMetaData['data'];
+            $this->processPlace($place, $event->getSubject(), EventDefinition::ENTER);
 
-            $this->processPlace($place, $event->getSubject(), PlaceEventDefinition::ENTER);
-
-            /*
-            $workflowLog = new WorkflowLog($event->getSubject(), null);
+            $workflowLog = new WorkflowLog($event->getSubject());
+            $workflowLog->setPlace($place);
             $this->doctrine->getManager()->persist($workflowLog);
             $this->doctrine->getManager()->flush();
-            */
         }
     }
 
@@ -211,7 +206,7 @@ class WorkflowSubscriber implements EventSubscriberInterface
     {
         /** @var Workflow $workflow */
         $workflow = $event->getMetadata('data', null);
-        $this->processWorkflow($workflow, $event->getSubject(), PlaceEventDefinition::ENTERED);
+        $this->processWorkflow($workflow, $event->getSubject(), EventDefinition::ENTERED);
     }
 
 
@@ -230,29 +225,17 @@ class WorkflowSubscriber implements EventSubscriberInterface
 
     /**
      * @param Transition $transition
-     * @param $eventName
+     * @param mixed $subject
+     * @param string $eventName
      * @return bool
      */
-    private function processTransition(Transition $transition, $subject, $eventName): bool
+    private function processTransition(Transition $transition, $subject, string $eventName): bool
     {
         $result = false;
-        /** @var EventDefinitionInterface $eventDefinition */
+        /** @var EventDefinition $eventDefinition */
         foreach ($transition->getEventDefinitions() as $eventDefinition) {
-            if ( $eventDefinition->getEventName() === $eventName && !empty($eventDefinition->getEventSubscriber()) ) {
-                $eventSubscriberClass = $eventDefinition->getEventSubscriber();
-                /** @var IWorkflowSubscriber $workflowSubscriber */
-                $workflowSubscriber = $this->container->get($eventSubscriberClass);
-                $success = $workflowSubscriber->run($subject, $eventDefinition);
-
-/*
-                $workflowLog = new WorkflowLog($subject, $transition);
-                $workflowLog->setSuccess($success);
-                $workflowLog->setTransitionEventDefinition($eventDefinition);
-
-                $this->doctrine->getManager()->persist($workflowLog);
-                $this->doctrine->getManager()->flush();
-*/
-                $result = true;
+            if ( $eventDefinition->getEventName() === $eventName && !empty($eventDefinition->getEventHandler()) ) {
+                $result = $this->processEventDefinition($subject, $eventName, $eventDefinition);
             }
         }
 
@@ -260,43 +243,52 @@ class WorkflowSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param Transition $place
-     * @param $eventName
+     * @param Place $place
+     * @param mixed $subject
+     * @param string $eventName
      * @return bool
      */
-    private function processPlace(Place $place, $subject, $eventName): bool
+    private function processPlace(Place $place, $subject, string $eventName): bool
     {
         $result = false;
-        /** @var EventDefinitionInterface $eventDefinition */
+        /** @var EventDefinition $eventDefinition */
         foreach ($place->getEventDefinitions() as $eventDefinition) {
-            if ( $eventDefinition->getEventName() === $eventName && !empty($eventDefinition->getEventSubscriber()) ) {
-                $eventSubscriberClass = $eventDefinition->getEventSubscriber();
-                /** @var IWorkflowSubscriber $workflowSubscriber */
-                $workflowSubscriber = $this->container->get($eventSubscriberClass);
-                $success = $workflowSubscriber->run($subject, $eventDefinition);
-
-                /*
-                $workflowLog = new WorkflowLog($subject, $place);
-                $workflowLog->setSuccess($success);
-                $workflowLog->setPlaceEventDefinition($eventDefinition);
-
-                $this->doctrine->getManager()->persist($workflowLog);
-                $this->doctrine->getManager()->flush();
-
-                */
-                $result = true;
-            }
+            $result = $this->processEventDefinition($subject, $eventName, $eventDefinition);
         }
 
         return $result;
     }
 
     /**
-     * @param Transition $transition
-     * @param $eventName
+     * @param Workflow $workflow
+     * @param mixed $subject
+     * @param string $eventName
      */
-    private function processWorkflow(Workflow $workflow, $subject, $eventName): void
+    private function processWorkflow(Workflow $workflow, $subject, string $eventName): void
     {
         $o = 0;
+    }
+
+    /**
+     * @param mixed $subject
+     * @param string $eventName
+     * @param EventDefinition $eventDefinition
+     * @return bool
+     */
+    private function processEventDefinition($subject, string $eventName, EventDefinition $eventDefinition): bool
+    {
+        $result = false;
+        if ($eventHandler = $this->manager->getEventHandler($eventDefinition, $eventName)) {
+            $success = $eventHandler->run($subject, $eventDefinition);
+
+            $workflowLog = new WorkflowLog($subject);
+            $workflowLog->setEventDefinition($eventDefinition);
+            $workflowLog->setSuccess($success);
+            $this->doctrine->getManager()->persist($workflowLog);
+            $this->doctrine->getManager()->flush();
+
+            $result = true;
+        }
+        return $result;
     }
 }

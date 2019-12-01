@@ -1,13 +1,9 @@
 <?php
-
-
 namespace whatwedo\WorkflowBundle\Entity;
-
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\VarDumper\Tests\Cloner\DataTest;
 
 /**
  * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\WorkflowLogRepository")
@@ -15,7 +11,6 @@ use Symfony\Component\VarDumper\Tests\Cloner\DataTest;
  */
 class WorkflowLog
 {
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -43,6 +38,14 @@ class WorkflowLog
 
 
     /**
+     * @var Transition
+     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\Transition")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $transition;
+
+
+    /**
      * @var Place
      * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\Place")
      * @ORM\JoinColumn(nullable=true)
@@ -50,24 +53,11 @@ class WorkflowLog
     private $place;
 
     /**
-     * @var null|TransitionEventDefinition
-     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\TransitionEventDefinition")
+     * @var EventDefinition
+     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\EventDefinition")
      * @ORM\JoinColumn(nullable=true)
-     */
-    private $transitionEventDefinition;
-
-    /**
-     * @var null|string
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $eventDefinition;
-
-    /**
-     * @var null|PlaceEventDefinition
-     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\PlaceEventDefinition")
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $placeEventDefinition;
 
     /**
      *
@@ -79,17 +69,22 @@ class WorkflowLog
     /**
      *
      * @var null|string
+     * @ORM\Column(type="object", nullable=true)
+     */
+    private $data;
+
+
+    /**
+     *
+     * @var null|string
      * @ORM\Column(type="text", nullable=true)
      */
     private $log;
 
-    public function __construct(Workflowable $subject, Transition $transition = null, Place $place = null)
+    public function __construct(Workflowable $subject)
     {
         $this->subjectClass = get_class($subject);
         $this->subjectId = $subject->getId();
-        $this->transition = $transition;
-        $this->place = $place;
-        $this->transition = $transition;
         $this->date = new \DateTime('now');
     }
 
@@ -134,38 +129,12 @@ class WorkflowLog
     }
 
     /**
-     * @return TransitionEventDefinition
+     * @param Transition $transition
      */
-    public function getTransitionEventDefinition(): ?TransitionEventDefinition
+    public function setTransition(Transition $transition): void
     {
-        return $this->transitionEventDefinition;
+        $this->transition = $transition;
     }
-
-    /**
-     * @param TransitionEventDefinition $transitionEventDefinition
-     */
-    public function setTransitionEventDefinition(?TransitionEventDefinition $transitionEventDefinition): void
-    {
-        $this->transitionEventDefinition = $transitionEventDefinition;
-    }
-
-    /**
-     * @return PlaceEventDefinition|null
-     */
-    public function getPlaceEventDefinition(): ?PlaceEventDefinition
-    {
-        return $this->placeEventDefinition;
-    }
-
-    /**
-     * @param PlaceEventDefinition|null $placeEventDefinition
-     */
-    public function setPlaceEventDefinition(?PlaceEventDefinition $placeEventDefinition): void
-    {
-        $this->placeEventDefinition = $placeEventDefinition;
-    }
-
-
 
     /**
      * @return bool|null
@@ -200,22 +169,6 @@ class WorkflowLog
     }
 
     /**
-     * @return string|null
-     */
-    public function getEventDefinition(): ?string
-    {
-        return $this->eventDefinition;
-    }
-
-    /**
-     * @param string|null $eventDefinition
-     */
-    public function setEventDefinition(?string $eventDefinition): void
-    {
-        $this->eventDefinition = $eventDefinition;
-    }
-
-    /**
      * @return Place
      */
     public function getPlace(): Place
@@ -231,6 +184,35 @@ class WorkflowLog
         $this->place = $place;
     }
 
+    /**
+     * @return EventDefinition
+     */
+    public function getEventDefinition(): EventDefinition
+    {
+        return $this->eventDefinition;
+    }
 
+    /**
+     * @param EventDefinition $eventDefinition
+     */
+    public function setEventDefinition(EventDefinition $eventDefinition): void
+    {
+        $this->eventDefinition = $eventDefinition;
+    }
 
+    /**
+     * @return mixed|null
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param mixed $data
+     */
+    public function setData($data): void
+    {
+        $this->data = $data;
+    }
 }

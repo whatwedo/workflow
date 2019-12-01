@@ -4,6 +4,8 @@ namespace whatwedo\WorkflowBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Mapping\OrderBy;
+use Doctrine\ORM\Query\AST\OrderByClause;
 use whatwedo\WorkflowBundle\Entity\Workflowable;
 use whatwedo\WorkflowBundle\Entity\WorkflowLog;
 
@@ -20,18 +22,24 @@ class WorkflowLogRepository extends ServiceEntityRepository
         parent::__construct($registry, WorkflowLog::class);
     }
 
+    public function createQueryBuilder($alias, $indexBy = null)
+    {
+        $queryBuilder = parent::createQueryBuilder($alias, $indexBy);
+        $queryBuilder->orderBy('date', 'DESC');
+        return $queryBuilder;
+    }
+
 
     /**
-     * @param $subject
-     * @return mixed
+     * @param Workflowable $subject
+     * @return WorkflowLog|null
      */
     public function getLastLog(Workflowable $subject): ? WorkflowLog
     {
         $id = $subject->getId();
 
-
-        /** @var WorkflowLog $result */
-        $result =  $this->createQueryBuilder('w')
+        /** @var WorkflowLog|null $result */
+        $result = $this->createQueryBuilder('w')
             ->andWhere('w.subjectClass = :subjectClass')
             ->andWhere('w.subjectId = :subjectId')
             ->setParameter('subjectClass', get_class($subject))
@@ -42,17 +50,18 @@ class WorkflowLogRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
             ;
 
-        /**  */
-        if ($result) {
-            foreach ($result->getTransition()->getTos() as $place) {
-                if ($place->getName() == $subject->getCurrentPlace()) {
-                    return $result;
-                }
-            }
+        if ($result === null) {
+            return null;
         }
 
+        foreach ($result->getTransition()->getTos() as $place) {
+            if ($place->getName() !== $subject->getCurrentPlace()) {
+                continue;
+            }
+            return $result;
+        }
 
+        // No place matched.
         return null;
     }
-
 }

@@ -7,15 +7,20 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\TransitionEventDefinitionRepository")
- * @ORM\Table(name="whatwedo_workflow_transition_event_definition")
+ * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\EventDefinitionRepository")
+ * @ORM\Table(name="whatwedo_workflow_event_definition")
  */
-class TransitionEventDefinition implements EventDefinitionInterface
+class EventDefinition
 {
     const GUARD         = 'guard';
     const TRANSITION    = 'transition';
     const COMPLETED     = 'completed';
     const ANNOUNCE      = 'announce';
+
+    const LEAVE     = 'leave';
+    const ENTER     = 'enter';
+    const ENTERED   = 'entered';
+    const CHECK     = 'check';
 
     /**
      * @ORM\Id()
@@ -27,9 +32,16 @@ class TransitionEventDefinition implements EventDefinitionInterface
     /**
      * @var null|Transition
      * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\Transition", inversedBy="eventDefinitions")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $transition;
+
+    /**
+     * @var null|Place
+     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\Place", inversedBy="eventDefinitions")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $place;
 
     /**
      * @var null|string
@@ -47,7 +59,7 @@ class TransitionEventDefinition implements EventDefinitionInterface
      * @var null|string
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $eventSubscriber;
+    private $eventHandler;
 
     /**
      * @var integer
@@ -65,13 +77,19 @@ class TransitionEventDefinition implements EventDefinitionInterface
      * @var null|string
      * @ORM\Column(type="text", nullable=true)
      */
+    /**
+     * @var null|string
+     * @ORM\Column(type="text", nullable=true)
+     */
     private $template;
 
 
-    public function __construct(Transition $transition)
-    {
-        $this->transition = $transition;
-    }
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     */
+    private $applyOnce = false;
+
 
     public function getId(): ?int
     {
@@ -92,6 +110,22 @@ class TransitionEventDefinition implements EventDefinitionInterface
     public function setTransition(?Transition $transition): void
     {
         $this->transition = $transition;
+    }
+
+    /**
+     * @return Place|null
+     */
+    public function getPlace(): ?Place
+    {
+        return $this->place;
+    }
+
+    /**
+     * @param Place|null $place
+     */
+    public function setPlace(?Place $place): void
+    {
+        $this->place = $place;
     }
 
     /**
@@ -129,17 +163,17 @@ class TransitionEventDefinition implements EventDefinitionInterface
     /**
      * @return string|null
      */
-    public function getEventSubscriber(): ?string
+    public function getEventHandler(): ?string
     {
-        return $this->eventSubscriber;
+        return $this->eventHandler;
     }
 
     /**
-     * @param string|null $eventSubscriber
+     * @param string|null $eventHandler
      */
-    public function setEventSubscriber(?string $eventSubscriber): void
+    public function setEventHandler(?string $eventHandler): void
     {
-        $this->eventSubscriber = $eventSubscriber;
+        $this->eventHandler = $eventHandler;
     }
 
     /**
@@ -190,7 +224,20 @@ class TransitionEventDefinition implements EventDefinitionInterface
         $this->template = $template;
     }
 
+    /**
+     * @return bool
+     */
+    public function isApplyOnce(): bool
+    {
+        return $this->applyOnce;
+    }
 
-
+    /**
+     * @param bool $applyOnce
+     */
+    public function setApplyOnce(bool $applyOnce): void
+    {
+        $this->applyOnce = $applyOnce;
+    }
 
 }

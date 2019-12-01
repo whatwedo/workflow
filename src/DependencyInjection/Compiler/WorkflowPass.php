@@ -4,7 +4,7 @@ namespace whatwedo\WorkflowBundle\DependencyInjection\Compiler;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use whatwedo\WorkflowBundle\Entity\Workflowable;
-use whatwedo\WorkflowBundle\Form\WorkflowEventSubscriberTypes;
+use whatwedo\WorkflowBundle\Form\EventHandlerTypes;
 use whatwedo\WorkflowBundle\Form\WorkflowSupportedTypes;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,11 +17,11 @@ class WorkflowPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $workflowEventSubscriberTypes = $container->getDefinition(WorkflowEventSubscriberTypes::class);
+        $eventHandlerTypes = $container->getDefinition(EventHandlerTypes::class);
         $taggedServices = $container->findTaggedServiceIds('workflow.event_handler');
 
         foreach ($taggedServices as $id => $tags) {
-            $workflowEventSubscriberTypes->addMethodCall('addWorkflowSubscriber', [
+            $eventHandlerTypes->addMethodCall('addWorkflowSubscriber', [
                 new Reference($id)
             ]);
         }

@@ -30,12 +30,6 @@ class Place
      */
     private $name;
 
-    /**
-     * @var int
-     * @ORM\Column(type="integer", name="placeLimit", nullable=true)
-     */
-    private $limit = 0;
-
 
     /**
      * @ORM\ManyToMany(targetEntity="whatwedo\WorkflowBundle\Entity\Transition", mappedBy="froms")
@@ -48,7 +42,7 @@ class Place
     private $toTransitions;
 
     /**
-     * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\PlaceEventDefinition", mappedBy="place")
+     * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\EventDefinition", mappedBy="place")
      */
     private $eventDefinitions;
 
@@ -65,22 +59,6 @@ class Place
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLimit(): int
-    {
-        return $this->limit;
-    }
-
-    /**
-     * @param int $limit
-     */
-    public function setLimit(int $limit): void
-    {
-        $this->limit = $limit;
     }
 
     public function getWorkflow(): ?Workflow
