@@ -201,7 +201,7 @@ class WorkflowLog
     }
 
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function getData()
     {
