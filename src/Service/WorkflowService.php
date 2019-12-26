@@ -6,7 +6,6 @@ namespace whatwedo\WorkflowBundle\Service;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\EventSubscriber\WorkflowSubscriber;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Workflow\MarkingStore\MethodMarkingStore;
 use Symfony\Component\Workflow\Registry;

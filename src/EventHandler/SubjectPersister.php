@@ -5,7 +5,6 @@ namespace whatwedo\WorkflowBundle\EventHandler;
 
 
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Mailer\Mailer;
@@ -16,14 +15,14 @@ use Twig\Loader\ChainLoader;
 
 class SubjectPersister extends EventHandlerAbstract
 {
-    /** @var RegistryInterface */
+    /** @var \Doctrine\Common\Persistence\ManagerRegistry */
     private $doctrine;
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param \Doctrine\Common\Persistence\ManagerRegistry $doctrine
      * @required
      */
-    public function setDoctrine(RegistryInterface $doctrine): void
+    public function setDoctrine(\Doctrine\Common\Persistence\ManagerRegistry $doctrine): void
     {
         $this->doctrine = $doctrine;
     }

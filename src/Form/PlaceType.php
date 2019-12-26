@@ -2,7 +2,6 @@
 
 namespace whatwedo\WorkflowBundle\Form;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use whatwedo\WorkflowBundle\Entity\Place;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use Symfony\Component\Form\AbstractType;
@@ -13,14 +12,14 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class PlaceType extends AbstractType
 {
-    /** @var RegistryInterface */
+    /** @var \Doctrine\Common\Persistence\ManagerRegistry */
     private $doctirine;
 
     /**
-     * @param RegistryInterface $doctirine
+     * @param \Doctrine\Common\Persistence\ManagerRegistry $doctirine
      * @required
      */
-    public function setDoctirine(RegistryInterface $doctirine): void
+    public function setDoctirine(\Doctrine\Common\Persistence\ManagerRegistry $doctirine): void
     {
         $this->doctirine = $doctirine;
     }

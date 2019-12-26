@@ -5,7 +5,6 @@ namespace whatwedo\WorkflowBundle\Form;
 
 
 use ReflectionClass;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\FormBuilderInterface;
 use whatwedo\WorkflowBundle\Entity\Workflowable;
 use Symfony\Component\Form\AbstractType;
@@ -16,14 +15,14 @@ use whatwedo\WorkflowBundle\EventHandler\TransitionsEventHandlerAbstract;
 class WorkflowSupportedTypes extends AbstractType
 {
 
-    /** @var RegistryInterface */
+    /** @var \Doctrine\Common\Persistence\ManagerRegistry */
     private $doctrine;
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param \Doctrine\Common\Persistence\ManagerRegistry $doctrine
      * @required
      */
-    public function setDoctrine(RegistryInterface $doctrine): void
+    public function setDoctrine(\Doctrine\Common\Persistence\ManagerRegistry $doctrine): void
     {
         $this->doctrine = $doctrine;
     }
