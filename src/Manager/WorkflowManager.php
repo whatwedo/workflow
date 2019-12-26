@@ -20,7 +20,7 @@ use Symfony\Component\Workflow\Transition;
 class WorkflowManager
 {
     /** @var \Doctrine\Common\Persistence\ManagerRegistry */
-    private $doctirine;
+    private $doctrine;
 
     /** @var ContainerInterface */
     protected $container;
@@ -35,12 +35,12 @@ class WorkflowManager
     }
 
     /**
-     * @param \Doctrine\Common\Persistence\ManagerRegistry $doctirine
+     * @param \Doctrine\Common\Persistence\ManagerRegistry $doctrine
      * @required
      */
-    public function setDoctirine(\Doctrine\Common\Persistence\ManagerRegistry $doctirine): void
+    public function setDoctrine(\Doctrine\Common\Persistence\ManagerRegistry $doctrine): void
     {
-        $this->doctirine = $doctirine;
+        $this->doctirine = $doctrine;
     }
 
     public function getWorkflowsForEntity(object $subject) {

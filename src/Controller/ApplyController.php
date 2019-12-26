@@ -30,10 +30,10 @@ class ApplyController extends AbstractController
     }
 
     /**
-     * @param Registry $workflowRegistry
+     * @param WorkflowService $workflowRegistry
      * @required
      */
-    public function setWorkflowRegistry(Registry $workflowRegistry): void
+    public function setWorkflowRegistry(WorkflowService $workflowRegistry): void
     {
         $this->workflowRegistry = $workflowRegistry;
     }
