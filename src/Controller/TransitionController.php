@@ -10,6 +10,7 @@ use whatwedo\WorkflowBundle\Repository\TransitionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * @Route("/wwd/workflow/transition")
@@ -19,6 +20,7 @@ class TransitionController extends AbstractController
 
     /**
      * @Route("/new/{workflow}", name="wwd_workflow_transition_new", methods={"GET","POST"})
+     * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_ADMIN'), workflow)")
      */
     public function new(Request $request, Workflow $workflow): Response
     {
@@ -43,6 +45,7 @@ class TransitionController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="wwd_workflow_transition_edit", methods={"GET","POST"})
+     * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_ADMIN'), transition)")
      */
     public function edit(Request $request, Transition $transition): Response
     {
@@ -63,6 +66,7 @@ class TransitionController extends AbstractController
 
     /**
      * @Route("/{id}/delete", name="wwd_workflow_transition_delete", methods={"GET"})
+     * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_ADMIN'), transition)")
      */
     public function delete(Request $request, Transition $transition): Response
     {
