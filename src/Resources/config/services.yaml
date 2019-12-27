@@ -13,10 +13,5 @@ services:
         resource: '../../*'
         exclude: '../{Entity}'
 
-    whatwedo\WorkflowBundle\Manager\WorkflowManager: ~
-
-    whatwedo\WorkflowBundle\Service\WorkflowService:
-        arguments: [ whatwedo\WorkflowBundle\Manager\WorkflowManager]
-
     'workflow.registry':
         class: whatwedo\WorkflowBundle\Service\WorkflowService

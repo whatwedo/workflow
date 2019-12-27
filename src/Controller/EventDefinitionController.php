@@ -12,6 +12,7 @@ use whatwedo\WorkflowBundle\Repository\EventDefinitionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * @Route("/wwd/workflow/event/definition")
@@ -21,6 +22,7 @@ class EventDefinitionController extends AbstractController
 
     /**
      * @Route("/place/new/{place}", name="wwd_workflow_place_event_definition_new", methods={"GET","POST"})
+     * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_ADMIN'), place)")
      */
     public function newPlace(Request $request, Place $place): Response
     {
@@ -32,6 +34,7 @@ class EventDefinitionController extends AbstractController
 
     /**
      * @Route("/new/{transition}", name="wwd_workflow_event_definition_new", methods={"GET","POST"})
+     * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_ADMIN'), transition)")
      */
     public function newTransition(Request $request, Transition $transition): Response
     {
@@ -44,6 +47,7 @@ class EventDefinitionController extends AbstractController
 
      /**
      * @Route("/{id}/edit", name="wwd_workflow_event_definition_edit", methods={"GET","POST"})
+     * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_ADMIN'), eventDefinition)")
      */
     public function edit(Request $request, EventDefinition $eventDefinition): Response
     {
@@ -69,6 +73,7 @@ class EventDefinitionController extends AbstractController
 
     /**
      * @Route("/{id}", name="wwd_workflow_event_definition_delete", methods={"DELETE"})
+     * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_ADMIN'), eventDefinition)")
      */
     public function delete(Request $request, EventDefinition $eventDefinition): Response
     {

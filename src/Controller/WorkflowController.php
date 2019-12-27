@@ -18,6 +18,7 @@ use Symfony\Component\Workflow\Dumper\PlantUmlDumper;
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\MarkingStore\MethodMarkingStore;
 use Symfony\Component\Workflow\Transition;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * @Route("/wwd/workflow/workflow")
@@ -26,6 +27,7 @@ class WorkflowController extends AbstractController
 {
     /**
      * @Route("/", name="wwd_workflow_workflow_index", methods={"GET"})
+     * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_ADMIN'))")
      */
     public function index(WorkflowRepository $workflowRepository): Response
     {
@@ -36,6 +38,7 @@ class WorkflowController extends AbstractController
 
     /**
      * @Route("/new", name="wwd_workflow_workflow_new", methods={"GET","POST"})
+     * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_ADMIN'))")
      */
     public function new(Request $request): Response
     {
@@ -59,6 +62,7 @@ class WorkflowController extends AbstractController
 
     /**
      * @Route("/{id}", name="wwd_workflow_workflow_show", methods={"GET"})
+     * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_SHOW'), workflow)")
      */
     public function show(Workflow $workflow): Response
     {
@@ -151,6 +155,7 @@ class WorkflowController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="wwd_workflow_workflow_edit", methods={"GET","POST"})
+     * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_ADMIN'), workflow)")
      */
     public function edit(Request $request, Workflow $workflow): Response
     {
@@ -171,6 +176,7 @@ class WorkflowController extends AbstractController
 
     /**
      * @Route("/{id}", name="wwd_workflow_workflow_delete", methods={"DELETE"})
+     * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_ADMIN'), workflow)")
      */
     public function delete(Request $request, Workflow $workflow): Response
     {

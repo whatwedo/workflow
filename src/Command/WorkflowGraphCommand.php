@@ -11,7 +11,6 @@ namespace whatwedo\WorkflowBundle\Command;
 
 use Fhaculty\Graph\Vertex;
 use Graphp\GraphViz\GraphViz;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,7 +24,7 @@ use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 
 class WorkflowGraphCommand extends Command
 {
-    /** @var RegistryInterface */
+    /** @var \Doctrine\Common\Persistence\ManagerRegistry */
     private $doctrine;
 
     /** @var WorkflowManager */
@@ -53,10 +52,10 @@ class WorkflowGraphCommand extends Command
     }
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param \Doctrine\Common\Persistence\ManagerRegistry $doctrine
      * @required
      */
-    public function setDoctrine(RegistryInterface $doctrine): void
+    public function setDoctrine(\Doctrine\Common\Persistence\ManagerRegistry $doctrine): void
     {
         $this->doctrine = $doctrine;
     }

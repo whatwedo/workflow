@@ -18,7 +18,6 @@ use whatwedo\WorkflowBundle\EventHandler\EventHandlerAbstract;
 use whatwedo\WorkflowBundle\EventHandler\TransitionsEventHandlerAbstract;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
@@ -55,7 +54,7 @@ class WorkflowSubscriber implements EventSubscriberInterface
      */
     private $tokenStorage;
 
-    /** @var RegistryInterface */
+    /** @var \Doctrine\Common\Persistence\ManagerRegistry */
     private $doctrine;
 
     /** @var LoggerInterface */
@@ -73,10 +72,10 @@ class WorkflowSubscriber implements EventSubscriberInterface
 
 
     /**
-     * @param RegistryInterface $doctrine
+     * @param \Doctrine\Common\Persistence\ManagerRegistry $doctrine
      * @required
      */
-    public function setDoctrine(RegistryInterface $doctrine): void
+    public function setDoctrine(\Doctrine\Common\Persistence\ManagerRegistry $doctrine): void
     {
         $this->doctrine = $doctrine;
     }

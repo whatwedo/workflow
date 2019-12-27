@@ -21,7 +21,7 @@ class WorkflowExtension extends AbstractExtension
     /** @var \whatwedo\WorkflowBundle\Manager\WorkflowManager */
     private $workflowManager;
     
-    /** @var Registry */
+    /** @var \whatwedo\WorkflowBundle\Service\WorkflowService */
     private $workflowRegistry;
 
     /** @var RouterInterface */
@@ -42,10 +42,10 @@ class WorkflowExtension extends AbstractExtension
     }
 
     /**
-     * @param Registry $workflowRegistry
+     * @param \whatwedo\WorkflowBundle\Service\WorkflowService $workflowRegistry
      * @required
      */
-    public function setWorkflowRegistry(Registry $workflowRegistry): void
+    public function setWorkflowRegistry(\whatwedo\WorkflowBundle\Service\WorkflowService $workflowRegistry): void
     {
         $this->workflowRegistry = $workflowRegistry;
     }

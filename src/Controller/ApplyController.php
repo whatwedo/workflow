@@ -6,7 +6,6 @@ use whatwedo\WorkflowBundle\Service\WorkflowService;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Entity\Transition;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,23 +17,23 @@ class ApplyController extends AbstractController
     private $workflowRegistry;
 
 
-    /** @var RegistryInterface */
+    /** @var \Doctrine\Common\Persistence\ManagerRegistry */
     private $doctirine;
 
     /**
-     * @param RegistryInterface $doctirine
+     * @param \Doctrine\Common\Persistence\ManagerRegistry $doctirine
      * @required
      */
-    public function setDoctirine(RegistryInterface $doctirine): void
+    public function setDoctirine(\Doctrine\Common\Persistence\ManagerRegistry $doctirine): void
     {
         $this->doctirine = $doctirine;
     }
 
     /**
-     * @param Registry $workflowRegistry
+     * @param WorkflowService $workflowRegistry
      * @required
      */
-    public function setWorkflowRegistry(Registry $workflowRegistry): void
+    public function setWorkflowRegistry(WorkflowService $workflowRegistry): void
     {
         $this->workflowRegistry = $workflowRegistry;
     }

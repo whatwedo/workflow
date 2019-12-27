@@ -14,14 +14,13 @@ use whatwedo\WorkflowBundle\Repository\EventDefinitionRepository;
 use whatwedo\WorkflowBundle\Repository\TransitionRepository;
 use whatwedo\WorkflowBundle\Repository\WorkflowLogRepository;
 use whatwedo\WorkflowBundle\Repository\WorkflowRepository;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Workflow\DefinitionBuilder;
 use Symfony\Component\Workflow\Transition;
 
 class WorkflowManager
 {
-    /** @var RegistryInterface */
-    private $doctirine;
+    /** @var \Doctrine\Common\Persistence\ManagerRegistry */
+    private $doctrine;
 
     /** @var ContainerInterface */
     protected $container;
@@ -36,12 +35,12 @@ class WorkflowManager
     }
 
     /**
-     * @param RegistryInterface $doctirine
+     * @param \Doctrine\Common\Persistence\ManagerRegistry $doctrine
      * @required
      */
-    public function setDoctirine(RegistryInterface $doctirine): void
+    public function setDoctrine(\Doctrine\Common\Persistence\ManagerRegistry $doctrine): void
     {
-        $this->doctirine = $doctirine;
+        $this->doctirine = $doctrine;
     }
 
     public function getWorkflowsForEntity(object $subject) {
