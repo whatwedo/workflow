@@ -54,7 +54,7 @@ class WorkflowSubscriber implements EventSubscriberInterface
      */
     private $tokenStorage;
 
-    /** @var \Doctrine\Common\Persistence\ManagerRegistry */
+    /** @var \Doctrine\Persistence\ManagerRegistry */
     private $doctrine;
 
     /** @var LoggerInterface */
@@ -72,10 +72,10 @@ class WorkflowSubscriber implements EventSubscriberInterface
 
 
     /**
-     * @param \Doctrine\Common\Persistence\ManagerRegistry $doctrine
+     * @param \Doctrine\Persistence\ManagerRegistry $doctrine
      * @required
      */
-    public function setDoctrine(\Doctrine\Common\Persistence\ManagerRegistry $doctrine): void
+    public function setDoctrine(\Doctrine\Persistence\ManagerRegistry $doctrine): void
     {
         $this->doctrine = $doctrine;
     }

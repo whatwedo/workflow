@@ -12,14 +12,14 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class PlaceType extends AbstractType
 {
-    /** @var \Doctrine\Common\Persistence\ManagerRegistry */
+    /** @var \Doctrine\Persistence\ManagerRegistry */
     private $doctirine;
 
     /**
-     * @param \Doctrine\Common\Persistence\ManagerRegistry $doctirine
+     * @param \Doctrine\Persistence\ManagerRegistry $doctirine
      * @required
      */
-    public function setDoctirine(\Doctrine\Common\Persistence\ManagerRegistry $doctirine): void
+    public function setDoctirine(\Doctrine\Persistence\ManagerRegistry $doctirine): void
     {
         $this->doctirine = $doctirine;
     }

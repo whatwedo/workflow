@@ -4,7 +4,7 @@ namespace whatwedo\WorkflowBundle\Repository;
 
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Workflow|null find($id, $lockMode = null, $lockVersion = null)

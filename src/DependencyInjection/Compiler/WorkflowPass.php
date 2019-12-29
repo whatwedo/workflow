@@ -2,7 +2,7 @@
 
 namespace whatwedo\WorkflowBundle\DependencyInjection\Compiler;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use whatwedo\WorkflowBundle\Entity\Workflowable;
 use whatwedo\WorkflowBundle\Form\EventHandlerTypes;
 use whatwedo\WorkflowBundle\Form\WorkflowSupportedTypes;

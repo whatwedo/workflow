@@ -4,7 +4,7 @@ namespace whatwedo\WorkflowBundle\Repository;
 
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method EventDefinition|null find($id, $lockMode = null, $lockVersion = null)
