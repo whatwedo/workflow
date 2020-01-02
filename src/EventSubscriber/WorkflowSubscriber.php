@@ -203,9 +203,10 @@ class WorkflowSubscriber implements EventSubscriberInterface
 
     public function onEntered(EnteredEvent $event)
     {
-        /** @var Workflow $workflow */
-        $workflow = $event->getMetadata('data', null);
-        $this->processWorkflow($workflow, $event->getSubject(), EventDefinition::ENTERED);
+        /** @var \Symfony\Component\Workflow\Workflow $workflow */
+        $workflow = $event->getWorkflow();
+        $wwdWorkflow = $this->manager->getWorkflow($workflow);
+        $this->processWorkflow($wwdWorkflow, $event->getSubject(), EventDefinition::ENTERED);
     }
 
 

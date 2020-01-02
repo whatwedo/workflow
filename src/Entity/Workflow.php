@@ -20,11 +20,13 @@ class Workflow
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=20)
      */
     private $type;
@@ -48,14 +50,24 @@ class Workflow
 
 
     /**
+     * @var Place[]
      * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\Place", mappedBy="workflow")
      */
     private $places;
 
     /**
+     * @var Transition[]
      * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\Transition", mappedBy="workflow")
      */
     private $transitions;
+
+
+    /**
+     * @var Place|null
+     * @ORM\ManyToOne(targetEntity="whatwedo\WorkflowBundle\Entity\Place")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $initialPlace;
 
     public function __construct()
     {
@@ -193,5 +205,21 @@ class Workflow
     public function setSingleState(bool $singleState): void
     {
         $this->singleState = $singleState;
+    }
+
+    /**
+     * @return Place|null
+     */
+    public function getInitialPlace(): ?Place
+    {
+        return $this->initialPlace;
+    }
+
+    /**
+     * @param Place|null $initialPlace
+     */
+    public function setInitialPlace(?Place $initialPlace): void
+    {
+        $this->initialPlace = $initialPlace;
     }
 }

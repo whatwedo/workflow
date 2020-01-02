@@ -27,6 +27,8 @@ class WorkflowService extends Registry
     public function __construct(WorkflowManager $manager, WorkflowSubscriber $workflowListener)
     {
 
+     //   return;
+
         $this->manager = $manager;
         $this->workflowListener = $workflowListener;
 

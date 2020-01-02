@@ -61,6 +61,16 @@ class WorkflowManager
         return $workflows;
     }
 
+    public function getWorkflow(\Symfony\Component\Workflow\Workflow $workflow): Workflow
+    {
+        /** @var WorkflowRepository $workflowRepo */
+        $workflowRepo = $this->doctirine->getRepository(Workflow::class);
+
+        $wwdWorkflow = $workflowRepo->findOneByName($workflow->getName());
+
+        return $wwdWorkflow;
+    }
+
     public function getDefinition(Workflow $workflow)
     {
         $definitionBuilder = new DefinitionBuilder();
@@ -81,6 +91,9 @@ class WorkflowManager
         }
 
         $definitionBuilder->setMetadataStore(new WorkflowMetadataStore($workflow));
+        if ($workflow->getInitialPlace()) {
+            $definitionBuilder->setInitialPlaces($workflow->getInitialPlace()->getName());
+        }
 
         $definition = $definitionBuilder->build();
 

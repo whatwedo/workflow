@@ -29,6 +29,10 @@ class WorkflowType extends AbstractType
                 'supports',
                 WorkflowSupportedTypes::class
             )
+            ->add(
+                'initialPlace'
+            )
+
             ->add('singleState')
         ;
     }
