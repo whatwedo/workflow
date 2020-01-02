@@ -6,6 +6,7 @@ namespace whatwedo\WorkflowBundle\Manager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use whatwedo\WorkflowBundle\DTO\WorkflowMetadataStore;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
+use whatwedo\WorkflowBundle\Entity\Place;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Entity\Workflowable;
 use whatwedo\WorkflowBundle\Entity\WorkflowLog;
@@ -69,6 +70,17 @@ class WorkflowManager
         $wwdWorkflow = $workflowRepo->findOneByName($workflow->getName());
 
         return $wwdWorkflow;
+    }
+
+
+    public function getPlace(string $place): Place
+    {
+        /** @var WorkflowRepository $workflowRepo */
+        $placeRepo = $this->doctirine->getRepository(Place::class);
+
+        $wwdPlace = $placeRepo->findOneByName($place);
+
+        return $wwdPlace;
     }
 
     public function getDefinition(Workflow $workflow)

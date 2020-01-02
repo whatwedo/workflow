@@ -121,8 +121,6 @@ class WorkflowSubscriber implements EventSubscriberInterface
         /** @var Transition $transition */
         $transition = $event->getMetadata('data', $event->getTransition());
 
-
-
         /** @var EventDefinition $eventDefinition */
         foreach ($transition->getEventDefinitions() as $eventDefinition) {
             if (empty($eventDefinition->getEventHandler()) && $eventDefinition->getEventName() === EventDefinition::GUARD) {
@@ -206,7 +204,11 @@ class WorkflowSubscriber implements EventSubscriberInterface
         /** @var \Symfony\Component\Workflow\Workflow $workflow */
         $workflow = $event->getWorkflow();
         $wwdWorkflow = $this->manager->getWorkflow($workflow);
-        $this->processWorkflow($wwdWorkflow, $event->getSubject(), EventDefinition::ENTERED);
+        foreach ($event->getMarking()->getPlaces() as $place => $val) {
+            $wwdPlace = $this->manager->getPlace($place);
+            $this->processPlace($wwdPlace, $event->getSubject(), EventDefinition::ENTERED);
+        }
+
     }
 
 

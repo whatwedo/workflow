@@ -2,6 +2,8 @@
 
 namespace whatwedo\WorkflowBundle\EventHandler;
 
+use Psr\Container\ContainerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Security\Core\Authorization\ExpressionLanguageProvider;
@@ -14,6 +16,17 @@ abstract class EventHandlerAbstract
     /** @var Environment */
     protected $twig;
 
+    /** @var TokenStorageInterface */
+    protected $tokenStorage;
+
+    /**
+     * @param TokenStorageInterface $tokenStorage
+     * @required
+     */
+    public function setTokenStorage(TokenStorageInterface $tokenStorage): void
+    {
+        $this->tokenStorage = $tokenStorage;
+    }
 
     /**
      * @param Environment $twig
@@ -23,7 +36,6 @@ abstract class EventHandlerAbstract
     {
         $this->twig = $twig;
     }
-
 
     abstract public function run($subject, EventDefinition $eventDefinition): bool;
     abstract public function getExpressionHelper(): string;
@@ -37,16 +49,13 @@ abstract class EventHandlerAbstract
      */
     protected function getTemplate($subject, EventDefinition $eventDefinition): string
     {
-        $twig = new Environment(new ChainLoader());
-        $twig->setCache(false);
 
-
-        $body = $twig
+        $body = $this->twig
             ->createTemplate($eventDefinition->getTemplate())
             ->render(
                 [
-                    'name' => 'asdfasd',
                     'subject' => $subject,
+                    'user' => $this->getUser(),
                 ]
             );
         return $body;
@@ -69,9 +78,37 @@ abstract class EventHandlerAbstract
             [
                 'data' => $data,
                 'subject' => $subject,
+                'user' => $this->getUser(),
             ]
         );
         return $result;
     }
+
+
+    /**
+     * Get a user from the Security Token Storage.
+     *
+     * @return UserInterface|object|null
+     *
+     * @see TokenInterface::getUser()
+     */
+    protected function getUser()
+    {
+        if (!$this->tokenStorage) {
+            return null;
+        }
+
+        if (null === $token = $this->tokenStorage->getToken()) {
+            return null;
+        }
+
+        if (!\is_object($user = $token->getUser())) {
+            // e.g. anonymous authentication
+            return null;
+        }
+
+        return $user;
+    }
+
 
 }
