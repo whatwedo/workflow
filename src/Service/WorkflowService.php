@@ -58,6 +58,10 @@ class WorkflowService extends Registry
             echo   "\e[0;33m"  . PHP_EOL;
             echo   '    Create Workflow Tables    ';
             echo "\e[0m" . PHP_EOL . PHP_EOL;
+        } catch (\Doctrine\DBAL\Exception\InvalidFieldNameException $ex) {
+            echo   "\e[0;33m"  . PHP_EOL;
+            echo   '    Update Workflow Tables    ';
+            echo "\e[0m" . PHP_EOL . PHP_EOL;
         }
     }
 }
