@@ -147,7 +147,7 @@ class WorkflowController extends AbstractController
         $graphviz = new \Graphp\GraphViz\GraphViz();
 
         if (isset($_ENV['DOT_BIN'])) {
-            $graphviz->setExecutable($_ENV('DOT_BIN'));
+            $graphviz->setExecutable($_ENV['DOT_BIN']);
         }
         try {
             $image = $graphviz->createImageSrc($graph);
