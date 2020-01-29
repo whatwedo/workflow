@@ -145,7 +145,15 @@ class WorkflowController extends AbstractController
         }
 
         $graphviz = new \Graphp\GraphViz\GraphViz();
-        $image = $graphviz->createImageSrc($graph);
+
+        if (isset($_ENV['DOT_BIN'])) {
+            $graphviz->setExecutable($_ENV('DOT_BIN'));
+        }
+        try {
+            $image = $graphviz->createImageSrc($graph);
+        } catch (\Exception $ex) {
+            $image = null;
+        }
 
         return $this->render('@whatwedoWorkflow/workflow/show.html.twig', [
             'workflow' => $workflow,
