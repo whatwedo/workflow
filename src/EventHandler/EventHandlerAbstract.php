@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\Authorization\ExpressionLanguageProvider;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
 
-abstract class EventHandlerAbstract
+abstract class EventHandlerAbstract implements WorkflowEventHandlerInterface
 {
 
     /** @var Environment */
@@ -36,9 +36,6 @@ abstract class EventHandlerAbstract
     {
         $this->twig = $twig;
     }
-
-    abstract public function run($subject, EventDefinition $eventDefinition): bool;
-    abstract public function getExpressionHelper(): string;
 
     /**
      * @param mixed $subject

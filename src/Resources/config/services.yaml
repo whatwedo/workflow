@@ -4,11 +4,6 @@ services:
         autoconfigure: true
         public: false
 
-    _instanceof:
-        whatwedo\WorkflowBundle\EventHandler\EventHandlerAbstract:
-            tags: ['workflow.event_handler']
-            public: true
-
     whatwedo\WorkflowBundle\:
         resource: '../../*'
         exclude: '../{Entity}'
