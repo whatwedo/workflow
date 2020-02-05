@@ -19,7 +19,9 @@ class WorkflowBundleExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
 
-        $container->registerForAutoconfiguration(WorkflowEventHandlerInterface::class)->addTag('workflow.event_handler');
+        $container->registerForAutoconfiguration(WorkflowEventHandlerInterface::class)
+            ->addTag('workflow.event_handler')
+            ->setPublic(true);
 
     }
 }
