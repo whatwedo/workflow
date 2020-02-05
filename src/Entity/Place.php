@@ -32,6 +32,14 @@ class Place
 
 
     /**
+     * @var boolean
+     * @ORM\Column(type="boolean",)
+     */
+    private $hideInMenu = false;
+
+
+
+    /**
      * @ORM\ManyToMany(targetEntity="whatwedo\WorkflowBundle\Entity\Transition", mappedBy="froms")
      */
     private $fromTransitions;
@@ -83,6 +91,22 @@ class Place
         $this->name = $name;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHideInMenu(): bool
+    {
+        return $this->hideInMenu;
+    }
+
+    /**
+     * @param bool $hideInMenu
+     */
+    public function setHideInMenu(bool $hideInMenu): void
+    {
+        $this->hideInMenu = $hideInMenu;
     }
 
     /**

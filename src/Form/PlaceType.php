@@ -27,13 +27,8 @@ class PlaceType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('workflow',
-                HiddenType::class,
-                [
-                    'property_path' => 'id'
-                ]
-            )
             ->add('name')
+            ->add('hideInMenu')
         ;
     }
 
