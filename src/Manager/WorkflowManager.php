@@ -65,7 +65,7 @@ class WorkflowManager
     public function getWorkflow(\Symfony\Component\Workflow\Workflow $workflow): Workflow
     {
         /** @var WorkflowRepository $workflowRepo */
-        $workflowRepo = $this->doctirine->getRepository(Workflow::class);
+        $workflowRepo = $this->doctrine->getRepository(Workflow::class);
 
         $wwdWorkflow = $workflowRepo->findOneByName($workflow->getName());
 
