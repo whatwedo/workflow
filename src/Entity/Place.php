@@ -30,14 +30,17 @@ class Place
      */
     private $name;
 
-
     /**
      * @var boolean
      * @ORM\Column(type="boolean",)
      */
     private $hideInMenu = false;
 
-
+    /**
+     * @var int
+     * @ORM\Column(type="smallint")
+     */
+    private $sort = 0;
 
     /**
      * @ORM\ManyToMany(targetEntity="whatwedo\WorkflowBundle\Entity\Transition", mappedBy="froms")
@@ -107,6 +110,22 @@ class Place
     public function setHideInMenu(bool $hideInMenu): void
     {
         $this->hideInMenu = $hideInMenu;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSort(): int
+    {
+        return $this->sort;
+    }
+
+    /**
+     * @param int $sort
+     */
+    public function setSort(int $sort): void
+    {
+        $this->sort = $sort;
     }
 
     /**
