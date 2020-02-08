@@ -2,14 +2,14 @@
 
 {% block stylesheets %}
     {{ parent() }}
-<link rel="stylesheet" href="/bundles/whatwedoworkflow/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/codemirror.min.css">
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-<script src="/bundles/whatwedoworkflow/codemirror/lib/codemirror.js"></script>
-<script src="/bundles/whatwedoworkflow/codemirror/mode/javascript/javascript.js"></script>
-<script src="/bundles/whatwedoworkflow/codemirror/mode/twig/twig.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.51.0/mode/twig/twig.min.js"></script>
 
     <script>
         var myCodeMirrorExpression = CodeMirror.fromTextArea($('.expression_editor').get( 0 ),
@@ -21,7 +21,6 @@
                 lineNumbers: true,
                 mode: { name: 'twig'}
             });
-
     </script>
 {% endblock %}
 
