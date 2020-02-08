@@ -69,7 +69,7 @@ class WorkflowCheckCommand extends Command
                 $supportedEntities = $eventDefintion->getPlace()->getWorkflow()->getSupports();
 
                 foreach ($supportedEntities as $supportedEntity) {
-                    $checkPlaceEntities = $this->workflowManager->getEntitiesInPlace($supportedEntity, $eventDefintion->getPlace()->getName());
+                    $checkPlaceEntities = $this->workflowManager->getEntitiesInPlace($eventDefintion->getPlace(), $supportedEntity);
 
                     foreach ($checkPlaceEntities as $checkPlaceEntity) {
 

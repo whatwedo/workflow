@@ -41,12 +41,12 @@ class WorkflowManager
      */
     public function setDoctrine(\Doctrine\Persistence\ManagerRegistry $doctrine): void
     {
-        $this->doctirine = $doctrine;
+        $this->doctrine = $doctrine;
     }
 
     public function getWorkflowsForEntity(object $subject) {
         /** @var WorkflowRepository $workflowRepo */
-        $workflowRepo = $this->doctirine->getRepository(Workflow::class);
+        $workflowRepo = $this->doctrine->getRepository(Workflow::class);
 
         $allWorkflows = $workflowRepo->findAll();
 
@@ -76,7 +76,7 @@ class WorkflowManager
     public function getPlace(string $place): Place
     {
         /** @var WorkflowRepository $workflowRepo */
-        $placeRepo = $this->doctirine->getRepository(Place::class);
+        $placeRepo = $this->doctrine->getRepository(Place::class);
 
         $wwdPlace = $placeRepo->findOneByName($place);
 
@@ -120,7 +120,7 @@ class WorkflowManager
     {
 
         /** @var WorkflowRepository $repository */
-        $repository = $this->doctirine->getRepository(Workflow::class);
+        $repository = $this->doctrine->getRepository(Workflow::class);
         return $repository->findAll();
     }
 
@@ -131,7 +131,7 @@ class WorkflowManager
     public function getTransition(string $name) : ?\whatwedo\WorkflowBundle\Entity\Transition
     {
         /** @var TransitionRepository $repository */
-        $repository = $this->doctirine->getRepository(\whatwedo\WorkflowBundle\Entity\Transition::class);
+        $repository = $this->doctrine->getRepository(\whatwedo\WorkflowBundle\Entity\Transition::class);
         return $repository->findOneBy(['name' => $name]);
     }
 
@@ -141,21 +141,29 @@ class WorkflowManager
     public function getCheckPlaceDefnitions()
     {
         /** @var EventDefinitionRepository $repository */
-        $repository = $this->doctirine->getRepository(EventDefinition::class);
+        $repository = $this->doctrine->getRepository(EventDefinition::class);
         return $repository->findBy(['eventName' => EventDefinition::CHECK]);
     }
 
 
     /**
-     * @param string $entityClass
-     * @param string $place
      * @return object[]
      */
-    public function getEntitiesInPlace(string $entityClass, string $place)
+    public function getEntitiesInPlace(Place $place, ?string $entityClass = null): array
     {
+        $result = [];
         /** @var Workflowable $dummyEntity */
+        if (!$entityClass) {
+            $entityClass = $place->getWorkflow()->getSupports()[0];
+        }
+
         $dummyEntity = new $entityClass;
-        return $this->doctirine->getRepository($entityClass)->findBy([$dummyEntity->getCurrentPlaceField() => $place]);
+        if ($queryResults = $this->doctrine->getRepository($entityClass)->findBy([$dummyEntity->getCurrentPlaceField() => $place->getName()])) {
+            return $queryResults;
+        }
+
+        return $result;
+
     }
 
     public function getEventHandler(EventDefinition $eventDefinition, string $eventName = null): ?EventHandlerAbstract
@@ -175,7 +183,7 @@ class WorkflowManager
     public function getLastEventLogForEntity($checkPlaceEntity, EventDefinition $eventDefintion) : ? WorkflowLog
     {
         /** @var WorkflowLogRepository $repository */
-        $repository = $this->doctirine->getRepository(WorkflowLog::class);
+        $repository = $this->doctrine->getRepository(WorkflowLog::class);
         $log = $repository->findOneBy(['eventDefinition' => $eventDefintion]);
         return $log;
     }
