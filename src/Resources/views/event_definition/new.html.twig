@@ -2,14 +2,14 @@
 
 {% block stylesheets %}
     {{ parent() }}
-<link rel="stylesheet" href="/codemirror-5.49.2/lib/codemirror.css">
+<link rel="stylesheet" href="/bundles/whatwedoworkflow/codemirror/lib/codemirror.css">
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-<script src="/codemirror-5.49.2/lib/codemirror.js"></script>
-<script src="/codemirror-5.49.2/mode/javascript/javascript.js"></script>
-<script src="/codemirror-5.49.2/mode/twig/twig.js"></script>
+<script src="/bundles/whatwedoworkflow/codemirror/lib/codemirror.js"></script>
+<script src="/bundles/whatwedoworkflow/codemirror/mode/javascript/javascript.js"></script>
+<script src="/bundles/whatwedoworkflow/codemirror/mode/twig/twig.js"></script>
 
     <script>
         var myCodeMirrorExpression = CodeMirror.fromTextArea($('.expression_editor').get( 0 ),
