@@ -123,6 +123,12 @@ class WorkflowSubscriber implements EventSubscriberInterface
 
         /** @var EventDefinition $eventDefinition */
         foreach ($transition->getEventDefinitions() as $eventDefinition) {
+
+            if (!$eventDefinition->isActive()) {
+                return false;
+            }
+
+
             if (empty($eventDefinition->getEventHandler()) && $eventDefinition->getEventName() === EventDefinition::GUARD) {
                 // do work
                 if (!empty($eventDefinition->getExpression())) {
@@ -280,6 +286,10 @@ class WorkflowSubscriber implements EventSubscriberInterface
     private function processEventDefinition($subject, string $eventName, EventDefinition $eventDefinition): bool
     {
         $result = false;
+        if (!$eventDefinition->isActive()) {
+            return false;
+        }
+
         if ($eventHandler = $this->manager->getEventHandler($eventDefinition, $eventName)) {
             $success = $eventHandler->run($subject, $eventDefinition);
 
