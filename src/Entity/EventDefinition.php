@@ -83,13 +83,18 @@ class EventDefinition
      */
     private $template;
 
-
     /**
      * @var boolean
      * @ORM\Column(type="boolean")
      */
     private $applyOnce = false;
 
+
+    /**
+     * @var boolean
+     * @ORM\Column(type="boolean")
+     */
+    private $active = true;
 
     public function getId(): ?int
     {
@@ -240,4 +245,19 @@ class EventDefinition
         $this->applyOnce = $applyOnce;
     }
 
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param bool $active
+     */
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
+    }
 }

@@ -90,8 +90,11 @@ class EventDefinitionType extends AbstractType
                 null,
                 [ 'required' => false ]
             )
-
-
+            ->add(
+                'active',
+                null,
+                [ 'required' => false ]
+            )
         ;
     }
 
