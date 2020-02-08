@@ -11,6 +11,7 @@ use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Entity\Workflowable;
 use whatwedo\WorkflowBundle\Entity\WorkflowLog;
 use whatwedo\WorkflowBundle\EventHandler\EventHandlerAbstract;
+use whatwedo\WorkflowBundle\EventHandler\WorkflowEventHandlerInterface;
 use whatwedo\WorkflowBundle\Repository\EventDefinitionRepository;
 use whatwedo\WorkflowBundle\Repository\TransitionRepository;
 use whatwedo\WorkflowBundle\Repository\WorkflowLogRepository;
@@ -166,7 +167,7 @@ class WorkflowManager
 
     }
 
-    public function getEventHandler(EventDefinition $eventDefinition, string $eventName = null): ?EventHandlerAbstract
+    public function getEventHandler(EventDefinition $eventDefinition, string $eventName = null): ?WorkflowEventHandlerInterface
     {
         $result = null;
         if (($eventName == null || $eventDefinition->getEventName() === $eventName) && !empty($eventDefinition->getEventHandler())) {
