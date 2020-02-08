@@ -30,11 +30,18 @@ class EventDefinitionType extends AbstractType
         /** @var EventDefinition $data */
         $data = $builder->getData();
 
-        $help = '';
+        $expressionHelp = '';
 
         if ($data !== null) {
             if ($eventHandler = $this->manager->getEventHandler($data)) {
-                $help = $eventHandler->getExpressionHelper();
+                $expressionHelp = $eventHandler->getExpressionHelp();
+                if (!$data->getExpression()) {
+                    $data->setExpression($eventHandler->getExpressionSample());
+                }
+                $templateHelp = $eventHandler->getTemplateHelp();
+                if (!$data->getTemplate()) {
+                    $data->setTemplate($eventHandler->getTemplateSample());
+                }
             }
         }
 
@@ -57,7 +64,7 @@ class EventDefinitionType extends AbstractType
             null,
                 [
                     'required' => false,
-                    'help' => $help,
+                    'help' => $expressionHelp,
                     'attr' => [
                         'id' => 'event_definition_expression',
                         'class' => 'expression_editor',
@@ -70,6 +77,7 @@ class EventDefinitionType extends AbstractType
                 null,
                 [
                     'required' => false,
+                    'help' => $templateHelp,
                     'attr' => [
                         'id' => 'event_definition_template',
                         'class' => 'template_editor'

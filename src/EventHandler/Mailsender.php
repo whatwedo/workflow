@@ -39,12 +39,36 @@ class Mailsender extends EventHandlerAbstract
         return true;
     }
 
-    public function getExpressionHelper(): string
+    public function getExpressionHelp(): string
+    {
+        return 'subject: Email Subject;  
+    sender: Email of sender; 
+    receiver: Email of receiver';
+    }
+
+    public function getExpressionSample(): string
     {
         return '{
-            subject: "The Subject",
-            sender: "Sender@Email.com",
-            receiver: "receiver@Email.com"
-        }';
+    subject: "The Subject",
+    sender: "Sender@Email.com",
+    receiver: "receiver@Email.com"
+}';
     }
+
+    public function getTemplateHelp(): string
+    {
+        return 'Avaliable Objects - User: the current user; subject: The subject entity';
+    }
+
+    public function getTemplateSample(): string
+    {
+        return "<h1>Hello</h1><br>
+<br>
+The Entity {{subject.name}} was created.
+by {{user.name}}<br>
+<a href=\"{{ path('entity_show', {id: entity.id} ) }}\">Show.<br>
+
+<br>";
+    }
+
 }

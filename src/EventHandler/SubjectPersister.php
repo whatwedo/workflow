@@ -27,9 +27,23 @@ class SubjectPersister extends EventHandlerAbstract
         $this->doctrine = $doctrine;
     }
 
-    public function getExpressionHelper(): string
+    public function getExpressionHelp(): string
     {
         return 'subject';
+    }
+    public function getExpressionSample(): string
+    {
+        return 'subject.name = "my Name"';
+    }
+
+    public function getTemplateHelp(): string
+    {
+        return '';
+    }
+
+    public function getTemplateSample(): string
+    {
+        return '';
     }
 
 
