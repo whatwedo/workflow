@@ -103,17 +103,17 @@ class WorkflowController extends AbstractController
 
         foreach ($workflow->getPlaces() as $place) {
             $places[$place->getId()] = $graph->createVertex($place->getName());
-            $places[$place->getId()]->setAttribute('graphviz.shape', 'box');
+            $places[$place->getId()]->setAttribute('graphviz.shape', 'record');
             $places[$place->getId()]->setAttribute('graphviz.fillcolor', 'black');
             $places[$place->getId()]->setAttribute('graphviz.fontcolor', 'white');
             $places[$place->getId()]->setAttribute('graphviz.style', 'rounded, filled');
-            $rawData = '<<table cellspacing="0" border="0" cellborder="0">
-                  <tr><td><b><u>\N</u></b></td></tr>';
+            $rawData = '"{\N';
             /** @var EventDefinition $eventDefinition */
             foreach ($place->getEventDefinitions() as $eventDefinition) {
-                $rawData .= '<tr><td><sub>' . strtoupper($eventDefinition->getEventName()) . '</sub></td></tr>';
+                $rawData .= '| on ' . strtoupper($eventDefinition->getEventName()) . '\n' . addslashes($eventDefinition->getEventHandler());
             }
-            $rawData .= '</table>>';
+            $rawData .= '}"';
+
             $places[$place->getId()]->setAttribute('graphviz.label', GraphViz::raw($rawData));
         }
 
@@ -123,14 +123,13 @@ class WorkflowController extends AbstractController
         /** @var \whatwedo\WorkflowBundle\Entity\Transition $transition */
         foreach ($workflow->getTransitions() as $transition) {
             $transitions[$transition->getId()]['vertex'] = $graph->createVertex($transition->getName());
-            $rawData = '<<table cellspacing="0" border="0" cellborder="0">
-                <tr><td><b><u>\N</u></b></td></tr>                
-                ';
+            $transitions[$transition->getId()]['vertex']->setAttribute('graphviz.shape', 'record');
+            $rawData = '"{\N';
             /** @var EventDefinition $eventDefinition */
             foreach ($transition->getEventDefinitions() as $eventDefinition) {
-                $rawData .= '<tr><td><sub>' . strtoupper($eventDefinition->getEventName()) . '</sub></td></tr>';
+                $rawData .= '| ' . strtoupper($eventDefinition->getEventName()) . '';
             }
-            $rawData .= '</table>>';
+            $rawData .= '}"';
             $transitions[$transition->getId()]['vertex']->setAttribute('graphviz.label', GraphViz::raw($rawData));
 
             /** @var \whatwedo\WorkflowBundle\Entity\Place $from */
@@ -149,6 +148,7 @@ class WorkflowController extends AbstractController
         if (isset($_ENV['DOT_BIN'])) {
             $graphviz->setExecutable($_ENV['DOT_BIN']);
         }
+        $graphviz->setFormat('svg');
         try {
             $image = $graphviz->createImageSrc($graph);
         } catch (\Exception $ex) {
