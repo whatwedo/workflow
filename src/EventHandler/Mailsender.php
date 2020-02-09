@@ -4,7 +4,10 @@
 namespace whatwedo\WorkflowBundle\EventHandler;
 
 
+use Twig\Error\RuntimeError;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
+use whatwedo\WorkflowBundle\Model\ValidationError;
+use whatwedo\WorkflowBundle\Model\DummySubject;
 use Twig\Environment;
 
 class Mailsender extends EventHandlerAbstract
@@ -69,6 +72,34 @@ by {{user.name}}<br>
 <a href=\"{{ path('entity_show', {id: entity.id} ) }}\">Show.<br>
 
 <br>";
+    }
+    
+
+    public function validateExpression(EventDefinition $eventDefinition): bool
+    {
+        $result = true;
+        $data = $this->evaluateExpression(new DummySubject(), $eventDefinition);
+
+        if (!isset($data['subject'])) {
+            $eventDefinition->addValidationError(
+                new ValidationError('Expression: Subject is not definied', 'danger')
+            );
+            $result = false;
+        }
+        if (!isset($data['sender'])) {
+            $eventDefinition->addValidationError(
+                new ValidationError('Expression: Sender is not definied', 'danger')
+            );
+            $result = false;
+        }
+        if (!isset($data['receiver'])) {
+            $eventDefinition->addValidationError(
+                new ValidationError('Expression: Receiver is not definied', 'danger')
+            );
+            $result = false;
+        }
+
+        return $result;
     }
 
 }

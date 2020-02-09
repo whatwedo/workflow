@@ -8,6 +8,7 @@ use whatwedo\WorkflowBundle\Entity\Place;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\Form\EventDefinitionType;
 use whatwedo\WorkflowBundle\Form\PlaceEventDefinitionType;
+use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 use whatwedo\WorkflowBundle\Repository\EventDefinitionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,17 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class EventDefinitionController extends AbstractController
 {
+
+    /** @var WorkflowManager */
+    private $workflowManager;
+
+    /**
+     * @required
+     */
+    public function setWorkflowManager(WorkflowManager $workflowManager): void
+    {
+        $this->workflowManager = $workflowManager;
+    }
 
     /**
      * @Route("/place/new/{place}", name="wwd_workflow_place_event_definition_new", methods={"GET","POST"})
@@ -58,8 +70,17 @@ class EventDefinitionController extends AbstractController
 
         $form = $this->createForm($type, $eventDefinition);
         $form->handleRequest($request);
+       
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if (!$this->workflowManager->isValid($eventDefinition)) {
+                foreach ($eventDefinition->getValidationErrors() as $validationError) {
+                    $this->addFlash($validationError->getType(), $validationError->getError());
+                }
+            }
+
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('wwd_workflow_event_definition_edit', ['id' => $eventDefinition->getId()]);

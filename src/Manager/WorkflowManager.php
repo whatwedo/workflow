@@ -24,18 +24,9 @@ class WorkflowManager
     /** @var \Doctrine\Persistence\ManagerRegistry */
     private $doctrine;
 
-    /** @var ContainerInterface */
-    protected $container;
-
-    /**
-     * @param ContainerInterface|null $container
-     * @required
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
+    /** @var array|WorkflowEventHandlerInterface */
+    protected $worklfowEventHandler = [];
+    
     /**
      * @param \Doctrine\Persistence\ManagerRegistry $doctrine
      * @required
@@ -43,6 +34,11 @@ class WorkflowManager
     public function setDoctrine(\Doctrine\Persistence\ManagerRegistry $doctrine): void
     {
         $this->doctrine = $doctrine;
+    }
+
+    public function addWorkflowEventHandler(WorkflowEventHandlerInterface $workflowEventHandler)
+    {
+        $this->worklfowEventHandler[get_class($workflowEventHandler)] = $workflowEventHandler;
     }
 
     public function getWorkflowsForEntity(object $subject) {
@@ -119,7 +115,6 @@ class WorkflowManager
      */
     public function getAllWorkflows()
     {
-
         /** @var WorkflowRepository $repository */
         $repository = $this->doctrine->getRepository(Workflow::class);
         return $repository->findAll();
@@ -172,10 +167,9 @@ class WorkflowManager
         $result = null;
         if (($eventName == null || $eventDefinition->getEventName() === $eventName) && !empty($eventDefinition->getEventHandler())) {
             $eventHandlerClass = $eventDefinition->getEventHandler();
-            /** @var EventHandlerAbstract $eventHandler */
-            $eventHandler = $this->container->get($eventHandlerClass);
-
-            $result = $eventHandler;
+            if (isset($this->worklfowEventHandler[$eventHandlerClass])) {
+                return $this->worklfowEventHandler[$eventHandlerClass];
+            }
         }
         return $result;
     }
@@ -187,5 +181,17 @@ class WorkflowManager
         $repository = $this->doctrine->getRepository(WorkflowLog::class);
         $log = $repository->findOneBy(['eventDefinition' => $eventDefintion]);
         return $log;
+    }
+
+
+    public function isValid(EventDefinition $eventDefintion) {
+        if ($eventDefintion->getEventHandler()) {
+            $eventHandler = $this->getEventHandler($eventDefintion);
+
+            return $eventHandler->validateExpression($eventDefintion) &&
+                $eventHandler->validateTemplate($eventDefintion);
+        }
+
+        return false;
     }
 }

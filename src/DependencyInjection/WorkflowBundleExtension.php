@@ -22,6 +22,5 @@ class WorkflowBundleExtension extends Extension
         $container->registerForAutoconfiguration(WorkflowEventHandlerInterface::class)
             ->addTag('workflow.event_handler')
             ->setPublic(true);
-
     }
 }

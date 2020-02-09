@@ -9,6 +9,7 @@ use whatwedo\WorkflowBundle\Form\WorkflowSupportedTypes;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 
 class WorkflowPass implements CompilerPassInterface
 {
@@ -17,12 +18,19 @@ class WorkflowPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $eventHandlerTypes = $container->getDefinition(EventHandlerTypes::class);
+        $eventHandlerTypesDefinition = $container->getDefinition(EventHandlerTypes::class);
         $taggedServices = $container->findTaggedServiceIds('workflow.event_handler');
+        $workflowManagerDefintion = $container->getDefinition(WorkflowManager::class);
 
         foreach ($taggedServices as $id => $tags) {
-            $eventHandlerTypes->addMethodCall('addWorkflowSubscriber', [
-                new Reference($id)
+
+            $reference = new Reference($id);
+
+            $eventHandlerTypesDefinition->addMethodCall('addWorkflowSubscriber', [
+                $reference
+            ]);
+            $workflowManagerDefintion->addMethodCall('addWorkflowEventHandler', [
+                $reference
             ]);
         }
     }

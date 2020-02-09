@@ -4,11 +4,14 @@ namespace whatwedo\WorkflowBundle\EventHandler;
 
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Twig\Error\RuntimeError;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Security\Core\Authorization\ExpressionLanguageProvider;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
+use whatwedo\WorkflowBundle\Model\DummySubject;
+use whatwedo\WorkflowBundle\Model\ValidationError;
 
 abstract class EventHandlerAbstract implements WorkflowEventHandlerInterface
 {
@@ -107,5 +110,17 @@ abstract class EventHandlerAbstract implements WorkflowEventHandlerInterface
         return $user;
     }
 
+    public function validateTemplate(EventDefinition $eventDefinition): bool
+    {
+        try {
+            $this->getTemplate(new DummySubject(), $eventDefinition);
+        } catch (RuntimeError $exception) {
+            $eventDefinition->addValidationError(
+                new ValidationError('Template: ' . $exception->getRawMessage(), 'danger')
+            );
+            return false;
+        }
+        return true;
+    }
 
 }

@@ -57,7 +57,7 @@ class SubjectPersister extends EventHandlerAbstract
 
         $data = [];
 
-        $result =  $expression->evaluate(
+        $result = $expression->evaluate(
             $eventDefinition->getExpression(),
             [
                 'data' => $data,
@@ -65,12 +65,16 @@ class SubjectPersister extends EventHandlerAbstract
             ]
         );
 
-
-
         $this->doctrine->getManager()->persist($subject);
         $this->doctrine->getManager()->flush();
 
 
         return true;
     }
+
+    public function validateExpression(EventDefinition $eventDefinition): bool
+    {
+        return true;
+    }
+
 }

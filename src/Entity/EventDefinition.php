@@ -5,6 +5,7 @@ namespace whatwedo\WorkflowBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use whatwedo\WorkflowBundle\Model\ValidationError;
 
 /**
  * @ORM\Entity(repositoryClass="whatwedo\WorkflowBundle\Repository\EventDefinitionRepository")
@@ -95,6 +96,11 @@ class EventDefinition
      * @ORM\Column(type="boolean")
      */
     private $active = true;
+
+    /**
+     * @var array|ValidationError[]
+     */
+    private $validationErrors = [];
 
     public function getId(): ?int
     {
@@ -260,4 +266,18 @@ class EventDefinition
     {
         $this->active = $active;
     }
+
+    public function addValidationError(ValidationError $validationError) {
+        $this->validationErrors[] = $validationError;
+    }
+
+    /**
+     * @return array|ValidationError[]
+     */
+    public function getValidationErrors()
+    {
+        return $this->validationErrors;
+    }
+    
+    
 }
