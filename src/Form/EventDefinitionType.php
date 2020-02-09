@@ -31,6 +31,7 @@ class EventDefinitionType extends AbstractType
         $data = $builder->getData();
 
         $expressionHelp = '';
+        $templateHelp = '';
 
         if ($data !== null) {
             if ($eventHandler = $this->manager->getEventHandler($data)) {
@@ -58,10 +59,11 @@ class EventDefinitionType extends AbstractType
             ->add('eventHandler',
                 EventHandlerTypes::class
             )
-            ->add('sortorder')
-            ->add(
-            'expression',
-            null,
+            ->add('sortorder');
+        if ($data->getEventHandler()) {
+            $builder->add(
+                'expression',
+                null,
                 [
                     'required' => false,
                     'help' => $expressionHelp,
@@ -72,30 +74,30 @@ class EventDefinitionType extends AbstractType
 
                 ]
             )
-            ->add(
-                'template',
-                null,
-                [
-                    'required' => false,
-                    'help' => $templateHelp,
-                    'attr' => [
-                        'id' => 'event_definition_template',
-                        'class' => 'template_editor'
-                    ],
+                ->add(
+                    'template',
+                    null,
+                    [
+                        'required' => false,
+                        'help' => $templateHelp,
+                        'attr' => [
+                            'id' => 'event_definition_template',
+                            'class' => 'template_editor'
+                        ],
 
-                ]
-            )
-            ->add(
-                'applyOnce',
-                null,
-                [ 'required' => false ]
-            )
+                    ]
+                );
+        }
+        $builder->add(
+            'applyOnce',
+            null,
+            ['required' => false]
+        )
             ->add(
                 'active',
                 null,
-                [ 'required' => false ]
-            )
-        ;
+                ['required' => false]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver)

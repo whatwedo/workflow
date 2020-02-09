@@ -188,8 +188,8 @@ class WorkflowManager
         if ($eventDefintion->getEventHandler()) {
             $eventHandler = $this->getEventHandler($eventDefintion);
 
-            return $eventHandler->validateExpression($eventDefintion) &&
-                $eventHandler->validateTemplate($eventDefintion);
+            return $eventDefintion->getExpression() && $eventHandler->validateExpression($eventDefintion) &&
+                $eventDefintion->getTemplate() && $eventHandler->validateTemplate($eventDefintion);
         }
 
         return false;
