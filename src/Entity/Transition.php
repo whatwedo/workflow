@@ -140,8 +140,18 @@ class Transition
     /**
      * @return Collection
      */
-    public function getEventDefinitions():Collection
+    public function getEventDefinitions($eventName = null):Collection
     {
-        return $this->eventDefinitions;
+        if (!$eventName) {
+            return $this->eventDefinitions;
+        } else {
+            return $this->eventDefinitions->filter(
+                function (EventDefinition $data) use ($eventName) {
+                    return $data->getEventName() == $eventName;
+                }
+            );
+        }
+
+
     }
 }

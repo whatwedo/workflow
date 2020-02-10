@@ -106,11 +106,23 @@ class WorkflowController extends AbstractController
             $places[$place->getId()]->setAttribute('graphviz.shape', 'record');
             $places[$place->getId()]->setAttribute('graphviz.fillcolor', 'black');
             $places[$place->getId()]->setAttribute('graphviz.fontcolor', 'white');
+            $places[$place->getId()]->setAttribute('graphviz.color', 'white');
             $places[$place->getId()]->setAttribute('graphviz.style', 'rounded, filled');
-            $rawData = '"{\N';
+            $rawData = '"{';
+            $first = false;
             /** @var EventDefinition $eventDefinition */
-            foreach ($place->getEventDefinitions() as $eventDefinition) {
-                $rawData .= '| on ' . strtoupper($eventDefinition->getEventName()) . '\n' . addslashes($eventDefinition->getEventHandler());
+            foreach ($place->getEventDefinitions(EventDefinition::ENTER) as $eventDefinition) {
+                $rawData .= ($first?'|':''). ' ' . strtoupper($eventDefinition->getEventName()) . '\n' . addslashes($eventDefinition->getName());
+                $first = true;
+            }
+            foreach ($place->getEventDefinitions(EventDefinition::ENTERED) as $eventDefinition) {
+                $rawData .= ($first?'|':''). ' ' . strtoupper($eventDefinition->getEventName()) . '\n' . addslashes($eventDefinition->getName());
+                $first = true;
+            }
+            $rawData .= ($first?'|':'').'\N';
+            foreach ($place->getEventDefinitions(EventDefinition::LEAVE) as $eventDefinition) {
+                $rawData .= ($first?'|':'').' ' . strtoupper($eventDefinition->getEventName()) . '\n' . addslashes($eventDefinition->getName());
+                $first = true;
             }
             $rawData .= '}"';
 
@@ -122,25 +134,56 @@ class WorkflowController extends AbstractController
 
         /** @var \whatwedo\WorkflowBundle\Entity\Transition $transition */
         foreach ($workflow->getTransitions() as $transition) {
+            $hasGuard = false;
+
+            foreach ($transition->getEventDefinitions(EventDefinition::GUARD) as $eventDefinition) {
+                $transitions[$transition->getId()]['guard'] = $graph->createVertex($eventDefinition->getName());
+                $transitions[$transition->getId()]['guard']->setAttribute('graphviz.shape', 'diamond');
+                $hasGuard = true;
+            }
+
             $transitions[$transition->getId()]['vertex'] = $graph->createVertex($transition->getName());
             $transitions[$transition->getId()]['vertex']->setAttribute('graphviz.shape', 'record');
-            $rawData = '"{\N';
+            $rawData = '"{';
+            $first = false;
             /** @var EventDefinition $eventDefinition */
-            foreach ($transition->getEventDefinitions() as $eventDefinition) {
-                $rawData .= '| ' . strtoupper($eventDefinition->getEventName()) . '';
+            foreach ($transition->getEventDefinitions(EventDefinition::ANNOUNCE) as $eventDefinition) {
+                $rawData .= ($first?'|':'').' ' .  strtoupper($eventDefinition->getEventName()) .' '. $eventDefinition->getName() . '';
+                $first = true;
+            }
+            foreach ($transition->getEventDefinitions(EventDefinition::TRANSITION) as $eventDefinition) {
+                $rawData .= ($first?'|':'').' ' .  strtoupper($eventDefinition->getEventName()) .' '. $eventDefinition->getName() . '';
+                $first = true;
+            }
+            $rawData .= ($first?'|':'').'\N';
+            foreach ($transition->getEventDefinitions(EventDefinition::COMPLETED) as $eventDefinition) {
+                $rawData .= ($first?'|':'').' ' .  strtoupper($eventDefinition->getEventName()) .' '. $eventDefinition->getName() . '';
+                $first = true;
             }
             $rawData .= '}"';
             $transitions[$transition->getId()]['vertex']->setAttribute('graphviz.label', GraphViz::raw($rawData));
 
+
+
             /** @var \whatwedo\WorkflowBundle\Entity\Place $from */
             foreach ($transition->getFroms() as $from) {
-                $transitions[$transition->getId()]['edge1'] = $places[$from->getId()]->createEdgeTo($transitions[$transition->getId()]['vertex']);
+                if (!$hasGuard) {
+                    $transitions[$transition->getId()]['edge1'] = $places[$from->getId()]->createEdgeTo($transitions[$transition->getId()]['vertex']);
+                } else {
+                    $transitions[$transition->getId()]['edge1guard'] = $transitions[$transition->getId()]['guard']->createEdgeTo($transitions[$transition->getId()]['vertex']);
+                    $transitions[$transition->getId()]['edge2guard'] = $places[$from->getId()]->createEdgeTo($transitions[$transition->getId()]['guard']);
+                }
             }
 
             /** @var \whatwedo\WorkflowBundle\Entity\Place $to */
             foreach ($transition->getTos() as $to) {
-                $transitions[$transition->getId()]['edge2'] = $transitions[$transition->getId()]['vertex']->createEdgeTo($places[$to->getId()]);
+                if ($hasGuard) {
+                    $transitions[$transition->getId()]['edge2'] = $transitions[$transition->getId()]['vertex']->createEdgeTo($places[$to->getId()]);
+                }
+
             }
+
+
         }
 
         $graphviz = new \Graphp\GraphViz\GraphViz();
