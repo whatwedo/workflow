@@ -25,7 +25,7 @@ class WorkflowManager
     private $doctrine;
 
     /** @var array|WorkflowEventHandlerInterface */
-    protected $worklfowEventHandler = [];
+    protected $workflowEventHandler = [];
     
     /**
      * @param \Doctrine\Persistence\ManagerRegistry $doctrine
@@ -38,7 +38,7 @@ class WorkflowManager
 
     public function addWorkflowEventHandler(WorkflowEventHandlerInterface $workflowEventHandler)
     {
-        $this->worklfowEventHandler[get_class($workflowEventHandler)] = $workflowEventHandler;
+        $this->workflowEventHandler[get_class($workflowEventHandler)] = $workflowEventHandler;
     }
 
     public function getWorkflowsForEntity(object $subject) {
@@ -167,8 +167,8 @@ class WorkflowManager
         $result = null;
         if (($eventName == null || $eventDefinition->getEventName() === $eventName) && !empty($eventDefinition->getEventHandler())) {
             $eventHandlerClass = $eventDefinition->getEventHandler();
-            if (isset($this->worklfowEventHandler[$eventHandlerClass])) {
-                return $this->worklfowEventHandler[$eventHandlerClass];
+            if (isset($this->workflowEventHandler[$eventHandlerClass])) {
+                return $this->workflowEventHandler[$eventHandlerClass];
             }
         }
         return $result;
