@@ -6,6 +6,8 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use whatwedo\WorkflowBundle\EventHandler\TransitionGuardEventHandlerInterface;
+use whatwedo\WorkflowBundle\EventHandler\TransitionGuardInterface;
 use whatwedo\WorkflowBundle\EventHandler\WorkflowEventHandlerInterface;
 
 
@@ -21,6 +23,9 @@ class WorkflowBundleExtension extends Extension
 
         $container->registerForAutoconfiguration(WorkflowEventHandlerInterface::class)
             ->addTag('workflow.event_handler')
+            ->setPublic(true);
+        $container->registerForAutoconfiguration(TransitionGuardInterface::class)
+            ->addTag('workflow.transition_guard')
             ->setPublic(true);
     }
 }
