@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\Authorization\ExpressionLanguageProvider;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 
-abstract class AbstractGuard implements TransitionGuardInterface
+abstract class AbstractGuardHandler implements TransitionGuardHandlerInterface
 {
 
     /** @var AuthorizationCheckerInterface */
@@ -57,5 +57,14 @@ abstract class AbstractGuard implements TransitionGuardInterface
         $this->tokenStorage = $tokenStorage;
     }
 
+    public function hasExpression(): bool
+    {
+        return true;
+    }
+
+    public function hasTemplate(): bool
+    {
+        return false;
+    }
 
 }

@@ -3,7 +3,10 @@
 namespace whatwedo\WorkflowBundle\Form;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
+use whatwedo\WorkflowBundle\EventHandler\Mailsender;
+use whatwedo\WorkflowBundle\EventHandler\WorkflowEventHandlerInterface;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -55,26 +58,39 @@ class EventDefinitionType extends AbstractType
                 [
                     'choices' => $this->getChoices()
                 ]
-            )
-            ->add('eventHandler',
+            );
+        if ($data->getEventName() == EventDefinition::GUARD) {
+            $builder->add('eventHandler',
+                TransitionGuardHandlerTypes::class
+            );
+        } else {
+            $builder->add('eventHandler',
                 EventHandlerTypes::class
-            )
-            ->add('sortorder');
-        if ($data->getEventHandler()) {
-            $builder->add(
-                'expression',
-                null,
-                [
-                    'required' => false,
-                    'help' => $expressionHelp,
-                    'attr' => [
-                        'id' => 'event_definition_expression',
-                        'class' => 'expression_editor',
-                    ],
+            );
+        }
 
-                ]
-            )
-                ->add(
+        $builder->add('sortorder');
+        if ($eventHandler) {
+
+            if ($eventHandler->hasExpression()) {
+                $builder->add(
+                    'expression',
+                    null,
+                    [
+                        'required' => false,
+                        'help' => $expressionHelp,
+                        'attr' => [
+                            'id' => 'event_definition_expression',
+                            'class' => 'expression_editor',
+                        ],
+
+                    ]
+                );
+            }
+
+
+            if ($eventHandler->hasTemplate()) {
+                $builder->add(
                     'template',
                     null,
                     [
@@ -87,6 +103,7 @@ class EventDefinitionType extends AbstractType
 
                     ]
                 );
+            }
         }
         $builder->add(
             'applyOnce',

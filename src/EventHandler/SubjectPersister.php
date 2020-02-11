@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Authorization\ExpressionLanguageProvider;
 use Twig\Environment;
 use Twig\Loader\ChainLoader;
 
-class SubjectPersister extends EventHandlerAbstract
+class SubjectPersister extends AbstractEventHandler
 {
     /** @var \Doctrine\Persistence\ManagerRegistry */
     private $doctrine;

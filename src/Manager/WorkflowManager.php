@@ -69,7 +69,6 @@ class WorkflowManager
         return $wwdWorkflow;
     }
 
-
     public function getPlace(string $place): Place
     {
         /** @var WorkflowRepository $workflowRepo */

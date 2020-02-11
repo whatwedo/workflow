@@ -15,10 +15,10 @@ use Symfony\Component\Security\Core\Authorization\ExpressionLanguageProvider;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 
-class ExpressionGuard extends AbstractGuard
+class ExpressionGuard extends AbstractGuardHandler implements TransitionGuardHandlerInterface
 {
 
-    public function isBlcoked(EventDefinition $eventDefinition): bool
+    public function run($subject, EventDefinition $eventDefinition): bool
     {
         $result = false;
         if (!empty($eventDefinition->getExpression())) {
@@ -27,19 +27,49 @@ class ExpressionGuard extends AbstractGuard
             );
 
             $result = $expression->evaluate(
-                    $eventDefinition->getExpression(),
-                    [
-                        'subject' => $event->getSubject(),
-                        'transition' => $event->getTransition(),
-                        'workflow' => $event->getWorkflow(),
-                        'auth_checker' => $this->authChecker,
-                        'trust_resolver' => $this->trustResolver,
-                        'token' => $this->tokenStorage,
-                    ]
+                $eventDefinition->getExpression(),
+                [
+                    'subject' => $subject,
+                    'auth_checker' => $this->authChecker,
+                    'trust_resolver' => $this->trustResolver,
+                    'token' => $this->tokenStorage,
+                ]
             );
         }
 
         return $result;
     }
+
+    public function validateExpression(EventDefinition $eventDefinition): bool
+    {
+        return true;
+    }
+
+    public function getExpressionHelp(): string
+    {
+        return 'true = blocks the guard, false = ok';
+    }
+
+
+    public function getExpressionSample(): string
+    {
+        return '';
+    }
+
+    public function getTemplateHelp(): string
+    {
+        return '';
+    }
+
+    public function getTemplateSample(): string
+    {
+        return '';
+    }
+
+    public function validateTemplate(EventDefinition $eventDefinition): bool
+    {
+        return true;
+    }
+
 
 }

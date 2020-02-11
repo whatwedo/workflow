@@ -6,7 +6,7 @@ namespace whatwedo\WorkflowBundle\EventHandler;
 
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
 
-interface TransitionGuardInterface
+interface EventHandlerInterface extends WorkflowEventHandlerInterface
 {
-    public function isBlcoked(EventDefinition $eventDefinition): bool;
+
 }

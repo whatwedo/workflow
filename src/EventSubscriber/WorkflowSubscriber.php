@@ -128,30 +128,10 @@ class WorkflowSubscriber implements EventSubscriberInterface
                 return false;
             }
 
+            $eventHandler = $this->manager->getEventHandler($eventDefinition);
 
-            if (empty($eventDefinition->getEventHandler()) && $eventDefinition->getEventName() === EventDefinition::GUARD) {
-                // do work
-                if (!empty($eventDefinition->getExpression())) {
-                    $expression = new ExpressionLanguage(null,
-                        [new ExpressionLanguageProvider()]
-                    );
-
-                    $event->setBlocked(
-                        ! $expression->evaluate(
-                            $eventDefinition->getExpression(),
-                            [
-                                'subject' => $event->getSubject(),
-                                'transition' => $event->getTransition(),
-                                'workflow' => $event->getWorkflow(),
-                                'auth_checker' => $this->authChecker,
-                                'trust_resolver' => $this->trustResolver,
-                                'token' => $this->tokenStorage,
-                            ]
-                        )
-                    );
-                }
-            } else {
-              $o = 0;
+            if ($eventHandler) {
+                $event->setBlocked($eventHandler->run($event->getSubject(), $eventDefinition));
             }
         }
     }

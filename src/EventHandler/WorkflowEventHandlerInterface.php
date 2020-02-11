@@ -10,10 +10,12 @@ interface WorkflowEventHandlerInterface
 {
     public function run($subject, EventDefinition $eventDefinition): bool;
 
+    public function hasExpression(): bool;
     public function getExpressionHelp(): string;
     public function getExpressionSample(): string;
     public function validateExpression(EventDefinition $eventDefinition): bool;
 
+    public function hasTemplate(): bool;
     public function getTemplateHelp(): string;
     public function getTemplateSample(): string;
     public function validateTemplate(EventDefinition $eventDefinition): bool;

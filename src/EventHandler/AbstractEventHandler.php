@@ -13,7 +13,7 @@ use Twig\Loader\ChainLoader;
 use whatwedo\WorkflowBundle\Model\DummySubject;
 use whatwedo\WorkflowBundle\Model\ValidationError;
 
-abstract class EventHandlerAbstract implements WorkflowEventHandlerInterface
+abstract class AbstractEventHandler implements EventHandlerInterface
 {
 
     /** @var Environment */
@@ -120,6 +120,16 @@ abstract class EventHandlerAbstract implements WorkflowEventHandlerInterface
             );
             return false;
         }
+        return true;
+    }
+
+    public function hasExpression(): bool
+    {
+        return true;
+    }
+
+    public function hasTemplate(): bool
+    {
         return true;
     }
 

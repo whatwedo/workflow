@@ -10,7 +10,7 @@ use whatwedo\WorkflowBundle\Model\ValidationError;
 use whatwedo\WorkflowBundle\Model\DummySubject;
 use Twig\Environment;
 
-class Mailsender extends EventHandlerAbstract
+class Mailsender extends AbstractEventHandler
 {
     /** @var \Swift_Mailer */
     protected $mailer;

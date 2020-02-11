@@ -93,7 +93,7 @@ class EventDefinitionController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="wwd_workflow_event_definition_delete", methods={"GET, POST"})
+     * @Route("/{id}/delete", name="wwd_workflow_event_definition_delete", methods={"GET, POST"})
      * @Security("is_granted(constant('\\whatwedo\\WorkflowBundle\\Security\\Roles::WORKFLOW_ADMIN'), eventDefinition)")
      */
     public function delete(Request $request, EventDefinition $eventDefinition): Response

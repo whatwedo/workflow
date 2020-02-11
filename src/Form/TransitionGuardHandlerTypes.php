@@ -10,24 +10,25 @@ use whatwedo\WorkflowBundle\EventHandler\EventHandlerAbstract;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use whatwedo\WorkflowBundle\EventHandler\TransitionGuardHandlerInterface;
 use whatwedo\WorkflowBundle\EventHandler\WorkflowEventHandlerInterface;
 
-class EventHandlerTypes extends AbstractType
+class TransitionGuardHandlerTypes extends AbstractType
 {
-    /** @var array|WorkflowEventHandlerInterface  */
-    private $eventHandler;
+    /** @var array|TransitionGuardHandlerInterface  */
+    private $guardHandler;
 
     public function __construct()
     {
-        $this->eventHandler = [];
+        $this->guardHandler = [];
     }
 
-    public function addWorkflowHandler(WorkflowEventHandlerInterface $workflowSubscriber)
+    public function addGuardHandler(TransitionGuardHandlerInterface $transitionGuardHandler)
     {
-        $klass = get_class($workflowSubscriber);
+        $klass = get_class($transitionGuardHandler);
         $reflect = new ReflectionClass($klass);
-        if($reflect->implementsInterface(WorkflowEventHandlerInterface::class)) {
-            $this->eventHandler[$klass] = $klass;
+        if($reflect->implementsInterface(TransitionGuardHandlerInterface::class)) {
+            $this->guardHandler[$klass] = $klass;
         }
     }
 
@@ -39,9 +40,9 @@ class EventHandlerTypes extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'label' => 'Event Handler',
+            'label' => 'Guard Subscriber',
             'choices' =>
-                $this->eventHandler
+                $this->guardHandler
             ,
             'multiple' => false,
             'required' => false,
