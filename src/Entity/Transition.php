@@ -143,19 +143,13 @@ class Transition
     public function getEventDefinitions($eventName = null):Collection
     {
         if (!$eventName) {
-            return $this->eventDefinitions->filter(
-                function (EventDefinition $data) {
-                    return $data->isActive();
-                }
-            );
+            return $this->eventDefinitions;
         } else {
             return $this->eventDefinitions->filter(
                 function (EventDefinition $data) use ($eventName) {
-                    return $data->getEventName() == $eventName && $data->isActive();
+                    return $data->getEventName() == $eventName;
                 }
             );
         }
-
-
     }
 }
