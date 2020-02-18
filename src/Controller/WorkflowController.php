@@ -95,8 +95,11 @@ class WorkflowController extends AbstractController
 
 
         $graph = new \Fhaculty\Graph\Graph();
+
         $graph->setAttribute('landscape', true);
         $graph->setAttribute('splines', 'curved');
+        $subGraph = $graph->createGraphClone();
+        $subGraph->createVertex('asdfasd');
 
         /** @var Vertex[] $places */
         $places = [];
@@ -177,13 +180,8 @@ class WorkflowController extends AbstractController
 
             /** @var \whatwedo\WorkflowBundle\Entity\Place $to */
             foreach ($transition->getTos() as $to) {
-                if ($hasGuard) {
-                    $transitions[$transition->getId()]['edge2'] = $transitions[$transition->getId()]['vertex']->createEdgeTo($places[$to->getId()]);
-                }
-
+                $transitions[$transition->getId()]['edge2'] = $transitions[$transition->getId()]['vertex']->createEdgeTo($places[$to->getId()]);
             }
-
-
         }
 
         $graphviz = new \Graphp\GraphViz\GraphViz();
