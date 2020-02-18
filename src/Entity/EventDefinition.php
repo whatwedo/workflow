@@ -19,9 +19,10 @@ class EventDefinition
     const ANNOUNCE      = 'announce';
 
     const LEAVE     = 'leave';
-    const ENTER     = 'enter';
+    const ENTER = 'enter';
     const ENTERED   = 'entered';
     const CHECK     = 'check';
+    const ACTION     = 'action';
 
     /**
      * @ORM\Id()
