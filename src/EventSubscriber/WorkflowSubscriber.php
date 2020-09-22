@@ -121,11 +121,15 @@ class WorkflowSubscriber implements EventSubscriberInterface
         /** @var Transition $transition */
         $transition = $event->getMetadata('data', $event->getTransition());
 
+
         /** @var EventDefinition $eventDefinition */
         foreach ($transition->getEventDefinitions() as $eventDefinition) {
 
             if (!$eventDefinition->isActive()) {
-                return false;
+                continue;
+            }
+            if ($eventDefinition->getEventName() !== EventDefinition::GUARD) {
+                continue;
             }
 
             $eventHandler = $this->manager->getEventHandler($eventDefinition);
@@ -134,6 +138,8 @@ class WorkflowSubscriber implements EventSubscriberInterface
                 $event->setBlocked($eventHandler->run($event->getSubject(), $eventDefinition));
             }
         }
+
+
     }
 
 
