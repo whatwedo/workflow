@@ -34,13 +34,6 @@ class TransitionType extends AbstractType
         $builder
             ->add('name')
             ->add(
-                'workflow',
-                HiddenType::class,
-                    [
-                        'property_path' => 'id'
-                    ]
-                )
-            ->add(
                 'froms',
                     EntityType::class,
                     [
