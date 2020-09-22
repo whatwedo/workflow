@@ -6,6 +6,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Query\AST\OrderByClause;
+use whatwedo\WorkflowBundle\Entity\EventDefinition;
+use whatwedo\WorkflowBundle\Entity\Workflow;
 use whatwedo\WorkflowBundle\Entity\Workflowable;
 use whatwedo\WorkflowBundle\Entity\WorkflowLog;
 
@@ -14,6 +16,7 @@ use whatwedo\WorkflowBundle\Entity\WorkflowLog;
  * @method WorkflowLog|null findOneBy(array $criteria, array $orderBy = null)
  * @method WorkflowLog[]    findAll()
  * @method WorkflowLog[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method WorkflowLog[]    findByEventDefinition(EventDefinition $eventDefinition)
  */
 class WorkflowLogRepository extends ServiceEntityRepository
 {

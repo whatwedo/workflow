@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use whatwedo\WorkflowBundle\Entity\Transition;
 use whatwedo\WorkflowBundle\Entity\Place;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
+use whatwedo\WorkflowBundle\Entity\WorkflowLog;
 use whatwedo\WorkflowBundle\Form\EventDefinitionType;
 use whatwedo\WorkflowBundle\Form\PlaceEventDefinitionType;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
@@ -100,6 +101,11 @@ class EventDefinitionController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$eventDefinition->getId(), $request->query->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
+
+            array_map(
+                fn ($logItem) => $entityManager->remove($logItem),
+                $entityManager->getRepository(WorkflowLog::class)->findByEventDefinition($eventDefinition)
+            );
             $entityManager->remove($eventDefinition);
             $entityManager->flush();
         }
