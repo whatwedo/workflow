@@ -13,8 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Workflow\DefinitionBuilder;
-use Symfony\Component\Workflow\Dumper\GraphvizDumper;
-use Symfony\Component\Workflow\Dumper\PlantUmlDumper;
+use whatwedo\WorkflowBundle\Dumper\PlantUmlDumper;
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\MarkingStore\MethodMarkingStore;
 use Symfony\Component\Workflow\Transition;
@@ -66,29 +65,8 @@ class WorkflowController extends AbstractController
      */
     public function show(Workflow $workflow): Response
     {
-
-        $definitionBuilder = new DefinitionBuilder();
-
-        foreach ($workflow->getPlaces() as $place) {
-            $definitionBuilder->addPlace($place->getName());
-        }
-        foreach ($workflow->getTransitions() as $transition) {
-            $tos = [];
-            foreach ($transition->getTos() as $to) {
-                $tos[] = $to->getName();
-            }
-            $froms = [];
-            foreach ($transition->getFroms() as $from) {
-                $froms[] = $from->getName();
-            }
-            $definitionBuilder->addTransition(new Transition($transition->getName(), $froms, $tos));
-        }
-
-
-        $definition = $definitionBuilder->build();
-
         $dumper = new PlantUmlDumper(PlantUmlDumper::WORKFLOW_TRANSITION);
-        $dump = $dumper->dump($definition);
+        $dump = $dumper->dump($workflow);
 
         $encode = \Jawira\PlantUml\encodep($dump);
         $image = "http://www.plantuml.com/plantuml/png/{$encode}";
