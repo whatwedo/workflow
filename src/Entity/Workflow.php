@@ -59,7 +59,6 @@ class Workflow
     /**
      * @var Transition[]
      * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\Transition", mappedBy="workflow")
-     * @ORM\OrderBy({"sort" = "ASC"})
      */
     private $transitions;
 

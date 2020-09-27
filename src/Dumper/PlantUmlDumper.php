@@ -235,8 +235,8 @@ class PlantUmlDumper
         $placeHashed = $this->hash($place);
 
         $output = "state $placeEscaped as $placeHashed".
-            (\in_array($place, $definition->getInitialPlaces(), true) ? ' '.self::INITIAL : '').
-            ($marking && $marking->has($place) ? ' '.self::MARKED : '');
+            (\in_array($place->getName(), $definition->getInitialPlaces(), true) ? ' '.self::INITIAL : '').
+            ($marking && $marking->has($place->getName()) ? ' '.self::MARKED : '');
 
         if ($place->getEventDefinitions()->count()) {
             $output .= '{' . PHP_EOL;

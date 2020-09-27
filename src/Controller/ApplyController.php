@@ -39,9 +39,8 @@ class ApplyController extends AbstractController
     }
 
     /**
-     * @Route("/wwd/workflow/apply/{workflow}/{transition}/{subjectClass}/{subjectId}", name="wwd_workflow_apply", methods={"GET"})
+     * @Route("/wwd/workflow/apply/{transition}/{subjectClass}/{subjectId}", name="wwd_workflow_apply", methods={"GET"})
      * @param Request $request
-     * @param Workflow $workflow
      * @param Transition $transition
      * @param string $subjectClass
      * @param string $subjectId
@@ -50,11 +49,11 @@ class ApplyController extends AbstractController
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function apply(Request $request, Workflow $workflow, Transition $transition, string $subjectClass, string $subjectId): Response
+    public function apply(Request $request, Transition $transition, string $subjectClass, string $subjectId): Response
     {
         $subject = $this->doctirine->getRepository($subjectClass)->find($subjectId);
 
-        $wf =  $this->workflowRegistry->get($subject, $workflow->getName());
+        $wf =  $this->workflowRegistry->get($subject, $transition->getWorkflow()->getName());
         $wf->apply($subject, $transition->getName(), ['foo' => 'bar']);
 
         $this->doctirine->getManager()->persist($subject);

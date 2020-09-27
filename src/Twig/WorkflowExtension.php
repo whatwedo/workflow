@@ -73,6 +73,7 @@ class WorkflowExtension extends AbstractExtension
     {
         return [
             new TwigFunction('wwd_workflow_buttons', [$this, 'workflowButtons']),
+            new TwigFunction('wwd_workflow_enabled_transitions', [$this, 'workflowEnabledTransitions']),
         ];
     }
 
@@ -102,7 +103,6 @@ class WorkflowExtension extends AbstractExtension
                         $pathInfo  = $this->requestStack->getCurrentRequest()->getPathInfo();
 
                         $parameters = [
-                            'workflow' => $workflowItem->getId(),
                             'transition' =>  $transition->getId(),
                             'subjectClass' => get_class($entity),
                             'subjectId' => $entity->getId(),
@@ -111,6 +111,29 @@ class WorkflowExtension extends AbstractExtension
 
                         $applyUrl = $this->router->generate('wwd_workflow_apply', $parameters);
                         $result .= sprintf('<a href="%s" class="btn btn-primary">%s</a>', $applyUrl,  $transition->getName());
+                    }
+                }
+            }
+        }
+
+        return $result;
+
+    }
+    public function workflowEnabledTransitions(Workflowable $entity)
+    {
+        /** @var Workflow[] $workflows */
+        $workflows = $this->workflowManager->getWorkflowsForEntity($entity);
+
+        $result = [];
+        if ($workflows) {
+
+            foreach ($workflows as $workflowItem) {
+                foreach ($workflowItem->getTransitions() as $transition) {
+
+                    /** @var \Symfony\Component\Workflow\Workflow $workflow */
+                    $workflow = $this->workflowRegistry->get($entity, $workflowItem->getName());
+                    if ($workflow->can($entity, $transition->getName())) {
+                        $result[] = $transition;
                     }
                 }
             }
