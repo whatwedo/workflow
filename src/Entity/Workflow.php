@@ -52,12 +52,14 @@ class Workflow
     /**
      * @var Place[]
      * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\Place", mappedBy="workflow")
+     * @ORM\OrderBy({"sort" = "ASC"})
      */
     private $places;
 
     /**
      * @var Transition[]
      * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\Transition", mappedBy="workflow")
+     * @ORM\OrderBy({"sort" = "ASC"})
      */
     private $transitions;
 

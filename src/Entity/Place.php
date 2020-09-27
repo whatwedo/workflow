@@ -54,6 +54,7 @@ class Place
 
     /**
      * @ORM\OneToMany(targetEntity="whatwedo\WorkflowBundle\Entity\EventDefinition", mappedBy="place")
+     * @ORM\OrderBy({"sortorder" = "ASC"})
      */
     private $eventDefinitions;
 
