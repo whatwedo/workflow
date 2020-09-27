@@ -66,14 +66,12 @@ class WorkflowController extends AbstractController
     public function show(Workflow $workflow): Response
     {
         $dumper = new PlantUmlDumper(PlantUmlDumper::WORKFLOW_TRANSITION);
-        $dump = $dumper->dump($workflow);
+        $workflowDump = $dumper->dump($workflow);
 
-        $encode = \Jawira\PlantUml\encodep($dump);
-        $image = "http://www.plantuml.com/plantuml/png/{$encode}";
 
         return $this->render('@whatwedoWorkflow/workflow/show.html.twig', [
             'workflow' => $workflow,
-            'image' => $image,
+            'workflow_dump' => $workflowDump,
         ]);
     }
 

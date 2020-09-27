@@ -5,6 +5,7 @@ namespace whatwedo\WorkflowBundle\Twig;
 use http\Env\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Workflow\Registry;
+use Twig\TwigFilter;
 use whatwedo\WorkflowBundle\EventListener\WorkflowSubscriber;
 use whatwedo\WorkflowBundle\Manager\WorkflowManager;
 use Twig\Extension\AbstractExtension;
@@ -75,6 +76,13 @@ class WorkflowExtension extends AbstractExtension
         ];
     }
 
+    public function getFilters()
+    {
+        return [
+            new TwigFilter('wwd_plantuml_encode', [$this, 'plantUmlEncode']),
+        ];
+    }
+
     public function workflowButtons(Workflowable $entity)
     {
         /** @var Workflow[] $workflows */
@@ -110,6 +118,10 @@ class WorkflowExtension extends AbstractExtension
 
         return $result;
 
+    }
+    public function plantUmlEncode(string $value): string
+    {
+        return \Jawira\PlantUml\encodep($value);
     }
 
 }

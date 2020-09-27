@@ -4,11 +4,15 @@
 namespace whatwedo\WorkflowBundle\Dumper;
 
 
+use Doctrine\Common\Collections\Collection;
+use PHP_CodeSniffer\Exceptions\DeepExitException;
 use Symfony\Component\Workflow\Definition;
 use Symfony\Component\Workflow\DefinitionBuilder;
 use Symfony\Component\Workflow\Marking;
 use Symfony\Component\Workflow\Metadata\MetadataStoreInterface;
 use Symfony\Component\Workflow\Transition;
+use whatwedo\WorkflowBundle\Entity\EventDefinition;
+use whatwedo\WorkflowBundle\Entity\Place;
 use whatwedo\WorkflowBundle\Entity\Workflow;
 
 class PlantUmlDumper
@@ -16,6 +20,16 @@ class PlantUmlDumper
     private const INITIAL = '<<initial>>';
     private const MARKED = '<<marked>>';
     private const TRANSITION = '<<transition>>';
+    private const EVENT_GUARD         = '<<event_guard>>';
+    private const EVENT_TRANSITION    = '<<event_transition>>';
+    private const EVENT_COMPLETED     = '<<event_completed>>';
+    private const EVENT_ANNOUNCE      = '<<event_announce>>';
+
+    private const EVENT_LEAVE     = '<<event_leave>>';
+    private const EVENT_ENTER = '<<event_enter>>';
+    private const EVENT_ENTERED   = '<<event_entered>>';
+    private const EVENT_CHECK     = '<<event_check>>';
+    private const EVENT_ACTION     = '<<event_action>>';
 
     const STATEMACHINE_TRANSITION = 'arrow';
     const WORKFLOW_TRANSITION = 'square';
@@ -29,6 +43,15 @@ class PlantUmlDumper
                 'BackgroundColor'.self::INITIAL => '#87b741',
                 'BackgroundColor'.self::MARKED => '#3887C6',
                 'BackgroundColor'.self::TRANSITION => '#ffffff',
+                'BackgroundColor'.self::EVENT_GUARD => '#a83244',
+                'BackgroundColor'.self::EVENT_TRANSITION => '#f2ed5e',
+                'BackgroundColor'.self::EVENT_ANNOUNCE => '#5ef26f',
+                'BackgroundColor'.self::EVENT_LEAVE => '#ff0000',
+                'BackgroundColor'.self::EVENT_ENTER => '#5e97f2',
+                'BackgroundColor'.self::EVENT_ENTERED => '#3276e3',
+                'BackgroundColor'.self::EVENT_CHECK => '#bbe630',
+                'BackgroundColor'.self::EVENT_ACTION => '#ebce2d',
+                'BackgroundColor'.self::EVENT_COMPLETED => '#32a852',
                 'BorderColor' => '#3887C6',
                 'BorderColor'.self::MARKED => 'Black',
                 'FontColor'.self::MARKED => 'White',
@@ -78,23 +101,22 @@ class PlantUmlDumper
 
         $code = $this->initialize($options, $definition);
 
-        foreach ($definition->getPlaces() as $place) {
+        foreach ($workflow->getPlaces() as $place) {
             $code[] = $this->getState($place, $definition, $marking);
         }
         if ($this->isWorkflowTransitionType()) {
-            foreach ($definition->getTransitions() as $transition) {
-                $transitionEscaped = $this->escape($transition->getName());
-                $code[] = "state $transitionEscaped ".self::TRANSITION;
+            foreach ($workflow->getTransitions() as $transition) {
+                $code[] = $this->getTransition($transition);
             }
         }
         foreach ($definition->getTransitions() as $transition) {
-            $transitionEscaped = $this->escape($transition->getName());
+            $transitionEscaped = $this->hash($transition->getName());
             foreach ($transition->getFroms() as $from) {
-                $fromEscaped = $this->escape($from);
+                $fromEscaped = $this->hash($from);
                 foreach ($transition->getTos() as $to) {
-                    $toEscaped = $this->escape($to);
+                    $toEscaped = $this->hash($to);
 
-                    $transitionEscapedWithStyle = $this->getTransitionEscapedWithStyle($workflowMetadata, $transition, $transitionEscaped);
+                    $transitionEscapedWithStyle = $this->getTransitionEscapedWithStyle($workflowMetadata, $transition, $this->escape($transition->getName()));
 
                     $arrowColor = $workflowMetadata->getMetadata('arrow_color', $transition);
 
@@ -111,8 +133,8 @@ class PlantUmlDumper
                         }
 
                         $lines = [
-                            "$fromEscaped -${transitionColor}-> ${transitionEscaped}${transitionLabel}",
-                            "$transitionEscaped -${transitionColor}-> ${toEscaped}${transitionLabel}",
+                            "$fromEscaped -${transitionColor}-> ${transitionEscaped}",
+                            "$transitionEscaped -${transitionColor}-> ${toEscaped}",
                         ];
                         foreach ($lines as $line) {
                             if (!\in_array($line, $code)) {
@@ -120,7 +142,7 @@ class PlantUmlDumper
                             }
                         }
                     } else {
-                        $code[] = "$fromEscaped -${transitionColor}-> $toEscaped: $transitionEscapedWithStyle";
+                        $code[] = "$fromEscaped -${transitionColor}-> $toEscaped";
                     }
                 }
             }
@@ -137,7 +159,7 @@ class PlantUmlDumper
     private function startPuml(array $options): string
     {
         $start = '@startuml'.PHP_EOL;
-        $start .= 'allow_mixing'.PHP_EOL;
+
 
         return $start;
     }
@@ -200,27 +222,40 @@ class PlantUmlDumper
         return '"'.str_replace('"', '', $string).'"';
     }
 
-    private function getState(string $place, Definition $definition, Marking $marking = null): string
+    private function hash(string $string): string
+    {
+        return hash('md5', $string);
+    }
+
+    private function getState(Place $place, Definition $definition, Marking $marking = null): string
     {
         $workflowMetadata = $definition->getMetadataStore();
 
         $placeEscaped = $this->escape($place);
+        $placeHashed = $this->hash($place);
 
-        $output = "state $placeEscaped".
+        $output = "state $placeEscaped as $placeHashed".
             (\in_array($place, $definition->getInitialPlaces(), true) ? ' '.self::INITIAL : '').
             ($marking && $marking->has($place) ? ' '.self::MARKED : '');
 
-        $backgroundColor = $workflowMetadata->getMetadata('bg_color', $place);
-        if (null !== $backgroundColor) {
-            $output .= ' <<'.$this->getColorId($backgroundColor).'>>';
+        if ($place->getEventDefinitions()->count()) {
+            $output .= '{' . PHP_EOL;
+            $eventDefinitions = $this->getEventDefinitions($place->getEventDefinitions(), [EventDefinition::ENTER, EventDefinition::ENTERED, EventDefinition::CHECK,EventDefinition::ACTION, EventDefinition::LEAVE]);
+            $output .= implode('    --' . PHP_EOL, $eventDefinitions);
+            $output .= '}' . PHP_EOL;
         }
 
-        $description = $workflowMetadata->getMetadata('description', $place);
-        if (null !== $description) {
-            $output .= ' as '.$place.
-                PHP_EOL.
-                $place.' : '.$description;
-        }
+//        $backgroundColor = $workflowMetadata->getMetadata('bg_color', $place);
+//        if (null !== $backgroundColor) {
+//            $output .= ' <<'.$this->getColorId($backgroundColor).'>>';
+//        }
+
+//        $description = $workflowMetadata->getMetadata('description', $place);
+//        if (null !== $description) {
+//            $output .= ' as '.$place.
+//                PHP_EOL.
+//                $place.' : '.$description;
+//        }
 
         return $output;
     }
@@ -256,5 +291,44 @@ class PlantUmlDumper
     {
         // Remove “#“ from start of the color name so it can be used as an identifier.
         return ltrim($color, '#');
+    }
+
+    /**
+     * @param \whatwedo\WorkflowBundle\Entity\Transition $transition
+     * @param array $eventDefinitions
+     * @return array
+     */
+    private function getEventDefinitions(Collection $eventDefinitions, array $order): array
+    {
+        $output = [];
+        foreach ($order as $orderItem) {
+            foreach ($eventDefinitions->filter(fn (EventDefinition $eventDefinition) => $eventDefinition->getEventName() == $orderItem) as $eventDefinition) {
+                $eventDefinitionEscaped = $this->escape(strtoupper($eventDefinition->getEventName()) . ': ' . $eventDefinition->getName());
+                $eventDefinitionHashed = $this->hash($eventDefinition->getName());
+                $enventDefinitionCode = "    state $eventDefinitionEscaped as $eventDefinitionHashed" . sprintf('<<event_%s>>', $eventDefinition->getEventName()) . PHP_EOL;
+                $enventDefinitionCode .= "    $eventDefinitionHashed : " . sprintf('%s %s ', 'Handler:', $eventDefinition->getEventHandler()) . PHP_EOL;
+                $output[] = $enventDefinitionCode;
+            }
+        }
+        return $output;
+    }
+
+    /**
+     * @param \whatwedo\WorkflowBundle\Entity\Transition $transition
+     * @return string
+     */
+    private function getTransition(\whatwedo\WorkflowBundle\Entity\Transition $transition): string
+    {
+        $transitionEscaped = $this->escape($transition->getName());
+        $transitionHash = $this->hash($transition->getName());
+        $transitionCode = "state $transitionEscaped as $transitionHash " . self::TRANSITION . ' {' . PHP_EOL;
+
+        if ($transition->getEventDefinitions()->count()) {
+            $eventDefinitions = $this->getEventDefinitions($transition->getEventDefinitions(), [EventDefinition::GUARD, EventDefinition::ANNOUNCE, EventDefinition::TRANSITION, EventDefinition::COMPLETED]);
+            $transitionCode .= implode("    --" . PHP_EOL, $eventDefinitions);
+        }
+
+        $transitionCode .= '}' . PHP_EOL;
+        return $transitionCode;
     }
 }

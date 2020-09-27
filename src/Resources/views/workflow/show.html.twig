@@ -205,7 +205,8 @@
     <br>
 
     <h2>Graph</h2>
-    <img src="{{ image }}">
+    <img src="http://www.plantuml.com/plantuml/png/{{ workflow_dump|wwd_plantuml_encode }}">
+    <pre>{{ workflow_dump }}</pre>
 
 {% endblock %}
 

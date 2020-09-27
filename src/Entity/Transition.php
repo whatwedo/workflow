@@ -138,7 +138,7 @@ class Transition
     }
 
     /**
-     * @return Collection
+     * @return Collection|EventDefinition[]
      */
     public function getEventDefinitions($eventName = null):Collection
     {
