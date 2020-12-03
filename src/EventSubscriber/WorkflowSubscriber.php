@@ -60,42 +60,19 @@ class WorkflowSubscriber implements EventSubscriberInterface
     /** @var LoggerInterface */
     private $logger;
 
-    /**
-     * @param LoggerInterface $logger
-     * @required
-     */
-    public function setLogger(LoggerInterface $logger): void
+    public function __construct(
+        LoggerInterface $logger,
+        \Doctrine\Persistence\ManagerRegistry $doctrine,
+        AuthorizationCheckerInterface $authChecker,
+        WorkflowManager $manager,
+        TokenStorageInterface $tokenStorage
+    )
     {
         $this->logger = $logger;
-    }
-
-
-
-    /**
-     * @param \Doctrine\Persistence\ManagerRegistry $doctrine
-     * @required
-     */
-    public function setDoctrine(\Doctrine\Persistence\ManagerRegistry $doctrine): void
-    {
         $this->doctrine = $doctrine;
-    }
-
-    /**
-     * @param AuthorizationCheckerInterface $authChecker
-     * @required
-     */
-    public function setAuthChecker(AuthorizationCheckerInterface $authChecker): void
-    {
         $this->authChecker = $authChecker;
-    }
-
-    /**
-     * @param WorkflowManager $manager
-     * @required
-     */
-    public function setManager(WorkflowManager $manager): void
-    {
         $this->manager = $manager;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -107,20 +84,14 @@ class WorkflowSubscriber implements EventSubscriberInterface
         $this->trustResolver = $trustResolver ?: new AuthenticationTrustResolver(AnonymousToken::class, RememberMeToken::class);
     }
 
-    /**
-     * @param TokenStorageInterface $tokenStorage
-     * @required
-     */
-    public function setTokenStorage(TokenStorageInterface $tokenStorage): void
-    {
-        $this->tokenStorage = $tokenStorage;
-    }
-
     public function onGuard(GuardEvent $event)
     {
         /** @var Transition $transition */
         $transition = $event->getMetadata('data', $event->getTransition());
 
+        if (!$transition) {
+            return;
+        }
 
         /** @var EventDefinition $eventDefinition */
         foreach ($transition->getEventDefinitions() as $eventDefinition) {

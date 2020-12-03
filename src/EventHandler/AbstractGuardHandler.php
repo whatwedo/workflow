@@ -29,15 +29,11 @@ abstract class AbstractGuardHandler implements TransitionGuardHandlerInterface
      */
     protected $tokenStorage;
 
-    /**
-     * @param AuthorizationCheckerInterface $authChecker
-     * @required
-     */
-    public function setAuthChecker(AuthorizationCheckerInterface $authChecker): void
+    public function __construct(AuthorizationCheckerInterface $authChecker, TokenStorageInterface $tokenStorage)
     {
         $this->authChecker = $authChecker;
+        $this->tokenStorage = $tokenStorage;
     }
-
 
     /**
      * @param AuthenticationTrustResolverInterface $trustResolver
@@ -46,15 +42,6 @@ abstract class AbstractGuardHandler implements TransitionGuardHandlerInterface
     public function setTrustResolver(AuthenticationTrustResolverInterface $trustResolver = null): void
     {
         $this->trustResolver = $trustResolver ?: new AuthenticationTrustResolver(AnonymousToken::class, RememberMeToken::class);
-    }
-
-    /**
-     * @param TokenStorageInterface $tokenStorage
-     * @required
-     */
-    public function setTokenStorage(TokenStorageInterface $tokenStorage): void
-    {
-        $this->tokenStorage = $tokenStorage;
     }
 
     public function hasExpression(): bool

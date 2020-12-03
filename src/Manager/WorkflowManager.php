@@ -21,21 +21,17 @@ use Symfony\Component\Workflow\Transition;
 
 class WorkflowManager
 {
+    public function __construct(\Doctrine\Persistence\ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+
     /** @var \Doctrine\Persistence\ManagerRegistry */
     private $doctrine;
 
     /** @var array|WorkflowEventHandlerInterface */
     protected $workflowEventHandler = [];
     
-    /**
-     * @param \Doctrine\Persistence\ManagerRegistry $doctrine
-     * @required
-     */
-    public function setDoctrine(\Doctrine\Persistence\ManagerRegistry $doctrine): void
-    {
-        $this->doctrine = $doctrine;
-    }
-
     public function addWorkflowEventHandler(WorkflowEventHandlerInterface $workflowEventHandler)
     {
         $this->workflowEventHandler[get_class($workflowEventHandler)] = $workflowEventHandler;
