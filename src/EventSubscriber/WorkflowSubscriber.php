@@ -118,6 +118,10 @@ class WorkflowSubscriber implements EventSubscriberInterface
     {
         /** @var Transition $transition */
         $transition = $event->getMetadata('data', $event->getTransition());
+        if (!$transition) {
+            return;
+        }
+
         $this->processTransition($transition, $event->getSubject(), EventDefinition::TRANSITION);
     }
 
@@ -125,6 +129,9 @@ class WorkflowSubscriber implements EventSubscriberInterface
     {
         /** @var Transition $transition */
         $transition = $event->getMetadata('data', $event->getTransition());
+        if (!$transition) {
+            return;
+        }
         $this->processTransition($transition, $event->getSubject(), EventDefinition::COMPLETED);
     }
 
@@ -132,6 +139,9 @@ class WorkflowSubscriber implements EventSubscriberInterface
     {
         /** @var Transition $transition */
         $transition = $event->getMetadata('data', $event->getTransition());
+        if (!$transition) {
+            return;
+        }
         $this->processTransition($transition, $event->getSubject(), EventDefinition::ANNOUNCE);
     }
 
@@ -140,6 +150,9 @@ class WorkflowSubscriber implements EventSubscriberInterface
     {
         /** @var Transition $transition */
         $transition = $event->getMetadata('data', $event->getTransition());
+        if (!$transition) {
+            return;
+        }
         $this->processTransition($transition, $event->getSubject(), EventDefinition::LEAVE);
     }
 
@@ -152,6 +165,9 @@ class WorkflowSubscriber implements EventSubscriberInterface
         foreach ($places as $placeItem) {
             /** @var Transition $transition */
             $placeMetaData = $event->getWorkflow()->getMetadataStore()->getPlaceMetadata($placeItem);
+            if (!isset($placeMetaData['data'])) {
+                return;
+            }
             $place = $placeMetaData['data'];
             $this->processPlace($place, $event->getSubject(), EventDefinition::ENTER);
 
@@ -167,6 +183,11 @@ class WorkflowSubscriber implements EventSubscriberInterface
         /** @var \Symfony\Component\Workflow\Workflow $workflow */
         $workflow = $event->getWorkflow();
         $wwdWorkflow = $this->manager->getWorkflow($workflow);
+
+        if (!$wwdWorkflow) {
+            return;
+        }
+
         foreach ($event->getMarking()->getPlaces() as $place => $val) {
             $wwdPlace = $this->manager->getPlace($place);
             $this->processPlace($wwdPlace, $event->getSubject(), EventDefinition::ENTERED);
