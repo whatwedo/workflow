@@ -7,6 +7,3 @@ services:
     whatwedo\WorkflowBundle\:
         resource: '../../*'
         exclude: '../{Entity}'
-
-    'workflow.registry':
-        class: whatwedo\WorkflowBundle\Service\WorkflowService
