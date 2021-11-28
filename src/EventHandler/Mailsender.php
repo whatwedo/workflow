@@ -4,6 +4,8 @@
 namespace whatwedo\WorkflowBundle\EventHandler;
 
 
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Twig\Error\RuntimeError;
 use whatwedo\WorkflowBundle\Entity\EventDefinition;
 use whatwedo\WorkflowBundle\Model\ValidationError;
@@ -12,14 +14,14 @@ use Twig\Environment;
 
 class Mailsender extends AbstractEventHandler
 {
-    /** @var \Swift_Mailer */
+    /** @var MailerInterface */
     protected $mailer;
 
     /**
      * @param \Swift_Mailer $mailer
      * @required
      */
-    public function setMailer(\Swift_Mailer $mailer): void
+    public function setMailer(MailerInterface $mailer): void
     {
         $this->mailer = $mailer;
     }
@@ -30,13 +32,11 @@ class Mailsender extends AbstractEventHandler
         $data = $this->evaluateExpression($subject, $eventDefinition);
         $body = $this->getTemplate($subject, $eventDefinition);
 
-        $message = (new \Swift_Message($data['subject']))
-            ->setFrom($data['sender'])
-            ->setTo($data['receiver'])
-            ->setBody(
-                $body,
-                'text/html'
-            );
+        $message = new Email();
+        $message->subject($data['subject'])
+            ->from($data['sender'])
+            ->to($data['receiver'])
+            ->html($body);
 
         $this->mailer->send($message);
         return true;
