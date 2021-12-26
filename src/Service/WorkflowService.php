@@ -59,6 +59,10 @@ class WorkflowService extends Registry
             echo   "\e[0;33m"  . PHP_EOL;
             echo   '    Update Workflow Tables    ';
             echo "\e[0m" . PHP_EOL . PHP_EOL;
+        } catch (\Doctrine\DBAL\Exception\ConnectionException $ex) {
+            echo   "\e[0;33m"  . PHP_EOL;
+            echo   '    Workflow DB does not exists    ';
+            echo "\e[0m" . PHP_EOL . PHP_EOL;
         }
     }
 
