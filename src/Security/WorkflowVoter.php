@@ -13,7 +13,7 @@ use whatwedo\WorkflowBundle\Security\Roles;
 
 class WorkflowVoter extends Voter
 {
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject): bool
     {
         if ($subject instanceof Workflow) {
             return true;
@@ -31,7 +31,7 @@ class WorkflowVoter extends Voter
         return in_array($attribute, Roles::getRights());
     }
 
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         return true;
     }

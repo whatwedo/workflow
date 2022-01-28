@@ -2,6 +2,7 @@
 
 namespace whatwedo\WorkflowBundle;
 
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use whatwedo\WorkflowBundle\DependencyInjection\Compiler\WorkflowPass;
 use whatwedo\WorkflowBundle\DependencyInjection\WorkflowBundleExtension;
@@ -16,7 +17,7 @@ class whatwedoWorkflowBundle extends Bundle
         $container->addCompilerPass(new WorkflowPass());
     }
 
-    public function getContainerExtension()
+    public function getContainerExtension(): ?ExtensionInterface
     {
         return new WorkflowBundleExtension();
     }
