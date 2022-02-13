@@ -86,7 +86,7 @@ class WorkflowService extends Registry
     /**
      * @return Workflow
      */
-    public function get(object $subject, string $workflowName = null): Workflow
+    public function get(object $subject, string $workflowName = null): \Symfony\Component\Workflow\Workflow
     {
         $matched = [];
 
